@@ -23,7 +23,7 @@ function login() {
 <template>
   <v-container class="d-flex justify-center align-center" style="height: 100vh">
     <v-card class="pa-8" max-width="600" width="100%" elevation="10" rounded="xl">
-      <v-card-title class="text-h4 text-center">Login</v-card-title>
+      <v-card-title class="text-h4 text-center">Login Form</v-card-title>
 
       <v-card-text class="pa-8" max-width="600" width="100%" elevation="10" rounded="xl">
         <v-form v-model="valid" @submit.prevent="login">
