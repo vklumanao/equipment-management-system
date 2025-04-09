@@ -13,7 +13,12 @@ const { mobile } = useDisplay()
         <v-row class="ma-0 bg-blue-lighten-5">
           <!-- Left column: Logo centered -->
           <v-col cols="12" md="7" class="d-flex justify-center align-center logo-column">
-            <v-img src="/images/logo.png" max-width="850" max-height="850"></v-img>
+            <v-img
+              :src="'/images/logo.png'"
+              :max-width="mobile ? '200' : '850'"
+              :max-height="mobile ? '200' : '850'"
+              class="logo-image"
+            ></v-img>
           </v-col>
 
           <!-- Right column: Login form centered -->
@@ -107,7 +112,7 @@ html {
 }
 
 .logo-column {
-  padding: 20px;
+  padding: 0;
 }
 
 .form-column {
