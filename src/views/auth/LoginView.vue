@@ -97,7 +97,7 @@ const { mobile } = useDisplay()
 
 <style scoped>
 .footer {
-  height: 60px;
+  height: 40px;
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
 }
