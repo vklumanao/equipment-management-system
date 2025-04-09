@@ -7,69 +7,103 @@ const { mobile } = useDisplay()
 </script>
 
 <template>
-  <v-container fluid class="fill-height pa-0">
-    <v-row class="fill-height ma-0 bg-blue-lighten-5">
-      <!-- Left column: Logo centered -->
-      <v-col cols="12" md="7" class="d-flex justify-center align-center logo-column">
-        <v-img src="/images/logo.png" max-width="850" max-height="850"></v-img>
-      </v-col>
+  <v-app>
+    <v-main>
+      <v-container fluid class="pa-0">
+        <v-row class="ma-0 bg-blue-lighten-5">
+          <!-- Left column: Logo centered -->
+          <v-col cols="12" md="7" class="d-flex justify-center align-center logo-column">
+            <v-img src="/images/logo.png" max-width="850" max-height="850"></v-img>
+          </v-col>
 
-      <!-- Right column: Login form centered -->
-      <v-col
-        cols="12"
-        md="5"
-        class="d-flex flex-column justify-center align-center form-column bg-blue-lighten-5"
-      >
-        <v-card class="login-card">
-          <v-card-title class="text-h4 text-center font-weight-bold login-title">
-            <v-icon left>mdi-login</v-icon> CGB - Motorpol System
-          </v-card-title>
+          <!-- Right column: Login form centered -->
+          <v-col
+            cols="12"
+            md="5"
+            class="d-flex flex-column justify-center align-center form-column bg-blue-lighten-5"
+          >
+            <v-card class="login-card elevation-10">
+              <!-- Profile icon on top center -->
+              <div class="d-flex justify-center mb-4">
+                <v-avatar size="100" color="primary">
+                  <v-icon size="90" color="white">mdi-account-circle</v-icon>
+                </v-avatar>
+              </div>
+              <v-card-title class="text-h4 text-center font-weight-bold login-title">
+                CGB - Motorpol System
+              </v-card-title>
 
-          <v-card-subtitle class="text-center mb-3">
-            Please enter your credentials to log in.
-          </v-card-subtitle>
+              <v-card-subtitle class="text-center mb-3">
+                Please enter your credentials to log in.
+              </v-card-subtitle>
 
-          <v-card-text>
-            <v-form>
-              <v-text-field
-                label="Email"
-                prepend-inner-icon="mdi-email"
-                density="comfortable"
-                class="mb-4"
-                outlined
-              />
+              <v-card-text>
+                <v-form>
+                  <v-text-field
+                    label="Email"
+                    prepend-inner-icon="mdi-email"
+                    density="comfortable"
+                    class="mb-4"
+                    outlined
+                  />
 
-              <v-text-field
-                label="Password"
-                type="password"
-                prepend-inner-icon="mdi-lock"
-                density="comfortable"
-                class="mb-4"
-                outlined
-              />
+                  <v-text-field
+                    label="Password"
+                    type="password"
+                    prepend-inner-icon="mdi-lock"
+                    density="comfortable"
+                    class="mb-4"
+                    outlined
+                  />
 
-              <v-checkbox v-model="rememberMe" label="Remember Me" class="mb-4" color="primary" />
+                  <v-checkbox
+                    v-model="rememberMe"
+                    label="Remember Me"
+                    class="mb-4"
+                    color="primary"
+                  />
 
-              <v-btn type="submit" color="primary" block class="login-btn" size="large">
-                Login
-              </v-btn>
-            </v-form>
-            <p class="text-center mt-4 register-link">
-              Don't have an account?
-              <RouterLink to="" class="text-decoration-none register-link-text">
-                Register
-              </RouterLink>
-            </p>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+                  <v-btn type="submit" color="primary" block class="login-btn" size="large">
+                    <v-icon start class="me-2">mdi-login</v-icon>
+                    Login
+                  </v-btn>
+                </v-form>
+                <p class="text-center mt-4 register-link">
+                  Don't have an account?
+                  <RouterLink to="" class="text-decoration-none register-link-text">
+                    Register here
+                  </RouterLink>
+                </p>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+
+    <!-- Footer -->
+    <v-footer app color="#053b79" class="text-white d-flex justify-center align-center footer">
+      <span class="text-caption text-center w-100">
+        &copy; {{ new Date().getFullYear() }} CGB - Motorpol System. All rights reserved.
+      </span>
+    </v-footer>
+  </v-app>
 </template>
 
 <style scoped>
+.footer {
+  height: 60px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+}
+
 html {
   font-family: 'Poppins', sans-serif;
+}
+
+.logo-column,
+.form-column {
+  height: calc(100vh - 60px);
 }
 
 .logo-column {
@@ -77,7 +111,6 @@ html {
 }
 
 .form-column {
-  min-height: 100vh;
   background-color: #ffffff;
   padding: 20px;
   border-radius: 15px;
