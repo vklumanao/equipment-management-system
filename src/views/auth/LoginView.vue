@@ -88,7 +88,7 @@ const { mobile } = useDisplay()
 
     <!-- Footer -->
     <v-footer app color="#053b79" class="text-white d-flex justify-center align-center footer">
-      <span class="text-caption text-center w-100">
+      <span class="text-caption text-center w-100" style="font-family: Poppins">
         &copy; {{ new Date().getFullYear() }} CGB - Motorpol System. All rights reserved.
       </span>
     </v-footer>
@@ -98,7 +98,6 @@ const { mobile } = useDisplay()
 <style scoped>
 .footer {
   height: 40px;
-  font-family: 'Poppins', sans-serif;
   font-size: 14px;
 }
 
