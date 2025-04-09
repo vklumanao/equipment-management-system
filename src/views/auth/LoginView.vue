@@ -13,7 +13,12 @@ const { mobile } = useDisplay()
         <v-row class="ma-0 bg-blue-lighten-5">
           <!-- Left column: Logo centered -->
           <v-col cols="12" md="7" class="d-flex justify-center align-center logo-column">
-            <v-img src="/images/logo.png" max-width="850" max-height="850"></v-img>
+            <v-img
+              :src="'/images/logo.png'"
+              :max-width="mobile ? '200' : '850'"
+              :max-height="mobile ? '200' : '850'"
+              class="logo-image"
+            ></v-img>
           </v-col>
 
           <!-- Right column: Login form centered -->
@@ -83,7 +88,7 @@ const { mobile } = useDisplay()
 
     <!-- Footer -->
     <v-footer app color="#053b79" class="text-white d-flex justify-center align-center footer">
-      <span class="text-caption text-center w-100">
+      <span class="text-center w-100" style="font-family: Poppins">
         &copy; {{ new Date().getFullYear() }} CGB - Motorpol System. All rights reserved.
       </span>
     </v-footer>
@@ -93,12 +98,11 @@ const { mobile } = useDisplay()
 <style scoped>
 .footer {
   height: 60px;
-  font-family: 'Poppins', sans-serif;
   font-size: 14px;
 }
 
 html {
-  font-family: 'Poppins', sans-serif;
+  scroll-behavior: smooth;
 }
 
 .logo-column,
@@ -107,7 +111,7 @@ html {
 }
 
 .logo-column {
-  padding: 20px;
+  padding: 0;
 }
 
 .form-column {
@@ -126,7 +130,7 @@ html {
 
 .login-title {
   color: #053b79;
-  font-family: 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: bold;
 }
 
@@ -134,7 +138,7 @@ html {
   border-radius: 25px;
   background-color: #053b79;
   color: white;
-  font-family: 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .login-btn:hover {
@@ -152,13 +156,13 @@ html {
 
 .v-text-field,
 .v-checkbox {
-  font-family: 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', sans-serif;
   border-radius: 10px;
 }
 
 p {
   font-size: 14px;
   color: #7a7a7a;
-  font-family: 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 </style>
