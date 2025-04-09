@@ -15,8 +15,8 @@ const { mobile } = useDisplay()
           <v-col cols="12" md="6" class="d-flex justify-center align-center">
             <v-img
               :src="'/images/logo.png'"
-              :max-width="mobile ? '300' : '700'"
-              :max-height="mobile ? '300' : '800'"
+              :max-width="mobile ? '200' : '700'"
+              :max-height="mobile ? '200' : '800'"
               class="logo-image"
             ></v-img>
           </v-col>
@@ -27,7 +27,7 @@ const { mobile } = useDisplay()
             md="6"
             class="d-flex flex-column justify-center align-center bg-blue-lighten-5 form-column"
           >
-            <v-card class="login-card elevation-10">
+            <v-card class="login-card elevation-10 py-5 px-2">
               <!-- Profile icon on top center -->
               <div class="d-flex justify-center mb-4">
                 <v-avatar size="100" color="primary">
@@ -96,12 +96,24 @@ const { mobile } = useDisplay()
 </template>
 
 <style scoped>
-html {
-  scroll-behavior: smooth;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
-.logo-column {
-  padding: 0;
+.v-container {
+  max-width: 100%; /* Prevent the container from overflowing */
+}
+
+.v-row {
+  max-width: 100%;
+}
+
+.logo-image {
+  max-width: 100%; /* Prevent the image from overflowing */
+  height: auto;
 }
 
 .form-column {
@@ -113,7 +125,7 @@ html {
 .login-card {
   max-width: 700px;
   width: 100%;
-  padding: 40px;
+  /* padding: 10px; */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
 }
