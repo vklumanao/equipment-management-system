@@ -103,7 +103,7 @@ const { mobile } = useDisplay()
 }
 
 html {
-  font-family: 'Poppins', sans-serif;
+  scroll-behavior: smooth;
 }
 
 .logo-column,
@@ -131,7 +131,7 @@ html {
 
 .login-title {
   color: #053b79;
-  font-family: 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: bold;
 }
 
@@ -139,7 +139,7 @@ html {
   border-radius: 25px;
   background-color: #053b79;
   color: white;
-  font-family: 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .login-btn:hover {
@@ -157,13 +157,13 @@ html {
 
 .v-text-field,
 .v-checkbox {
-  font-family: 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', sans-serif;
   border-radius: 10px;
 }
 
 p {
   font-size: 14px;
   color: #7a7a7a;
-  font-family: 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 </style>
