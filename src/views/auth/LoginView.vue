@@ -5,14 +5,18 @@ const rememberMe = ref(false)
 
 <template>
   <v-container fluid class="fill-height pa-0">
-    <v-row class="fill-height ma-0">
+    <v-row class="fill-height ma-0 bg-grey-lighten-3">
       <!-- Left column: Logo centered -->
       <v-col cols="12" md="7" class="d-flex justify-center align-center logo-column">
-        <v-img src="/images/logo.png" max-width="700" max-height="700"></v-img>
+        <v-img src="/images/logo.png" max-width="850" max-height="850"></v-img>
       </v-col>
 
       <!-- Right column: Login form centered -->
-      <v-col cols="12" md="5" class="d-flex flex-column justify-center align-center form-column">
+      <v-col
+        cols="12"
+        md="5"
+        class="d-flex flex-column justify-center align-center form-column bg-grey-lighten-3"
+      >
         <v-card class="login-card">
           <v-card-title class="text-h4 text-center font-weight-bold login-title">
             CGB - Motorpol System
