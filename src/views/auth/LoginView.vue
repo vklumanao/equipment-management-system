@@ -9,14 +9,14 @@ const { mobile } = useDisplay()
 <template>
   <v-app>
     <v-main>
-      <v-container fluid class="pa-0">
-        <v-row class="ma-0 bg-blue-lighten-5">
+      <v-container fluid class="pa-0 fill-height">
+        <v-row class="ma-0 bg-blue-lighten-5 justify-center align-center fill-height">
           <!-- Left column: Logo centered -->
-          <v-col cols="12" md="7" class="d-flex justify-center align-center logo-column">
+          <v-col cols="12" md="6" class="d-flex justify-center align-center">
             <v-img
               :src="'/images/logo.png'"
-              :max-width="mobile ? '200' : '850'"
-              :max-height="mobile ? '200' : '850'"
+              :max-width="mobile ? '300' : '700'"
+              :max-height="mobile ? '300' : '800'"
               class="logo-image"
             ></v-img>
           </v-col>
@@ -24,8 +24,8 @@ const { mobile } = useDisplay()
           <!-- Right column: Login form centered -->
           <v-col
             cols="12"
-            md="5"
-            class="d-flex flex-column justify-center align-center form-column bg-blue-lighten-5"
+            md="6"
+            class="d-flex flex-column justify-center align-center bg-blue-lighten-5 form-column"
           >
             <v-card class="login-card elevation-10">
               <!-- Profile icon on top center -->
@@ -96,18 +96,8 @@ const { mobile } = useDisplay()
 </template>
 
 <style scoped>
-.footer {
-  height: 60px;
-  font-size: 14px;
-}
-
 html {
   scroll-behavior: smooth;
-}
-
-.logo-column,
-.form-column {
-  height: calc(100vh - 60px);
 }
 
 .logo-column {
@@ -164,5 +154,10 @@ p {
   font-size: 14px;
   color: #7a7a7a;
   font-family: 'Poppins', sans-serif;
+}
+
+.footer {
+  height: 60px;
+  font-size: 14px;
 }
 </style>
