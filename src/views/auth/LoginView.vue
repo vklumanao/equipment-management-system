@@ -27,26 +27,21 @@ const { mobile } = useDisplay()
             md="6"
             class="d-flex flex-column justify-center align-center bg-blue-lighten-5 form-column"
           >
-            <v-card class="login-card elevation-10 py-5 px-2">
-              <!-- Profile icon on top center -->
-              <div class="d-flex justify-center mb-4">
-                <v-avatar size="100" color="primary">
-                  <v-icon size="90" color="white">mdi-account-circle</v-icon>
-                </v-avatar>
-              </div>
+            <v-card class="login-card elevation-10 py-4 px-3">
               <v-card-title class="text-h4 text-center font-weight-bold login-title">
                 CGB - Motorpol System
               </v-card-title>
 
               <v-card-subtitle class="text-center mb-3">
-                Please enter your credentials to log in.
+                Please enter your credentials to Login.
               </v-card-subtitle>
 
               <v-card-text>
                 <v-form>
                   <v-text-field
-                    label="Email"
-                    prepend-inner-icon="mdi-email"
+                    label="Username"
+                    type="text"
+                    prepend-inner-icon="mdi-account-circle"
                     density="comfortable"
                     class="mb-4"
                     outlined
@@ -73,6 +68,9 @@ const { mobile } = useDisplay()
                     Login
                   </v-btn>
                 </v-form>
+
+                <v-divider class="my-3"></v-divider>
+
                 <p class="text-center mt-4 register-link">
                   Don't have an account?
                   <RouterLink to="/register" class="text-decoration-none register-link-text">
@@ -88,7 +86,7 @@ const { mobile } = useDisplay()
 
     <!-- Footer -->
     <v-footer app color="#053b79" class="text-white d-flex justify-center align-center footer">
-      <span class="text-center w-100" style="font-family: Poppins">
+      <span class="text-center w-100">
         &copy; {{ new Date().getFullYear() }} CGB - Motorpol System. All rights reserved.
       </span>
     </v-footer>
@@ -118,12 +116,11 @@ body {
 
 .form-column {
   background-color: #ffffff;
-  padding: 20px;
   border-radius: 15px;
 }
 
 .login-card {
-  max-width: 700px;
+  max-width: 600px;
   width: 100%;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
@@ -132,7 +129,6 @@ body {
 .login-title {
   color: #053b79;
   font-family: 'Poppins', sans-serif;
-  font-weight: bold;
 }
 
 .login-btn {
@@ -170,5 +166,6 @@ p {
 .footer {
   height: 60px;
   font-size: 14px;
+  font-family: 'Poppins', sans-serif;
 }
 </style>

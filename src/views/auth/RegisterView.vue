@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
-const rememberMe = ref(false)
 import { useDisplay } from 'vuetify'
 
 const { mobile } = useDisplay()
@@ -22,32 +21,54 @@ const { mobile } = useDisplay()
             ></v-img>
           </v-col>
 
-          <!-- Right column: Login form centered -->
+          <!-- Right column: Register form centered -->
           <v-col
             cols="12"
             md="6"
             class="d-flex flex-column justify-center align-center bg-blue-lighten-5 form-column"
           >
-            <v-card class="login-card elevation-10 py-5 px-2">
-              <!-- Profile icon on top center -->
-              <div class="d-flex justify-center mb-4">
-                <v-avatar size="100" color="primary">
-                  <v-icon size="90" color="white">mdi-account-circle</v-icon>
-                </v-avatar>
-              </div>
-              <v-card-title class="text-h4 text-center font-weight-bold login-title">
+            <v-card class="register-card elevation-10 py-4 px-3">
+              <v-card-title class="text-h4 text-center font-weight-bold register-title">
                 CGB - Motorpol System
               </v-card-title>
 
               <v-card-subtitle class="text-center mb-3">
-                Please enter your credentials to log in.
+                Please enter your credentials to Register.
               </v-card-subtitle>
 
               <v-card-text>
                 <v-form>
                   <v-text-field
+                    label="Firstname"
+                    prepend-inner-icon="mdi-account-plus"
+                    type="text"
+                    density="comfortable"
+                    class="mb-4"
+                    outlined
+                  />
+
+                  <v-text-field
+                    label="Lastname"
+                    prepend-inner-icon="mdi-account-plus"
+                    type="text"
+                    density="comfortable"
+                    class="mb-4"
+                    outlined
+                  />
+
+                  <v-text-field
+                    label="Username"
+                    prepend-inner-icon="mdi-account-circle"
+                    type="text"
+                    density="comfortable"
+                    class="mb-4"
+                    outlined
+                  />
+
+                  <v-text-field
                     label="Email"
                     prepend-inner-icon="mdi-email"
+                    type="email"
                     density="comfortable"
                     class="mb-4"
                     outlined
@@ -62,18 +83,23 @@ const { mobile } = useDisplay()
                     outlined
                   />
 
-                  <v-checkbox
-                    v-model="rememberMe"
-                    label="Remember Me"
+                  <v-text-field
+                    label="Password Confirmation"
+                    type="password"
+                    prepend-inner-icon="mdi-lock-check"
+                    density="comfortable"
                     class="mb-4"
-                    color="primary"
+                    outlined
                   />
 
-                  <v-btn type="submit" color="primary" block class="login-btn" size="large">
-                    <v-icon start class="me-2">mdi-login</v-icon>
-                    Login
+                  <v-btn type="submit" color="primary" block class="register-btn" size="large">
+                    <v-icon start class="me-2">mdi-account-plus</v-icon>
+                    Register
                   </v-btn>
                 </v-form>
+
+                <v-divider class="my-3"></v-divider>
+
                 <p class="text-center mt-4 register-link">
                   Already have an Account?
                   <RouterLink to="/" class="text-decoration-none register-link-text">
@@ -89,7 +115,7 @@ const { mobile } = useDisplay()
 
     <!-- Footer -->
     <v-footer app color="#053b79" class="text-white d-flex justify-center align-center footer">
-      <span class="text-center w-100" style="font-family: Poppins">
+      <span class="text-center w-100">
         &copy; {{ new Date().getFullYear() }} CGB - Motorpol System. All rights reserved.
       </span>
     </v-footer>
@@ -102,6 +128,7 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  font-family: 'Poppins', sans-serif;
 }
 
 .v-container {
@@ -123,27 +150,26 @@ body {
   border-radius: 15px;
 }
 
-.login-card {
-  max-width: 700px;
+.register-card {
+  max-width: 600px;
   width: 100%;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
 }
 
-.login-title {
+.register-title {
   color: #053b79;
   font-family: 'Poppins', sans-serif;
-  font-weight: bold;
 }
 
-.login-btn {
+.register-btn {
   border-radius: 25px;
   background-color: #053b79;
   color: white;
   font-family: 'Poppins', sans-serif;
 }
 
-.login-btn:hover {
+.register-btn:hover {
   background-color: #053b79;
 }
 
@@ -171,5 +197,6 @@ p {
 .footer {
   height: 60px;
   font-size: 14px;
+  font-family: 'Poppins', sans-serif;
 }
 </style>
