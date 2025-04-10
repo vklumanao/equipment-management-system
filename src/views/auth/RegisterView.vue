@@ -64,7 +64,7 @@ import AuthLayout from '@/components/layout/AuthLayout.vue'
             class="mb-4"
             outlined
           />
-          <v-btn type="submit" color="primary" block class="register-btn" size="large">
+          <v-btn to="/" type="submit" color="primary" block class="register-btn" size="large">
             <v-icon start class="me-2">mdi-account-plus</v-icon>
             Register
           </v-btn>
@@ -72,7 +72,7 @@ import AuthLayout from '@/components/layout/AuthLayout.vue'
 
         <v-divider class="my-3"></v-divider>
 
-        <p class="text-center mt-4 register-link">
+        <p class="text-center mt-4">
           Already have an Account?
           <RouterLink to="/" class="text-decoration-none register-link-text">
             Click to Login

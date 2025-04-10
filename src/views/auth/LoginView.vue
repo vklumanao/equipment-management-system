@@ -39,7 +39,7 @@ const rememberMe = ref(false)
         </v-form>
 
         <v-divider class="my-3" />
-        <p class="text-center mt-4 register-link">
+        <p class="text-center mt-4">
           Don't have an account?
           <RouterLink to="/register" class="text-decoration-none register-link-text">
             Click to Register
