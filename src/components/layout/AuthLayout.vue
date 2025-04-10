@@ -36,6 +36,22 @@ import FooterLayout from '../common/FooterLayout.vue'
 </template>
 
 <style scoped>
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: 'Poppins', sans-serif;
+}
+
+.v-container {
+  max-width: 100%;
+}
+
+.v-row {
+  max-width: 100%;
+}
+
 .logo-image {
   max-width: 100%;
   height: auto;
