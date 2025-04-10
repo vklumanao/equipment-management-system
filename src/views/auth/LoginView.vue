@@ -8,15 +8,16 @@ const rememberMe = ref(false)
 <template>
   <AuthLayout>
     <v-card class="login-card elevation-10 py-4 px-3">
-      <v-card-title class="text-lg-h4 text-sm-h4 text-center font-weight-bold login-title">
+      <v-card-title class="text-lg-4 text-sm-h4 text-center font-weight-bold login-title">
         CGB - Motorpol System
       </v-card-title>
 
-      <v-card-subtitle class="text-center mb-3">
+      <v-card-subtitle class="text-center mb-3 text-h7">
         Please enter your credentials to Login.
       </v-card-subtitle>
 
       <v-card-text>
+        <v-divider class="mb-3" />
         <v-form>
           <v-text-field
             label="Username"
@@ -39,6 +40,7 @@ const rememberMe = ref(false)
         </v-form>
 
         <v-divider class="my-3" />
+
         <p class="text-center mt-4">
           Don't have an account?
           <RouterLink to="/register" class="text-decoration-none register-link-text">

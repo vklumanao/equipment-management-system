@@ -10,11 +10,12 @@ import AuthLayout from '@/components/layout/AuthLayout.vue'
         CGB - Motorpol System
       </v-card-title>
 
-      <v-card-subtitle class="text-center mb-3">
+      <v-card-subtitle class="text-center mb-3 text-h7">
         Please enter your credentials to Register.
       </v-card-subtitle>
 
       <v-card-text>
+        <v-divider class="mb-3" />
         <v-form>
           <v-text-field
             label="Firstname"
