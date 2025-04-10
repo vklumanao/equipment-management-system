@@ -31,7 +31,7 @@ const rememberMe = ref(false)
             outlined
             class="mb-4"
           />
-          <v-checkbox v-model="rememberMe" label="Remember Me" class="mb-4" color="primary" />
+          <v-checkbox v-model="rememberMe" label="Remember Me" class="my-1" color="primary" />
           <v-btn type="submit" color="primary" block class="login-btn" size="large">
             <v-icon start class="me-2">mdi-login</v-icon>
             Login
