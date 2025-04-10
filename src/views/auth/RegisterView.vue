@@ -6,15 +6,16 @@ import AuthLayout from '@/components/layout/AuthLayout.vue'
 <template>
   <AuthLayout>
     <v-card class="register-card elevation-10 py-4 px-3">
-      <v-card-title class="text-h4 text-center font-weight-bold register-title">
+      <v-card-title class="text-lg-h4 text-sm-h4 text-center font-weight-bold register-title">
         CGB - Motorpol System
       </v-card-title>
 
-      <v-card-subtitle class="text-center mb-3">
+      <v-card-subtitle class="text-center mb-3 text-h7">
         Please enter your credentials to Register.
       </v-card-subtitle>
 
       <v-card-text>
+        <v-divider class="mb-3" />
         <v-form>
           <v-text-field
             label="Firstname"
@@ -64,7 +65,7 @@ import AuthLayout from '@/components/layout/AuthLayout.vue'
             class="mb-4"
             outlined
           />
-          <v-btn type="submit" color="primary" block class="register-btn" size="large">
+          <v-btn to="/" type="submit" color="primary" block class="register-btn" size="large">
             <v-icon start class="me-2">mdi-account-plus</v-icon>
             Register
           </v-btn>
@@ -72,7 +73,7 @@ import AuthLayout from '@/components/layout/AuthLayout.vue'
 
         <v-divider class="my-3"></v-divider>
 
-        <p class="text-center mt-4 register-link">
+        <p class="text-center mt-4">
           Already have an Account?
           <RouterLink to="/" class="text-decoration-none register-link-text">
             Click to Login
@@ -87,7 +88,6 @@ import AuthLayout from '@/components/layout/AuthLayout.vue'
 .register-card {
   max-width: 600px;
   width: 100%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   font-family: 'Poppins', sans-serif;
 }
