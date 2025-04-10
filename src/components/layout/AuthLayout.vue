@@ -10,7 +10,7 @@ import FooterLayout from '../common/FooterLayout.vue'
       <v-container fluid class="pa-0 fill-height">
         <v-row class="ma-0 bg-blue-lighten-5 justify-center align-center fill-height">
           <!-- Left column: Logo centered -->
-          <v-col cols="12" md="6" class="d-none d-md-flex justify-center align-center">
+          <v-col cols="12" md="6" class="d-md-none d-lg-flex d-none justify-center align-center">
             <v-img
               :src="'/images/logo.png'"
               :max-width="mobile ? '200' : '700'"
