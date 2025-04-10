@@ -9,7 +9,7 @@ const rememberMe = ref(false)
   <AuthLayout>
     <v-card class="login-card elevation-10 py-4 px-3">
       <div class="d-lg-none d-flex justify-center mb-4">
-        <v-img src="/public/images/logo.png" width="200" height="200" />
+        <v-img src="/images/logo.png" width="200" height="200" />
       </div>
       <v-card-title class="text-lg-4 text-sm-h4 text-center font-weight-bold login-title">
         CGB - Motorpol System
