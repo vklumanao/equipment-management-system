@@ -8,7 +8,7 @@ const rememberMe = ref(false)
 <template>
   <AuthLayout>
     <v-card class="login-card elevation-10 py-4 px-3">
-      <v-card-title class="text-h4 text-center font-weight-bold login-title">
+      <v-card-title class="text-lg-h4 text-sm-h4 text-center font-weight-bold login-title">
         CGB - Motorpol System
       </v-card-title>
 

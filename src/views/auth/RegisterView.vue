@@ -6,7 +6,7 @@ import AuthLayout from '@/components/layout/AuthLayout.vue'
 <template>
   <AuthLayout>
     <v-card class="register-card elevation-10 py-4 px-3">
-      <v-card-title class="text-h4 text-center font-weight-bold register-title">
+      <v-card-title class="text-lg-h4 text-sm-h4 text-center font-weight-bold register-title">
         CGB - Motorpol System
       </v-card-title>
 
