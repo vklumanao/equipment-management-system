@@ -87,7 +87,6 @@ import AuthLayout from '@/components/layout/AuthLayout.vue'
 .register-card {
   max-width: 600px;
   width: 100%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   font-family: 'Poppins', sans-serif;
 }
