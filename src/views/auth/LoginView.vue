@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
 const rememberMe = ref(false)
 import { useDisplay } from 'vuetify'
 
@@ -93,6 +94,12 @@ const { mobile } = useDisplay()
       </span>
     </v-footer>
   </v-app>
+  <p class="text-center mt-4 register-link">
+  Don't have an account?
+  <RouterLink to="" class="text-decoration-none register-link-text">
+    Register here
+  </RouterLink>
+</p>
 </template>
 
 <style scoped>
