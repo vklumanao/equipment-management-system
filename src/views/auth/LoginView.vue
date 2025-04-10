@@ -75,8 +75,8 @@ const { mobile } = useDisplay()
                 </v-form>
                 <p class="text-center mt-4 register-link">
                   Don't have an account?
-                  <RouterLink to="" class="text-decoration-none register-link-text">
-                    Register here
+                  <RouterLink to="/register" class="text-decoration-none register-link-text">
+                    Click to Register
                   </RouterLink>
                 </p>
               </v-card-text>
@@ -100,11 +100,11 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-x: hidden;
 }
 
 .v-container {
-  max-width: 100%; /* Prevent the container from overflowing */
+  max-width: 100%;
 }
 
 .v-row {
@@ -112,7 +112,7 @@ body {
 }
 
 .logo-image {
-  max-width: 100%; /* Prevent the image from overflowing */
+  max-width: 100%;
   height: auto;
 }
 
@@ -125,7 +125,6 @@ body {
 .login-card {
   max-width: 700px;
   width: 100%;
-  /* padding: 10px; */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
 }
