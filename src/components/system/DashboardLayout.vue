@@ -46,22 +46,17 @@ const menuItems = [
           :key="item.title"
           :to="item.route"
           link
-          class="my-1 px-4 py-2 transition-all duration-200 ease-in-out hover:bg-blue-darken-3"
+          class="my-1 px-4 py-3 transition-all duration-200 ease-in-out hover:bg-blue-darken-3"
           active-class="bg-blue-dark text-dark"
         >
-        <!-- icon -->
-          <v-list-item-icon>
-            <v-icon color="primary" class="text-h4">
+          <div class="d-flex align-center gap-3">
+            <v-icon color="primary" class="text-h5">
               {{ item.icon }}
             </v-icon>
-          </v-list-item-icon>
-          
-          <!-- title -->
-          <v-list-item-content>
-            <v-list-item-title class="text-body-1">
+            <span class="px-2 text-body-1 font-weight-medium">
               {{ item.title }}
-            </v-list-item-title>
-          </v-list-item-content>
+            </span>
+          </div>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
