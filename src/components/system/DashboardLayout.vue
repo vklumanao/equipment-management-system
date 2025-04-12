@@ -49,11 +49,14 @@ const menuItems = [
           class="my-1 px-4 py-2 transition-all duration-200 ease-in-out hover:bg-blue-darken-3"
           active-class="bg-blue-dark text-dark"
         >
+        <!-- icon -->
           <v-list-item-icon>
             <v-icon color="primary" class="text-h4">
               {{ item.icon }}
             </v-icon>
           </v-list-item-icon>
+          
+          <!-- title -->
           <v-list-item-content>
             <v-list-item-title class="text-body-1">
               {{ item.title }}
