@@ -4,7 +4,7 @@ import { ref } from 'vue'
 const drawer = ref(true)
 
 const menuItems = [
-  { title: 'Home', icon: 'mdi-home', route: '/dashboard' },
+  { title: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard' },
   { title: 'Vehicles', icon: 'mdi-dump-truck', route: '/vehicle' },
   { title: 'Drivers', icon: 'mdi-account', route: '/driver' },
   { title: 'Requests', icon: 'mdi-message-plus', route: '/request' },
@@ -23,7 +23,7 @@ const menuItems = [
     >
       <!-- Left side -->
       <div class="d-flex align-center gap-3">
-        <v-app-bar-nav-icon @click="drawer = !drawer" />
+        <v-app-bar-nav-icon variant="text" @click="drawer = !drawer" />
         <v-toolbar-title class="text-h6 font-weight-bold"> Dashboard </v-toolbar-title>
       </div>
 
@@ -47,7 +47,7 @@ const menuItems = [
           :to="item.route"
           link
           class="my-1 px-4 py-3 transition-all duration-200 ease-in-out hover:bg-blue-darken-3"
-          active-class="bg-blue-dark text-dark"
+          active-class="bg-blue-dark text-blue"
         >
           <div class="d-flex align-center gap-3">
             <v-icon color="primary" class="text-h5">
