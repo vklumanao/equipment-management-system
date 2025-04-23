@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
 
 const rememberMe = ref(false)
+const showPassword = ref(false)
 </script>
 
 <template>
@@ -29,9 +30,12 @@ const rememberMe = ref(false)
             class="mb-4"
           />
           <v-text-field
+            v-model="password"
+            :type="showPassword ? 'text' : 'password'"
             label="Password"
-            type="password"
             prepend-inner-icon="mdi-lock"
+            :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+            @click:append-inner="showPassword = !showPassword"
             outlined
             class="mb-4"
           />

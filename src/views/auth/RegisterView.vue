@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
+
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
 </script>
 
 <template>
@@ -28,6 +31,7 @@ import AuthLayout from '@/components/layout/AuthLayout.vue'
             class="mb-4"
             outlined
           />
+
           <v-text-field
             label="Lastname"
             prepend-inner-icon="mdi-account-plus"
@@ -36,6 +40,7 @@ import AuthLayout from '@/components/layout/AuthLayout.vue'
             class="mb-4"
             outlined
           />
+
           <v-text-field
             label="Username"
             prepend-inner-icon="mdi-account-circle"
@@ -44,6 +49,7 @@ import AuthLayout from '@/components/layout/AuthLayout.vue'
             class="mb-4"
             outlined
           />
+
           <v-text-field
             label="Email"
             prepend-inner-icon="mdi-email"
@@ -52,18 +58,24 @@ import AuthLayout from '@/components/layout/AuthLayout.vue'
             class="mb-4"
             outlined
           />
+
           <v-text-field
             label="Password"
-            type="password"
+            :type="showPassword ? 'text' : 'password'"
             prepend-inner-icon="mdi-lock"
+            :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+            @click:append-inner="showPassword = !showPassword"
             density="comfortable"
             class="mb-4"
             outlined
           />
+
           <v-text-field
             label="Password Confirmation"
-            type="password"
+            :type="showConfirmPassword ? 'text' : 'password'"
             prepend-inner-icon="mdi-lock-check"
+            :append-inner-icon="showConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'"
+            @click:append-inner="showConfirmPassword = !showConfirmPassword"
             density="comfortable"
             class="mb-4"
             outlined
