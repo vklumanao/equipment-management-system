@@ -1,9 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
+import { requiredValidator, emailValidator } from '@/utils/validators'
 
 const rememberMe = ref(false)
 const showPassword = ref(false)
+
 </script>
 
 <template>
@@ -28,6 +30,7 @@ const showPassword = ref(false)
             prepend-inner-icon="mdi-account-circle"
             outlined
             class="mb-4"
+            :rules="[requiredValidator, emailValidator]"
           />
           <v-text-field
             v-model="password"
@@ -38,6 +41,7 @@ const showPassword = ref(false)
             @click:append-inner="showPassword = !showPassword"
             outlined
             class="mb-4"
+            :rules="[requiredValidator]"
           />
           <v-checkbox v-model="rememberMe" label="Remember Me" class="my-1" color="primary" />
           <v-btn type="submit" color="primary" block class="login-btn" size="large">

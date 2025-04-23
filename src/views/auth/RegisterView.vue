@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
+import { requiredValidator, emailValidator } from '@/utils/validators'
 
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
@@ -30,6 +31,7 @@ const showConfirmPassword = ref(false)
             density="comfortable"
             class="mb-4"
             outlined
+            :rules="[requiredValidator]"
           />
 
           <v-text-field
@@ -39,6 +41,7 @@ const showConfirmPassword = ref(false)
             density="comfortable"
             class="mb-4"
             outlined
+            :rules="[requiredValidator]"
           />
 
           <v-text-field
@@ -48,6 +51,7 @@ const showConfirmPassword = ref(false)
             density="comfortable"
             class="mb-4"
             outlined
+            :rules="[requiredValidator]"
           />
 
           <v-text-field
@@ -57,6 +61,7 @@ const showConfirmPassword = ref(false)
             density="comfortable"
             class="mb-4"
             outlined
+            :rules="[requiredValidator, emailValidator]"
           />
 
           <v-text-field
@@ -68,6 +73,7 @@ const showConfirmPassword = ref(false)
             density="comfortable"
             class="mb-4"
             outlined
+            :rules="[requiredValidator]"
           />
 
           <v-text-field
@@ -79,6 +85,7 @@ const showConfirmPassword = ref(false)
             density="comfortable"
             class="mb-4"
             outlined
+            :rules="[requiredValidator]"
           />
           <v-btn to="/" type="submit" color="primary" block class="register-btn" size="large">
             <v-icon start class="me-2">mdi-account-plus</v-icon>
