@@ -55,6 +55,33 @@ const onFormSubmit = () => {
 
       <v-card-text>
         <v-divider class="mb-3" />
+
+        <!-- Alert message -->
+        <v-alert
+          v-if="formAction.formSuccessMessage"
+          :text="formAction.formSuccessMessage"
+          title="Success!"
+          type="success"
+          variant="tonal"
+          density="compact"
+          border="start"
+          closable
+        >
+        </v-alert>
+
+        <v-alert
+          v-if="formAction.formErrorMessage"
+          :text="formAction.formErrorMessage"
+          title="Ooops!"
+          type="error"
+          variant="tonal"
+          density="compact"
+          border="start"
+          closable
+        >
+        </v-alert>
+
+        <!-- Firstname -->
         <v-form ref="refVform" @submit.prevent="onFormSubmit">
           <v-text-field
             label="Firstname"
@@ -67,6 +94,7 @@ const onFormSubmit = () => {
             v-model="formData.firstname"
           />
 
+          <!-- Lastname -->
           <v-text-field
             label="Lastname"
             prepend-inner-icon="mdi-account-plus"
@@ -78,6 +106,7 @@ const onFormSubmit = () => {
             v-model="formData.lastname"
           />
 
+          <!-- Username -->
           <v-text-field
             label="Username"
             prepend-inner-icon="mdi-account-circle"
@@ -89,6 +118,7 @@ const onFormSubmit = () => {
             v-model="formData.username"
           />
 
+          <!-- Email -->
           <v-text-field
             label="Email"
             prepend-inner-icon="mdi-email"
@@ -100,6 +130,7 @@ const onFormSubmit = () => {
             v-model="formData.email"
           />
 
+          <!-- Password -->
           <v-text-field
             label="Password"
             :type="showPassword ? 'text' : 'password'"
@@ -113,6 +144,7 @@ const onFormSubmit = () => {
             v-model="formData.password"
           />
 
+          <!-- Password Confirmation -->
           <v-text-field
             label="Password Confirmation"
             :type="showConfirmPassword ? 'text' : 'password'"
@@ -128,7 +160,18 @@ const onFormSubmit = () => {
             ]"
             v-model="formData.password_confirmation"
           />
-          <v-btn to="" type="submit" color="primary" block class="register-btn" size="large">
+
+          <!-- Register Button -->
+          <v-btn
+            to=""
+            type="submit"
+            color="primary"
+            block
+            class="register-btn"
+            size="large"
+            :disabled="formAction.formProcess"
+            :loading="formAction.formProcess"
+          >
             <v-icon start class="me-2">mdi-account-plus</v-icon>
             Register
           </v-btn>
@@ -136,6 +179,7 @@ const onFormSubmit = () => {
 
         <v-divider class="my-3"></v-divider>
 
+        <!-- Already have an Account -->
         <p class="text-center mt-4">
           Already have an Account?
           <RouterLink to="/" class="text-decoration-none register-link-text">
