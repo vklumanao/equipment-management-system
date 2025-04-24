@@ -9,6 +9,7 @@ import {
 } from '@/utils/validators'
 
 import { supabase, formActionDefault } from '@/utils/supabase'
+import AlertNotification from '@/components/common/AlertNotification.vue'
 
 const formAction = ref({
   ...formActionDefault,
@@ -61,6 +62,7 @@ const onSubmit = async () => {
   } else if (data) {
     console.log(data)
     formAction.value.formSuccessMessage = 'Successfully Registered Account.'
+    refVform.value?.reset()
   }
 
   formAction.value.formProcess = false
@@ -85,32 +87,13 @@ const onSubmit = async () => {
         <v-divider class="mb-3" />
 
         <!-- Alert message -->
-        <v-alert
-          v-if="formAction.formSuccessMessage"
-          :text="formAction.formSuccessMessage"
-          title="Success!"
-          type="success"
-          variant="tonal"
-          density="compact"
-          border="start"
-          closable
-        >
-        </v-alert>
-
-        <v-alert
-          v-if="formAction.formErrorMessage"
-          :text="formAction.formErrorMessage"
-          title="Ooops!"
-          type="error"
-          variant="tonal"
-          density="compact"
-          border="start"
-          closable
-        >
-        </v-alert>
+        <AlertNotification
+          :form-success-message="formAction.formSuccessMessage"
+          :form-error-message="formAction.formErrorMessage"
+        ></AlertNotification>
 
         <!-- Firstname -->
-        <v-form ref="refVform" @submit.prevent="onFormSubmit">
+        <v-form class="mt-2" ref="refVform" @submit.prevent="onFormSubmit">
           <v-text-field
             label="Firstname"
             prepend-inner-icon="mdi-account-plus"
