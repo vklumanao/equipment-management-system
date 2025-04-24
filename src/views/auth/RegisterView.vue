@@ -1,7 +1,12 @@
 <script setup>
 import { ref } from 'vue'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
-import { requiredValidator, emailValidator, confirmedValidator, passwordValidator } from '@/utils/validators'
+import {
+  requiredValidator,
+  emailValidator,
+  confirmedValidator,
+  passwordValidator,
+} from '@/utils/validators'
 
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
