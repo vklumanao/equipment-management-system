@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
-import { requiredValidator, emailValidator, confirmedValidator } from '@/utils/validators'
+import { requiredValidator, emailValidator, confirmedValidator, passwordValidator } from '@/utils/validators'
 
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
@@ -98,7 +98,7 @@ const onFormSubmit = () => {
             density="comfortable"
             class="mb-4"
             outlined
-            :rules="[requiredValidator]"
+            :rules="[requiredValidator, passwordValidator]"
             v-model="formData.password"
           />
 
@@ -113,7 +113,7 @@ const onFormSubmit = () => {
             outlined
             :rules="[
               requiredValidator,
-              confirmedValidator(password_confirmation, formData.password),
+              confirmedValidator(formData.password_confirmation, formData.password),
             ]"
             v-model="formData.password_confirmation"
           />
