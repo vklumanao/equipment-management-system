@@ -1,7 +1,21 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { isAuthenticated } from '@/utils/supabase'
 
 const drawer = ref(true)
+
+// Load Variables
+const isLoggedin = ref()
+
+// Load Authentication status from supabase
+const getLoggedStatus = async () => {
+  isLoggedin.value = await isAuthenticated()
+}
+
+// Load Functions during component rendering
+onMounted(() => {
+  getLoggedStatus()
+})
 
 const menuItems = [
   { title: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard' },
