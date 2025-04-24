@@ -91,7 +91,7 @@ import { computed } from 'vue'
   ]
 
   const virtualBoats = computed(() => {
-    return [...Array(10000).keys()].map(i => {
+    return [...Array(30).keys()].map(i => {
       const boat = { ...boats[i % 10] }
       boat.name = `${boat.name} #${i}`
       return boat
@@ -106,7 +106,7 @@ import { computed } from 'vue'
 
 <template>
     <DashboardLayout>
-      <div class="pa-4">
+      <div class="pa-2">
         <div class="mb-4 d-flex justify-start">
           <v-btn
             prepend-icon="mdi-check-circle"
@@ -127,7 +127,7 @@ import { computed } from 'vue'
         <v-data-table-virtual
           :headers="headers"
           :items="virtualBoats"
-          height="400"
+          height="550"
           item-value="name"
           fixed-header
         ></v-data-table-virtual>
