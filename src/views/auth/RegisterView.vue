@@ -1,7 +1,19 @@
 <script setup>
 import { ref } from 'vue'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
-import { requiredValidator, emailValidator, confirmedValidator, passwordValidator } from '@/utils/validators'
+import {
+  requiredValidator,
+  emailValidator,
+  confirmedValidator,
+  passwordValidator,
+} from '@/utils/validators'
+
+import { supabase, formActionDefault } from '@/utils/supabase'
+import AlertNotification from '@/components/common/AlertNotification.vue'
+
+const formAction = ref({
+  ...formActionDefault,
+})
 
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
@@ -26,6 +38,35 @@ const onFormSubmit = () => {
     if (isValid) onSubmit()
   })
 }
+
+const onSubmit = async () => {
+  formAction.value = { ...formActionDefault }
+  formAction.value.formProcess = true
+
+  const { data, error } = await supabase.auth.signUp({
+    email: formData.value.email,
+    password: formData.value.password,
+    options: {
+      data: {
+        firstname: formData.value.firstname,
+        lastname: formData.value.lastname,
+        username: formData.value.username,
+      },
+    },
+  })
+
+  if (error) {
+    console.log(error)
+    formAction.value.formErrorMessage = error.message
+    formAction.value.formStatus = error.status
+  } else if (data) {
+    console.log(data)
+    formAction.value.formSuccessMessage = 'Successfully Registered Account.'
+    refVform.value?.reset()
+  }
+
+  formAction.value.formProcess = false
+}
 </script>
 
 <template>
@@ -44,7 +85,15 @@ const onFormSubmit = () => {
 
       <v-card-text>
         <v-divider class="mb-3" />
-        <v-form ref="refVform" @submit.prevent="onFormSubmit">
+
+        <!-- Alert message -->
+        <AlertNotification
+          :form-success-message="formAction.formSuccessMessage"
+          :form-error-message="formAction.formErrorMessage"
+        ></AlertNotification>
+
+        <!-- Firstname -->
+        <v-form class="mt-2" ref="refVform" @submit.prevent="onFormSubmit">
           <v-text-field
             label="Firstname"
             prepend-inner-icon="mdi-account-plus"
@@ -56,6 +105,7 @@ const onFormSubmit = () => {
             v-model="formData.firstname"
           />
 
+          <!-- Lastname -->
           <v-text-field
             label="Lastname"
             prepend-inner-icon="mdi-account-plus"
@@ -67,6 +117,7 @@ const onFormSubmit = () => {
             v-model="formData.lastname"
           />
 
+          <!-- Username -->
           <v-text-field
             label="Username"
             prepend-inner-icon="mdi-account-circle"
@@ -78,6 +129,7 @@ const onFormSubmit = () => {
             v-model="formData.username"
           />
 
+          <!-- Email -->
           <v-text-field
             label="Email"
             prepend-inner-icon="mdi-email"
@@ -89,6 +141,7 @@ const onFormSubmit = () => {
             v-model="formData.email"
           />
 
+          <!-- Password -->
           <v-text-field
             label="Password"
             :type="showPassword ? 'text' : 'password'"
@@ -102,6 +155,7 @@ const onFormSubmit = () => {
             v-model="formData.password"
           />
 
+          <!-- Password Confirmation -->
           <v-text-field
             label="Password Confirmation"
             :type="showConfirmPassword ? 'text' : 'password'"
@@ -117,7 +171,18 @@ const onFormSubmit = () => {
             ]"
             v-model="formData.password_confirmation"
           />
-          <v-btn to="" type="submit" color="primary" block class="register-btn" size="large">
+
+          <!-- Register Button -->
+          <v-btn
+            to=""
+            type="submit"
+            color="primary"
+            block
+            class="register-btn"
+            size="large"
+            :disabled="formAction.formProcess"
+            :loading="formAction.formProcess"
+          >
             <v-icon start class="me-2">mdi-account-plus</v-icon>
             Register
           </v-btn>
@@ -125,6 +190,7 @@ const onFormSubmit = () => {
 
         <v-divider class="my-3"></v-divider>
 
+        <!-- Already have an Account -->
         <p class="text-center mt-4">
           Already have an Account?
           <RouterLink to="/" class="text-decoration-none register-link-text">
