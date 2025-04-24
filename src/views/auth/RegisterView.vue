@@ -8,6 +8,12 @@ import {
   passwordValidator,
 } from '@/utils/validators'
 
+import { supabase, formActionDefault } from '@/utils/supabase'
+
+const formAction = ref({
+  ...formActionDefault,
+})
+
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 
