@@ -1,8 +1,27 @@
 <script setup>
 import { ref } from 'vue'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
+import { requiredValidator, emailValidator } from '@/utils/validators'
 
 const rememberMe = ref(false)
+const showPassword = ref(false)
+
+const refVform = ref()
+
+const formDataDefault = {
+  email: '',
+  password: '',
+}
+
+const formData = ref({
+  ...formDataDefault,
+})
+
+const onFormSubmit = () => {
+  refVform.value?.validate().then(({ valid: isValid }) => {
+    if (isValid) onSubmit()
+  })
+}
 </script>
 
 <template>
@@ -21,19 +40,26 @@ const rememberMe = ref(false)
 
       <v-card-text>
         <v-divider class="mb-3" />
-        <v-form>
+        <v-form ref="refVform" @submit.prevent="onFormSubmit">
           <v-text-field
             label="Username"
             prepend-inner-icon="mdi-account-circle"
             outlined
             class="mb-4"
+            :rules="[requiredValidator, emailValidator]"
+            v-model="formData.email"
           />
+
           <v-text-field
+            v-model="formData.password"
+            :type="showPassword ? 'text' : 'password'"
             label="Password"
-            type="password"
             prepend-inner-icon="mdi-lock"
+            :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+            @click:append-inner="showPassword = !showPassword"
             outlined
             class="mb-4"
+            :rules="[requiredValidator]"
           />
           <v-checkbox v-model="rememberMe" label="Remember Me" class="my-1" color="primary" />
           <v-btn type="submit" color="primary" block class="login-btn" size="large">
