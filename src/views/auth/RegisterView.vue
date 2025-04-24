@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
-import { requiredValidator, emailValidator } from '@/utils/validators'
+import { requiredValidator, emailValidator, confirmedValidator } from '@/utils/validators'
 
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
@@ -14,7 +14,7 @@ const formDataDefault = {
   username: '',
   email: '',
   password: '',
-  confirmPassword: '',
+  password_confirmation: '',
 }
 
 const formData = ref({
@@ -111,8 +111,11 @@ const onFormSubmit = () => {
             density="comfortable"
             class="mb-4"
             outlined
-            :rules="[requiredValidator]"
-            v-model="formData.confirmPassword"
+            :rules="[
+              requiredValidator,
+              confirmedValidator(password_confirmation, formData.password),
+            ]"
+            v-model="formData.password_confirmation"
           />
           <v-btn to="" type="submit" color="primary" block class="register-btn" size="large">
             <v-icon start class="me-2">mdi-account-plus</v-icon>
