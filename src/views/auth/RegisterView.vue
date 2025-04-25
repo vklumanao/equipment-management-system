@@ -56,6 +56,7 @@ const onSubmit = async () => {
         firstname: formData.value.firstname,
         lastname: formData.value.lastname,
         username: formData.value.username,
+        // is_admin: true
       },
     },
   })
