@@ -18,10 +18,37 @@ onMounted(() => {
 })
 
 const menuItems = [
-  { title: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard' },
-  { title: 'Vehicles', icon: 'mdi-dump-truck', route: '/dashboard/vehicle' },
-  { title: 'Drivers', icon: 'mdi-account', route: '/dashboard/driver' },
-  { title: 'Requests', icon: 'mdi-message-plus', route: '/dashboard/request' },
+  {
+    title: 'Dashboard',
+    icon: 'mdi-view-dashboard',
+    route: '/dashboard',
+  },
+  {
+    title: 'Vehicles',
+    icon: 'mdi-dump-truck',
+    children: [
+      { title: 'All Vehicles', route: '/dashboard/vehicle' },
+      { title: 'Add Vehicle', route: '/dashboard/vehicle/add' },
+      { title: 'Vehicle Types', route: '/dashboard/vehicle/types' },
+    ],
+  },
+  {
+    title: 'Drivers',
+    icon: 'mdi-account',
+    children: [
+      { title: 'All Drivers', route: '/dashboard/driver' },
+      { title: 'Add Driver', route: '/dashboard/driver/add' },
+    ],
+  },
+  {
+    title: 'Requests',
+    icon: 'mdi-message-plus',
+    children: [
+      { title: 'All Requests', route: '/dashboard/request' },
+      { title: 'New Request', route: '/dashboard/request/new' },
+      { title: 'Request History', route: '/dashboard/request/history' },
+    ],
+  },
 ]
 </script>
 
@@ -55,23 +82,48 @@ const menuItems = [
       width="230"
     >
       <v-list dense>
-        <v-list-item
-          v-for="item in menuItems"
-          :key="item.title"
-          :to="item.route"
-          link
-          class="my-1 px-4 py-3 transition-all duration-200 ease-in-out hover:bg-blue-darken-3"
-          active-class="bg-blue-dark text-blue"
-        >
-          <div class="d-flex align-center gap-3">
-            <v-icon color="primary" class="text-h5">
-              {{ item.icon }}
-            </v-icon>
-            <span class="px-2 text-body-1 font-weight-medium">
-              {{ item.title }}
-            </span>
-          </div>
-        </v-list-item>
+        <template v-for="item in menuItems" :key="item.title">
+          <!-- If item has children, show dropdown -->
+          <v-list-group v-if="item.children" :prepend-icon="item.icon" color="primary">
+            <template #activator="{ props }">
+              <v-list-item v-bind="props" class="px-4 py-3">
+                <v-list-item-title class="font-weight-medium">
+                  {{ item.title }}
+                </v-list-item-title>
+              </v-list-item>
+            </template>
+
+            <!-- Child items -->
+            <v-list-item
+              v-for="child in item.children"
+              :key="child.title"
+              :to="child.route"
+              link
+              class="pl-10"
+              active-class="bg-blue-dark text-blue"
+            >
+              <v-list-item-title>{{ child.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list-group>
+
+          <!-- If no children, render normal item -->
+          <v-list-item
+            v-else
+            :to="item.route"
+            link
+            class="my-1 px-4 py-3 transition-all duration-200 ease-in-out hover:bg-blue-darken-3"
+            active-class="bg-blue-dark text-blue"
+          >
+            <div class="d-flex align-center gap-3">
+              <v-icon color="primary" class="text-h5">
+                {{ item.icon }}
+              </v-icon>
+              <span class="px-2 text-body-1 font-weight-medium">
+                {{ item.title }}
+              </span>
+            </div>
+          </v-list-item>
+        </template>
       </v-list>
     </v-navigation-drawer>
 
