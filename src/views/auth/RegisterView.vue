@@ -10,6 +10,7 @@ import {
 
 import { supabase, formActionDefault } from '@/utils/supabase'
 import AlertNotification from '@/components/common/AlertNotification.vue'
+import { useRouter } from 'vue-router'
 
 const formAction = ref({
   ...formActionDefault,
@@ -33,14 +34,18 @@ const formData = ref({
   ...formDataDefault,
 })
 
+// Trigger validators
 const onFormSubmit = () => {
   refVform.value?.validate().then(({ valid: isValid }) => {
     if (isValid) onSubmit()
   })
 }
 
+// Register Functionality
 const onSubmit = async () => {
+  // Reset Form action utils
   formAction.value = { ...formActionDefault }
+  // Turn on processing
   formAction.value.formProcess = true
 
   const { data, error } = await supabase.auth.signUp({
@@ -56,17 +61,20 @@ const onSubmit = async () => {
   })
 
   if (error) {
-    console.log(error)
+    // Add Error Message and Status Code
     formAction.value.formErrorMessage = error.message
     formAction.value.formStatus = error.status
   } else if (data) {
-    console.log(data)
+    // Add Success Message
     formAction.value.formSuccessMessage = 'Successfully Registered Account.'
-    refVform.value?.reset()
+    router.replace('/dashboard')
   }
-
+  // Reset Form
+  refVform.value?.reset()
   formAction.value.formProcess = false
 }
+
+const router = useRouter()
 </script>
 
 <template>

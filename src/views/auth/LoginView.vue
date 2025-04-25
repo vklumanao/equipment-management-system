@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
-import { requiredValidator, emailValidator } from '@/utils/validators'
+import { requiredValidator } from '@/utils/validators'
 
 const rememberMe = ref(false)
 const showPassword = ref(false)
@@ -46,7 +46,7 @@ const onFormSubmit = () => {
             prepend-inner-icon="mdi-account-circle"
             outlined
             class="mb-4"
-            :rules="[requiredValidator, emailValidator]"
+            :rules="[requiredValidator]"
             v-model="formData.email"
           />
 
