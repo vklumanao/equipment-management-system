@@ -20,7 +20,7 @@ onMounted(() => {
 const menuItems = [
   { title: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard' },
   { title: 'Vehicles', icon: 'mdi-dump-truck', route: '/vehicle' },
-  { title: 'Drivers', icon: 'mdi-account', route: '/driver' },
+  { title: 'Drivers', icon: 'mdi-account', route: '/dashboard/driver' },
   { title: 'Requests', icon: 'mdi-message-plus', route: '/request' },
 ]
 </script>
