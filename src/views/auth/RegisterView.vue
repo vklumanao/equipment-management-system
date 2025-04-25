@@ -75,6 +75,7 @@ const onSubmit = async () => {
   formAction.value.formProcess = false
 }
 
+// Load pre-defined vue functions
 const router = useRouter()
 </script>
 
