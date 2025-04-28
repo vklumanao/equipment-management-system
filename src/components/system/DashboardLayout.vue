@@ -158,7 +158,7 @@ onMounted(() => {
                 {{ userData.initials }}
               </v-avatar>
               <div>
-                <div class="text-subtitle-2 font-weight-medium">{{ userData.fullname }}</div>
+                <div class="text-subtitle-3 font-weight-bold">{{ userData.fullname }}</div>
                 <div class="text-subtitle-2 font-weight-medium">{{ userData.role }}</div>
               </div>
             </div>
