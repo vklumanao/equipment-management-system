@@ -131,6 +131,15 @@ onMounted(() => {
           fixed-header
           class="elevation-1"
         >
+          <!-- Title Column -->
+          <template v-slot:headers="{ columns }">
+            <tr>
+              <th v-for="column in columns" :key="column.key" class="text-start font-weight-bold">
+                {{ column.title }}
+              </th>
+            </tr>
+          </template>
+
           <!-- Status Column -->
           <template v-slot:item.status="{ item }">
             <v-chip :color="item.status === 'Active' ? 'green' : 'red'" class="text-white" small>
