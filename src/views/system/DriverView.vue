@@ -1,8 +1,14 @@
 <script setup>
+// ==================
+// Imports
+// ==================
 import { ref, onMounted } from 'vue'
 import DashboardLayout from '@/components/system/DashboardLayout.vue'
 import { supabase } from '@/utils/supabase'
 
+// ==================
+// Table Headers (for Data Table)
+// ==================
 const tableTitles = [
   { title: 'Full Name', align: 'start', key: 'full_name' },
   { title: 'License Number', align: 'start', key: 'license_number' },
@@ -13,9 +19,18 @@ const tableTitles = [
   { title: 'Details', align: 'start', key: 'details' },
 ]
 
-const drivers = ref([])
+// ==================
+// Reactive Variables
+// ==================
+const drivers = ref([]) // List of drivers from database
+const isDeleteDialogOpen = ref(false) // Control for delete confirmation modal
+const driverToDelete = ref(null) // Selected driver to delete
 
-// Fetch drivers from database
+// ==================
+// Functions
+// ==================
+
+// Fetch drivers from Supabase
 const fetchDrivers = async () => {
   const { data, error } = await supabase.from('drivers').select('*')
   if (error) {
@@ -25,40 +40,26 @@ const fetchDrivers = async () => {
   }
 }
 
-// Refresh button
+// Refresh the data (re-fetch)
 const refreshData = () => {
   fetchDrivers()
 }
 
-// onMounted para automatic kuhaon ang data pag load sa page
-onMounted(() => {
-  fetchDrivers()
-})
-
-// Example handlers (optional): editDriver, deleteDriver, viewDetails
-const editDriver = (driver) => {
-  console.log('Edit driver:', driver)
-}
-
-// For Modal
-const isDeleteDialogOpen = ref(false)
-const driverToDelete = ref(null)
-
+// Open the delete confirmation dialog
 const askDeleteDriver = (driverName) => {
   driverToDelete.value = driverName
   isDeleteDialogOpen.value = true
 }
 
+// Confirm and delete the driver
 const confirmDeleteDriver = async () => {
   if (!driverToDelete.value) return
 
   const { error } = await supabase.from('drivers').delete().eq('full_name', driverToDelete.value)
-
   if (error) {
     console.error('Error deleting driver:', error.message)
-    // alert('Failed to delete driver.')
+    // You can show an alert here if needed
   } else {
-    // alert('Driver deleted successfully.')
     refreshData()
   }
 
@@ -66,15 +67,32 @@ const confirmDeleteDriver = async () => {
   driverToDelete.value = null
 }
 
+// Edit driver (still console log for now)
+const editDriver = (driver) => {
+  console.log('Edit driver:', driver)
+}
+
+// View driver details
 const viewDetails = (driver) => {
   console.log('View details:', driver)
 }
+
+// ==================
+// Lifecycle Hooks
+// ==================
+
+// On page mount, automatically fetch drivers
+onMounted(() => {
+  fetchDrivers()
+})
 </script>
 
 <template>
   <DashboardLayout>
     <div class="pa-0">
-      <!-- Button Section -->
+      <!-- ====================
+           Add Driver Button Section
+           ==================== -->
       <div class="mb-6 d-flex justify-start align-center">
         <RouterLink to="/driver/add" style="text-decoration: none">
           <v-btn
@@ -95,7 +113,9 @@ const viewDetails = (driver) => {
         </RouterLink>
       </div>
 
-      <!-- Data Table Section -->
+      <!-- ====================
+           Drivers Data Table Section
+           ==================== -->
       <div class="table-container">
         <v-data-table-virtual
           :headers="tableTitles"
@@ -105,12 +125,14 @@ const viewDetails = (driver) => {
           fixed-header
           class="elevation-1"
         >
+          <!-- Status Column -->
           <template v-slot:item.status="{ item }">
             <v-chip :color="item.status === 'Active' ? 'green' : 'red'" class="text-white" small>
               {{ item.status }}
             </v-chip>
           </template>
 
+          <!-- Action Buttons (Edit/Delete) Column -->
           <template v-slot:item.action="{ item }">
             <div class="d-flex align-center" style="gap: 6px">
               <v-btn @click="editDriver(item.name)" color="blue" icon size="x-small">
@@ -122,12 +144,14 @@ const viewDetails = (driver) => {
             </div>
           </template>
 
+          <!-- Details Button Column -->
           <template v-slot:item.details="{ item }">
             <v-btn @click="viewDetails(item.name)" color="green" icon size="x-small">
               <v-icon size="18">mdi-eye</v-icon>
             </v-btn>
           </template>
 
+          <!-- Table Toolbar (Title + Refresh) -->
           <template v-slot:top>
             <v-toolbar flat>
               <v-toolbar-title class="text-h6">Driver Information</v-toolbar-title>
@@ -138,7 +162,9 @@ const viewDetails = (driver) => {
           </template>
         </v-data-table-virtual>
 
-        <!-- Confirmation for deletion -->
+        <!-- ====================
+             Delete Confirmation Modal
+             ==================== -->
         <v-dialog v-model="isDeleteDialogOpen" max-width="400px">
           <v-card>
             <v-card-title class="text-h6">Confirm Deletion</v-card-title>
