@@ -11,6 +11,7 @@ const userData = ref({
   initials: '',
   email: '',
   fullname: '',
+  role: '',
 })
 
 const drawer = ref(true)
@@ -37,8 +38,10 @@ const getUser = async () => {
     userData.value.email = metadata.email || data.user.email || ''
     const firstname = metadata.firstname || ''
     const lastname = metadata.lastname || ''
+    const role = metadata.role || ''
     userData.value.fullname = `${firstname} ${lastname}`.trim()
     userData.value.initials = getAvatarText(userData.value.fullname || 'User')
+    userData.value.role = role
   }
 }
 
@@ -123,19 +126,20 @@ const menuVisible = ref(false)
         <v-menu v-model="menuVisible" offset-y transition="scale-transition">
           <template #activator="{ props }">
             <v-btn icon v-bind="props">
-              <v-avatar size="50" class="elevation-1">
-                <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Avatar" />
+              <v-avatar size="50" color="primary" class="elevation-1 text-white font-weight-bold">
+                {{ userData.initials }}
               </v-avatar>
             </v-btn>
           </template>
 
           <v-card class="pa-4" width="250">
             <div class="d-flex align-center mb-4">
-              <v-avatar size="50" class="mr-3">
-                <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Profile" />
+              <v-avatar size="50" color="primary" class="mr-3 text-white font-weight-bold">
+                {{ userData.initials }}
               </v-avatar>
               <div>
                 <div class="text-subtitle-2 font-weight-medium">{{ userData.fullname }}</div>
+                <div class="text-subtitle-2 font-weight-medium">{{ userData.role }}</div>
               </div>
             </div>
 
