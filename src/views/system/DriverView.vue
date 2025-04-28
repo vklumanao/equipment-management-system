@@ -1,30 +1,51 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DashboardLayout from '@/components/system/DashboardLayout.vue'
+import { supabase } from '@/utils/supabase'
 
 const tableTitles = [
-  { title: 'First Name', align: 'start', key: 'name' },
-  { title: 'Last Name', align: 'start', key: 'last_name' },
+  { title: 'Full Name', align: 'start', key: 'full_name' },
+  { title: 'License Number', align: 'start', key: 'license_number' },
+  { title: 'License Expiry', align: 'start', key: 'license_expiry' },
+  { title: 'Years of Experience', align: 'start', key: 'experience_year' },
   { title: 'Status', align: 'start', key: 'status' },
   { title: 'Action', align: 'start', key: 'action' },
   { title: 'Details', align: 'start', key: 'details' },
 ]
 
-const driver = [
-  // Add sample data for testing purposes
-  { name: 'John', last_name: 'Doe', status: 'Active' },
-  { name: 'Jane', last_name: 'Smith', status: 'Inactive' },
-  { name: 'John', last_name: 'Doe', status: 'Active' },
-  { name: 'Jane', last_name: 'Smith', status: 'Inactive' },
-  { name: 'John', last_name: 'Doe', status: 'Active' },
-  { name: 'Jane', last_name: 'Smith', status: 'Inactive' },
-  { name: 'John', last_name: 'Doe', status: 'Active' },
-  { name: 'Jane', last_name: 'Smith', status: 'Inactive' },
-]
+const drivers = ref([])
 
+// Fetch drivers from database
+const fetchDrivers = async () => {
+  const { data, error } = await supabase.from('drivers').select('*')
+  if (error) {
+    console.error('Error fetching drivers:', error.message)
+  } else {
+    drivers.value = data
+  }
+}
+
+// Refresh button
 const refreshData = () => {
-  // Handle refreshing data here
-  console.log('Data refreshed')
+  fetchDrivers()
+}
+
+// onMounted para automatic kuhaon ang data pag load sa page
+onMounted(() => {
+  fetchDrivers()
+})
+
+// Example handlers (optional): editDriver, deleteDriver, viewDetails
+const editDriver = (driver) => {
+  console.log('Edit driver:', driver)
+}
+
+const deleteDriver = (driver) => {
+  console.log('Delete driver:', driver)
+}
+
+const viewDetails = (driver) => {
+  console.log('View details:', driver)
 }
 </script>
 
@@ -33,30 +54,32 @@ const refreshData = () => {
     <div class="pa-0">
       <!-- Button Section -->
       <div class="mb-6 d-flex justify-start align-center">
-        <v-btn
-          color=""
-          prepend-icon="mdi-account-circle"
-          class="d-flex align-center"
-          elevation="2"
-          style="text-transform: none; font-weight: bold"
-        >
-          <template v-slot:prepend>
-            <v-icon color="success" class="mr-2"></v-icon>
-          </template>
-          Add Driver
-          <template v-slot:append>
-            <v-icon color="warning" class="ml-2"></v-icon>
-          </template>
-        </v-btn>
+        <RouterLink to="/driver/add" style="text-decoration: none">
+          <v-btn
+            color=""
+            prepend-icon="mdi-account-circle"
+            class="d-flex align-center"
+            elevation="2"
+            style="text-transform: none; font-weight: bold"
+          >
+            <template v-slot:prepend>
+              <v-icon color="success" class="mr-2"></v-icon>
+            </template>
+            Add Driver
+            <template v-slot:append>
+              <v-icon color="warning" class="ml-2"></v-icon>
+            </template>
+          </v-btn>
+        </RouterLink>
       </div>
 
       <!-- Data Table Section -->
       <div class="table-container">
         <v-data-table-virtual
           :headers="tableTitles"
-          :items="driver"
-          height="600 "
-          item-value="name"
+          :items="drivers"
+          height="600"
+          item-value="full_name"
           fixed-header
           class="elevation-1"
         >
