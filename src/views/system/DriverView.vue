@@ -40,8 +40,30 @@ const editDriver = (driver) => {
   console.log('Edit driver:', driver)
 }
 
-const deleteDriver = (driver) => {
-  console.log('Delete driver:', driver)
+// For Modal
+const isDeleteDialogOpen = ref(false)
+const driverToDelete = ref(null)
+
+const askDeleteDriver = (driverName) => {
+  driverToDelete.value = driverName
+  isDeleteDialogOpen.value = true
+}
+
+const confirmDeleteDriver = async () => {
+  if (!driverToDelete.value) return
+
+  const { error } = await supabase.from('drivers').delete().eq('full_name', driverToDelete.value)
+
+  if (error) {
+    console.error('Error deleting driver:', error.message)
+    // alert('Failed to delete driver.')
+  } else {
+    // alert('Driver deleted successfully.')
+    refreshData()
+  }
+
+  isDeleteDialogOpen.value = false
+  driverToDelete.value = null
 }
 
 const viewDetails = (driver) => {
@@ -94,7 +116,7 @@ const viewDetails = (driver) => {
               <v-btn @click="editDriver(item.name)" color="blue" icon size="x-small">
                 <v-icon size="18">mdi-pencil</v-icon>
               </v-btn>
-              <v-btn @click="deleteDriver(item.name)" color="red" icon size="x-small">
+              <v-btn @click="askDeleteDriver(item.full_name)" color="red" icon size="x-small">
                 <v-icon size="18">mdi-delete</v-icon>
               </v-btn>
             </div>
@@ -115,6 +137,21 @@ const viewDetails = (driver) => {
             </v-toolbar>
           </template>
         </v-data-table-virtual>
+
+        <!-- Confirmation for deletion -->
+        <v-dialog v-model="isDeleteDialogOpen" max-width="400px">
+          <v-card>
+            <v-card-title class="text-h6">Confirm Deletion</v-card-title>
+            <v-card-text>
+              Are you sure you want to delete <strong>{{ driverToDelete }}</strong
+              >?
+            </v-card-text>
+            <v-card-actions class="justify-end">
+              <v-btn color="grey" text @click="isDeleteDialogOpen = false">Cancel</v-btn>
+              <v-btn color="red" text @click="confirmDeleteDriver">Yes, Delete</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </div>
     </div>
   </DashboardLayout>
