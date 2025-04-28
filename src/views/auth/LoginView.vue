@@ -42,7 +42,7 @@ const onFormSubmit = () => {
         <v-divider class="mb-3" />
         <v-form ref="refVform" @submit.prevent="onFormSubmit">
           <v-text-field
-            label="Username"
+            label="email"
             prepend-inner-icon="mdi-account-circle"
             outlined
             class="mb-4"
