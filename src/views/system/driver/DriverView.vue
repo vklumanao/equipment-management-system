@@ -114,6 +114,15 @@ onMounted(() => {
             {{ index + 1 }}
           </template>
 
+          <!-- Title Column -->
+          <template v-slot:headers="{ columns }">
+            <tr>
+              <th v-for="column in columns" :key="column.key" class="text-start font-weight-bold">
+                {{ column.title }}
+              </th>
+            </tr>
+          </template>
+
           <!-- Status Column -->
           <template v-slot:item.status="{ item }">
             <v-chip
