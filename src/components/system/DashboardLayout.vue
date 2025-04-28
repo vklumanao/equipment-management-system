@@ -165,6 +165,11 @@ onMounted(() => {
 
             <v-divider />
 
+            <!-- Account Settings Button -->
+            <v-btn block class="mt-4" color="blue-darken-1" @click="router.push('/account-settings')">
+              <v-icon left>mdi-account-cog</v-icon> Account Settings
+            </v-btn>
+
             <!-- Logout Button -->
             <v-btn
               block
