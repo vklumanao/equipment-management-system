@@ -2,11 +2,17 @@
 import { ref } from 'vue'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
 import { requiredValidator } from '@/utils/validators'
+import AlertNotification from '@/components/common/AlertNotification.vue'
+import { supabase, formActionDefault } from '@/utils/supabase'
 
 const rememberMe = ref(false)
 const showPassword = ref(false)
 
 const refVform = ref()
+
+const formAction = ref({
+  ...formActionDefault,
+})
 
 const formDataDefault = {
   email: '',
@@ -22,6 +28,35 @@ const onFormSubmit = () => {
     if (isValid) onSubmit()
   })
 }
+
+const onSubmit = async () => {
+  // Reset Form Action utils; Turn on processing at the same time
+  formAction.value = { ...formActionDefault, formProcess: true }
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: formData.value.email,
+    password: formData.value.password,
+  })
+
+  if (error) {
+    // Add Error Message and Status Code
+    formAction.value.formErrorMessage = error.message
+    formAction.value.formStatus = error.status
+  } else if (data) {
+    // Add Success Message
+    formAction.value.formSuccessMessage = 'Successfully Logged Account.'
+    // Redirect Acct to Dashboard
+    router.replace('/dashboard')
+  }
+
+  // Reset Form
+  refVForm.value?.reset()
+  // Turn off processing
+  formAction.value.formProcess = false
+}
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
 </script>
 
 <template>
@@ -38,11 +73,17 @@ const onFormSubmit = () => {
         Please enter your credentials to Login.
       </v-card-subtitle>
 
+      <!-- Alert message -->
+      <AlertNotification
+        :form-success-message="formAction.formSuccessMessage"
+        :form-error-message="formAction.formErrorMessage"
+      ></AlertNotification>
+
       <v-card-text>
         <v-divider class="mb-3" />
         <v-form ref="refVform" @submit.prevent="onFormSubmit">
           <v-text-field
-            label="email"
+            label="Email"
             prepend-inner-icon="mdi-account-circle"
             outlined
             class="mb-4"
@@ -62,7 +103,15 @@ const onFormSubmit = () => {
             :rules="[requiredValidator]"
           />
           <v-checkbox v-model="rememberMe" label="Remember Me" class="my-1" color="primary" />
-          <v-btn type="submit" color="primary" block class="login-btn" size="large">
+          <v-btn
+            type="submit"
+            color="primary"
+            block
+            class="login-btn"
+            size="large"
+            :disabled="formAction.formProcess"
+            :loading="formAction.formProcess"
+          >
             <v-icon start class="me-2">mdi-login</v-icon>
             Login
           </v-btn>
