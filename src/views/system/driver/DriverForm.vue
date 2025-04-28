@@ -69,11 +69,39 @@ const onSubmit = async () => {
   refVform.value?.reset()
   formAction.value.formProcess = false
 }
+
+// ================================
+// Breadcrumb Items
+// ================================
+const breadcrumbs = ref([
+  { title: 'Dashboard', disabled: false, href: '/dashboard' },
+  { title: 'Drivers', disabled: false, href: '/driver' },
+  { title: 'Add Driver', disabled: true }, // Current Page
+])
 </script>
 
 <template>
   <DashboardLayout>
     <v-container class="pa-4" fluid>
+      <!-- ================================
+     Breadcrumbs
+     ================================ -->
+      <v-breadcrumbs :items="breadcrumbs" class="mb-4">
+        <template #divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+
+        <template #item="{ item }">
+          <v-breadcrumbs-item
+            :to="!item.disabled ? item.href : undefined"
+            :disabled="item.disabled"
+            link
+          >
+            {{ item.title }}
+          </v-breadcrumbs-item>
+        </template>
+      </v-breadcrumbs>
+
       <!-- ================================
            Add New Driver Form Card
            ================================ -->
