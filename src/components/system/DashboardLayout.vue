@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { isAuthenticated } from '@/utils/supabase'
+// import { isAuthenticated } from '@/utils/supabase'
 
 const drawer = ref(true)
 
@@ -165,8 +165,8 @@ const menuVisible = ref(false)
     </v-main>
 
     <!-- Footer -->
-    <v-footer app color="primary" class="text-center white--text py-3">
-      <span>&copy; 2025 CGB Motorpol System. All rights reserved.</span>
+    <v-footer app color="primary" class="text-center white--text py-3 d-flex justify-center">
+      <span>&copy; {{ new Date().getFullYear() }} CGB - Motorpol System. All rights reserved.</span>
     </v-footer>
   </v-app>
 </template>
