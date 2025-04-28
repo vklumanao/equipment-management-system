@@ -50,6 +50,8 @@ const menuItems = [
     ],
   },
 ]
+
+const menuVisible = ref(false)
 </script>
 
 <template>
@@ -68,10 +70,36 @@ const menuItems = [
         <v-toolbar-title class="text-h6 font-weight-bold"> Dashboard </v-toolbar-title>
       </div>
 
-      <!-- Right side (Avatar aligned to the edge) -->
-      <v-avatar size="50" class="elevation-1 ml-auto">
-        <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Avatar" />
-      </v-avatar>
+      <!-- Right side (Avatar with dropdown) -->
+      <div class="ml-auto">
+        <v-menu v-model="menuVisible" offset-y transition="scale-transition">
+          <template #activator="{ props }">
+            <v-btn icon v-bind="props">
+              <v-avatar size="50" class="elevation-1">
+                <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Avatar" />
+              </v-avatar>
+            </v-btn>
+          </template>
+
+          <v-card class="pa-4" width="250">
+            <div class="d-flex align-center mb-4">
+              <v-avatar size="50" class="mr-3">
+                <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Profile" />
+              </v-avatar>
+              <div>
+                <div class="text-subtitle-2 font-weight-medium">Vicryl Kez Lumanao</div>
+              </div>
+            </div>
+
+            <v-divider></v-divider>
+
+            <!-- Logout Button -->
+            <v-btn block class="mt-4" color="red-darken-1" @click="logout">
+              <v-icon left>mdi-logout</v-icon> Logout
+            </v-btn>
+          </v-card>
+        </v-menu>
+      </div>
     </v-app-bar>
 
     <!-- Navigation Drawer / Sidebar -->
@@ -143,4 +171,8 @@ const menuItems = [
   </v-app>
 </template>
 
-<style scoped></style>
+<style scoped>
+.ml-auto {
+  margin-left: auto;
+}
+</style>
