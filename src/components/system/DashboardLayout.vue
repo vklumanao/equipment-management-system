@@ -71,6 +71,9 @@ const menuItems = [
 // Check Authentication Status
 const getLoggedStatus = async () => {
   isLoggedin.value = await isAuthenticated()
+  if (!isLoggedin.value) {
+    router.replace('/') // Redirect to login if the user is not authenticated
+  }
 }
 
 // Get Current User Information
