@@ -1,6 +1,17 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 // import { isAuthenticated } from '@/utils/supabase'
+import { getAvatarText } from '@/utils/helpers'
+import { formActionDefault, supabase } from '@/utils/supabase'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const userData = ref({
+  initials: '',
+  email: '',
+  fullname: '',
+})
 
 const drawer = ref(true)
 
@@ -12,9 +23,28 @@ const getLoggedStatus = async () => {
   isLoggedin.value = await isAuthenticated()
 }
 
+
+const formAction = ref({
+  ...formActionDefault,
+})
+
+const onLogout = async () => {
+  formAction.value = { ...formActionDefault }
+  formAction.value.formProcess = true
+
+  const { error } = await supabase.auth.signOut()
+  if (error) {
+    console.error('Error during logout: ', error)
+    return
+  }
+  formAction.value.formProcess = false
+  router.replace('/')
+}
+
 // Load Functions during component rendering
 onMounted(() => {
   getLoggedStatus()
+  getUser()
 })
 
 const menuItems = [
@@ -87,14 +117,21 @@ const menuVisible = ref(false)
                 <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Profile" />
               </v-avatar>
               <div>
-                <div class="text-subtitle-2 font-weight-medium">Vicryl Kez Lumanao</div>
+                <div class="text-subtitle-2 font-weight-medium">{{ userData.firstname }}</div>
               </div>
             </div>
 
             <v-divider></v-divider>
 
             <!-- Logout Button -->
-            <v-btn block class="mt-4" color="red-darken-1" @click="logout">
+            <v-btn
+              block
+              class="mt-4"
+              color="red-darken-1"
+              @click="onLogout"
+              :loading="formAction.formProcess"
+              :disabled="formAction.formProcess"
+            >
               <v-icon left>mdi-logout</v-icon> Logout
             </v-btn>
           </v-card>
