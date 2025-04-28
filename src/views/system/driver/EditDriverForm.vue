@@ -78,7 +78,31 @@ const onSubmit = async () => {
 
   const id = route.params.id
 
-  // Update driver record instead of insert
+  // Check if the driver exists before attempting the update
+  const { data: driverData, error: fetchError } = await supabase
+    .from('drivers')
+    .select('*')
+    .eq('id', id)
+    .single()
+
+  if (fetchError) {
+    console.error('Error fetching driver before update:', fetchError.message)
+    formAction.value.formErrorMessage = fetchError.message
+    formAction.value.formStatus = fetchError.status
+    formAction.value.formProcess = false
+    return
+  }
+
+  if (!driverData) {
+    console.log('Driver not found with ID:', id)
+    formAction.value.formErrorMessage = 'Driver not found'
+    formAction.value.formProcess = false
+    return
+  }
+
+  console.log('Driver found:', driverData)
+
+  // Proceed with update if driver exists
   const { data, error } = await supabase
     .from('drivers')
     .update({
@@ -91,13 +115,14 @@ const onSubmit = async () => {
     .eq('id', id)
 
   if (error) {
-    // Handle error
     formAction.value.formErrorMessage = error.message
     formAction.value.formStatus = error.status
   } else if (data) {
-    // Handle success
+    // console.log('Data received:', data)
     formAction.value.formSuccessMessage = 'Successfully updated driver.'
-    router.push('/driver') // Navigate back to driver list
+    console.log(formAction.value.formSuccessMessage)
+
+    router.replace('/driver') // Navigate back to driver list
   }
 
   formAction.value.formProcess = false
