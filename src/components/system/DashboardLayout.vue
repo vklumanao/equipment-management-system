@@ -27,26 +27,26 @@ const menuItems = [
     title: 'Vehicles',
     icon: 'mdi-dump-truck',
     children: [
-      { title: 'All Vehicles', route: '/dashboard/vehicle' },
-      { title: 'Add Vehicle', route: '/dashboard/vehicle/add' },
-      { title: 'Vehicle Types', route: '/dashboard/vehicle/types' },
+      { title: 'All Vehicles', route: '/vehicle' },
+      { title: 'Add Vehicle', route: '/vehicle/add' },
+      { title: 'Vehicle Types', route: '/vehicle/types' },
     ],
   },
   {
     title: 'Drivers',
     icon: 'mdi-account',
     children: [
-      { title: 'All Drivers', route: '/dashboard/driver' },
-      { title: 'Add Driver', route: '/dashboard/driver/add' },
+      { title: 'All Drivers', route: '/driver' },
+      { title: 'Add Driver', route: '/driver/add' },
     ],
   },
   {
     title: 'Requests',
     icon: 'mdi-message-plus',
     children: [
-      { title: 'All Requests', route: '/dashboard/request' },
-      { title: 'New Request', route: '/dashboard/request/new' },
-      { title: 'Request History', route: '/dashboard/request/history' },
+      { title: 'All Requests', route: '/request' },
+      { title: 'New Request', route: '/request/new' },
+      { title: 'Request History', route: '/request/history' },
     ],
   },
 ]
