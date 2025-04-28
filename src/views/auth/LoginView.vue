@@ -81,6 +81,8 @@ const router = useRouter()
           :form-success-message="formAction.formSuccessMessage"
           :form-error-message="formAction.formErrorMessage"
         ></AlertNotification>
+
+        <!-- Email -->
         <v-form ref="refVform" @submit.prevent="onFormSubmit">
           <v-text-field
             label="Email"
@@ -91,6 +93,7 @@ const router = useRouter()
             v-model="formData.email"
           />
 
+          <!-- Password -->
           <v-text-field
             v-model="formData.password"
             :type="showPassword ? 'text' : 'password'"
