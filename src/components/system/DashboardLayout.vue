@@ -1,22 +1,35 @@
 <script setup>
+// ================================
+// Imports
+// ================================
 import { onMounted, ref } from 'vue'
-import { isAuthenticated } from '@/utils/supabase'
+import { useRouter } from 'vue-router'
+import { isAuthenticated, formActionDefault, supabase } from '@/utils/supabase'
+import { getAvatarText } from '@/utils/helpers'
 
+// ================================
+// Router Instance
+// ================================
+const router = useRouter()
+
+// ================================
+// State Variables
+// ================================
 const drawer = ref(true)
-
-// Load Variables
+const menuVisible = ref(false)
 const isLoggedin = ref()
+const formAction = ref({ ...formActionDefault })
 
-// Load Authentication status from supabase
-const getLoggedStatus = async () => {
-  isLoggedin.value = await isAuthenticated()
-}
-
-// Load Functions during component rendering
-onMounted(() => {
-  getLoggedStatus()
+const userData = ref({
+  initials: '',
+  email: '',
+  fullname: '',
+  role: '',
 })
 
+// ================================
+// Menu Items for Sidebar
+// ================================
 const menuItems = [
   {
     title: 'Dashboard',
@@ -27,34 +40,93 @@ const menuItems = [
     title: 'Vehicles',
     icon: 'mdi-dump-truck',
     children: [
-      { title: 'All Vehicles', route: '/dashboard/vehicle' },
-      { title: 'Add Vehicle', route: '/dashboard/vehicle/add' },
-      { title: 'Vehicle Types', route: '/dashboard/vehicle/types' },
+      { title: 'All Vehicles', route: '/vehicle' },
+      { title: 'Add Vehicle', route: '/vehicle/add' },
+      { title: 'Vehicle Types', route: '/vehicle/types' },
     ],
   },
   {
     title: 'Drivers',
     icon: 'mdi-account',
     children: [
-      { title: 'All Drivers', route: '/dashboard/driver' },
-      { title: 'Add Driver', route: '/dashboard/driver/add' },
+      { title: 'All Drivers', route: '/driver' },
+      { title: 'Add Driver', route: '/driver/add' },
     ],
   },
   {
     title: 'Requests',
     icon: 'mdi-message-plus',
     children: [
-      { title: 'All Requests', route: '/dashboard/request' },
-      { title: 'New Request', route: '/dashboard/request/new' },
-      { title: 'Request History', route: '/dashboard/request/history' },
+      { title: 'All Requests', route: '/request' },
+      { title: 'New Request', route: '/request/new' },
+      { title: 'Request History', route: '/request/history' },
     ],
   },
 ]
+
+// ================================
+// Functions
+// ================================
+
+// Check Authentication Status
+const getLoggedStatus = async () => {
+  isLoggedin.value = await isAuthenticated()
+  if (!isLoggedin.value) {
+    router.replace('/') // Redirect to login if the user is not authenticated
+  }
+}
+
+// Get Current User Information
+const getUser = async () => {
+  const { data, error } = await supabase.auth.getUser()
+
+  if (error) {
+    console.error('Error fetching user:', error.message)
+    return
+  }
+
+  if (data?.user) {
+    const metadata = data.user.user_metadata || {}
+    const firstname = metadata.firstname || ''
+    const lastname = metadata.lastname || ''
+    const role = metadata.role || ''
+
+    userData.value.email = metadata.email || data.user.email || ''
+    userData.value.fullname = `${firstname} ${lastname}`.trim()
+    userData.value.initials = getAvatarText(userData.value.fullname || 'User')
+    userData.value.role = role
+  }
+}
+
+// Logout User
+const onLogout = async () => {
+  formAction.value = { ...formActionDefault }
+  formAction.value.formProcess = true
+
+  const { error } = await supabase.auth.signOut()
+  if (error) {
+    console.error('Error during logout: ', error)
+    return
+  }
+
+  formAction.value.formProcess = false
+  router.replace('/')
+}
+
+// ================================
+// Lifecycle Hooks
+// ================================
+onMounted(() => {
+  getLoggedStatus()
+  getUser()
+})
 </script>
 
 <template>
   <v-app class="bg-blue-lighten-5">
-    <!-- App Bar / Header -->
+    <!-- ================================
+         App Bar (Top Navigation)
+         ================================ -->
     <v-app-bar
       app
       color="primary"
@@ -62,19 +134,56 @@ const menuItems = [
       elevation="3"
       class="px-4 d-flex align-center justify-space-between"
     >
-      <!-- Left side -->
+      <!-- Left Side -->
       <div class="d-flex align-center gap-3">
         <v-app-bar-nav-icon variant="text" @click="drawer = !drawer" />
         <v-toolbar-title class="text-h6 font-weight-bold"> Dashboard </v-toolbar-title>
       </div>
 
-      <!-- Right side (Avatar aligned to the edge) -->
-      <v-avatar size="50" class="elevation-1 ml-auto">
-        <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Avatar" />
-      </v-avatar>
+      <!-- Right Side (User Avatar with Menu) -->
+      <div class="ml-auto">
+        <v-menu v-model="menuVisible" offset-y transition="scale-transition">
+          <template #activator="{ props }">
+            <v-btn icon v-bind="props">
+              <v-avatar size="50" color="primary" class="elevation-1 text-white font-weight-bold">
+                {{ userData.initials }}
+              </v-avatar>
+            </v-btn>
+          </template>
+
+          <v-card class="pa-4" width="250">
+            <!-- User Info -->
+            <div class="d-flex align-center mb-4">
+              <v-avatar size="50" color="primary" class="mr-3 text-white font-weight-bold">
+                {{ userData.initials }}
+              </v-avatar>
+              <div>
+                <div class="text-subtitle-2 font-weight-medium">{{ userData.fullname }}</div>
+                <div class="text-subtitle-2 font-weight-medium">{{ userData.role }}</div>
+              </div>
+            </div>
+
+            <v-divider />
+
+            <!-- Logout Button -->
+            <v-btn
+              block
+              class="mt-4"
+              color="red-darken-1"
+              @click="onLogout"
+              :loading="formAction.formProcess"
+              :disabled="formAction.formProcess"
+            >
+              <v-icon left>mdi-logout</v-icon> Logout
+            </v-btn>
+          </v-card>
+        </v-menu>
+      </div>
     </v-app-bar>
 
-    <!-- Navigation Drawer / Sidebar -->
+    <!-- ================================
+         Navigation Drawer (Sidebar)
+         ================================ -->
     <v-navigation-drawer
       app
       v-model="drawer"
@@ -83,17 +192,15 @@ const menuItems = [
     >
       <v-list dense>
         <template v-for="item in menuItems" :key="item.title">
-          <!-- If item has children, show dropdown -->
+          <!-- List with Children -->
           <v-list-group v-if="item.children" :prepend-icon="item.icon" color="primary">
             <template #activator="{ props }">
               <v-list-item v-bind="props" class="px-4 py-3">
-                <v-list-item-title class="font-weight-medium">
-                  {{ item.title }}
-                </v-list-item-title>
+                <v-list-item-title class="font-weight-medium">{{ item.title }}</v-list-item-title>
               </v-list-item>
             </template>
 
-            <!-- Child items -->
+            <!-- Child Menu Items -->
             <v-list-item
               v-for="child in item.children"
               :key="child.title"
@@ -106,7 +213,7 @@ const menuItems = [
             </v-list-item>
           </v-list-group>
 
-          <!-- If no children, render normal item -->
+          <!-- Single List Item -->
           <v-list-item
             v-else
             :to="item.route"
@@ -115,27 +222,35 @@ const menuItems = [
             active-class="bg-blue-dark text-blue"
           >
             <div class="d-flex align-center gap-3">
-              <v-icon color="primary" class="text-h5">
-                {{ item.icon }}
-              </v-icon>
-              <span class="px-2 text-body-1 font-weight-medium">
-                {{ item.title }}
-              </span>
+              <v-icon color="primary" class="text-h5">{{ item.icon }}</v-icon>
+              <span class="px-2 text-body-1 font-weight-medium">{{ item.title }}</span>
             </div>
           </v-list-item>
         </template>
       </v-list>
     </v-navigation-drawer>
 
-    <!-- Main Content -->
+    <!-- ================================
+         Main Content Area
+         ================================ -->
     <v-main>
       <v-container fluid>
         <slot />
-        <!-- OR -->
-        <!-- <router-view /> -->
+        <!-- OR: <router-view /> -->
       </v-container>
     </v-main>
+
+    <!-- ================================
+         Footer
+         ================================ -->
+    <v-footer app color="primary" class="text-center white--text py-3 d-flex justify-center">
+      <span>&copy; {{ new Date().getFullYear() }} CGB - Motorpol System. All rights reserved.</span>
+    </v-footer>
   </v-app>
 </template>
 
-<style scoped></style>
+<style scoped>
+.ml-auto {
+  margin-left: auto;
+}
+</style>

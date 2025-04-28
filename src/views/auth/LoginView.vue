@@ -2,11 +2,17 @@
 import { ref } from 'vue'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
 import { requiredValidator } from '@/utils/validators'
+import AlertNotification from '@/components/common/AlertNotification.vue'
+import { supabase, formActionDefault } from '@/utils/supabase'
 
 const rememberMe = ref(false)
 const showPassword = ref(false)
 
 const refVform = ref()
+
+const formAction = ref({
+  ...formActionDefault,
+})
 
 const formDataDefault = {
   email: '',
@@ -22,6 +28,38 @@ const onFormSubmit = () => {
     if (isValid) onSubmit()
   })
 }
+
+const onSubmit = async () => {
+  //  Turn on processing
+  formAction.value.formProcess = true
+  // Reset error/success messages before the form submission
+  formAction.value.formErrorMessage = ''
+  formAction.value.formSuccessMessage = ''
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: formData.value.email,
+    password: formData.value.password,
+  })
+
+  if (error) {
+    // Add Error Message and Status Code
+    formAction.value.formErrorMessage = error.message
+    formAction.value.formStatus = error.status
+  } else if (data) {
+    // Add Success Message
+    formAction.value.formSuccessMessage = 'Successfully Logged Account.'
+    // Redirect Acct to Dashboard
+    router.replace('/dashboard')
+  }
+
+  // Reset Form
+  refVform.value?.reset()
+  // Turn off processing
+  formAction.value.formProcess = false
+}
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
 </script>
 
 <template>
@@ -40,9 +78,17 @@ const onFormSubmit = () => {
 
       <v-card-text>
         <v-divider class="mb-3" />
-        <v-form ref="refVform" @submit.prevent="onFormSubmit">
+
+        <!-- Alert message -->
+        <AlertNotification
+          :form-success-message="formAction.formSuccessMessage"
+          :form-error-message="formAction.formErrorMessage"
+        ></AlertNotification>
+
+        <!-- Email -->
+        <v-form class="mt-2" ref="refVform" @submit.prevent="onFormSubmit">
           <v-text-field
-            label="Username"
+            label="Email"
             prepend-inner-icon="mdi-account-circle"
             outlined
             class="mb-4"
@@ -50,6 +96,7 @@ const onFormSubmit = () => {
             v-model="formData.email"
           />
 
+          <!-- Password -->
           <v-text-field
             v-model="formData.password"
             :type="showPassword ? 'text' : 'password'"
@@ -62,7 +109,15 @@ const onFormSubmit = () => {
             :rules="[requiredValidator]"
           />
           <v-checkbox v-model="rememberMe" label="Remember Me" class="my-1" color="primary" />
-          <v-btn type="submit" color="primary" block class="login-btn" size="large">
+          <v-btn
+            type="submit"
+            color="primary"
+            block
+            class="login-btn"
+            size="large"
+            :disabled="formAction.formProcess"
+            :loading="formAction.formProcess"
+          >
             <v-icon start class="me-2">mdi-login</v-icon>
             Login
           </v-btn>

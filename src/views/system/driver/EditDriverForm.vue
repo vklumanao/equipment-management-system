@@ -2,17 +2,18 @@
 // ================================
 // Imports
 // ================================
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import DashboardLayout from '@/components/system/DashboardLayout.vue'
 import AlertNotification from '@/components/common/AlertNotification.vue'
 import { supabase, formActionDefault } from '@/utils/supabase'
 import { requiredValidator } from '@/utils/validators'
 
 // ================================
-// Router Instance
+// Router and Route Instances
 // ================================
 const router = useRouter()
+const route = useRoute()
 
 // ================================
 // Driver Form Data
@@ -36,6 +37,30 @@ const formAction = ref({
 const refVform = ref()
 
 // ================================
+// Fetch Existing Driver Data (for Edit)
+// ================================
+const fetchDriver = async () => {
+  const id = route.params.id
+
+  const { data, error } = await supabase.from('drivers').select('*').eq('id', id).single()
+
+  if (error) {
+    console.error('Error fetching driver:', error.message)
+    return
+  }
+
+  if (data) {
+    driver.value = {
+      full_name: data.full_name,
+      license_number: data.license_number,
+      license_expiry: data.license_expiry,
+      experience_year: data.experience_year,
+      status: data.status,
+    }
+  }
+}
+
+// ================================
 // Form Submit Handler
 // ================================
 const onFormSubmit = () => {
@@ -45,40 +70,81 @@ const onFormSubmit = () => {
 }
 
 // ================================
-// Actual Submit Logic
+// Actual Submit Logic (UPDATE)
 // ================================
 const onSubmit = async () => {
-  // Reset form action to default
   formAction.value = { ...formActionDefault }
   formAction.value.formProcess = true
 
-  // Insert driver record into Supabase
-  const { data, error } = await supabase.from('drivers').insert([driver.value])
+  const id = route.params.id
+
+  // Check if the driver exists before attempting the update
+  const { data: driverData, error: fetchError } = await supabase
+    .from('drivers')
+    .select('*')
+    .eq('id', id)
+    .single()
+
+  if (fetchError) {
+    console.error('Error fetching driver before update:', fetchError.message)
+    formAction.value.formErrorMessage = fetchError.message
+    formAction.value.formStatus = fetchError.status
+    formAction.value.formProcess = false
+    return
+  }
+
+  if (!driverData) {
+    console.log('Driver not found with ID:', id)
+    formAction.value.formErrorMessage = 'Driver not found'
+    formAction.value.formProcess = false
+    return
+  }
+
+  console.log('Driver found:', driverData)
+
+  // Proceed with update if driver exists
+  const { data, error } = await supabase
+    .from('drivers')
+    .update({
+      full_name: driver.value.full_name,
+      license_number: driver.value.license_number,
+      license_expiry: driver.value.license_expiry,
+      experience_year: driver.value.experience_year,
+      status: driver.value.status,
+    })
+    .eq('id', id)
 
   if (error) {
-    // Handle error
     formAction.value.formErrorMessage = error.message
     formAction.value.formStatus = error.status
   } else if (data) {
-    // Handle success
-    formAction.value.formSuccessMessage = 'Successfully added driver.'
-    router.push('/driver') // Navigate back to driver list
+    // console.log('Data received:', data)
+    formAction.value.formSuccessMessage = 'Successfully updated driver.'
+    console.log(formAction.value.formSuccessMessage)
+
+    router.replace('/driver') // Navigate back to driver list
   }
 
-  // Reset form
-  refVform.value?.reset()
   formAction.value.formProcess = false
 }
+
+// ================================
+// Lifecycle Hook
+// ================================
+// Fetch driver data when component is mounted
+onMounted(() => {
+  fetchDriver()
+})
 </script>
 
 <template>
   <DashboardLayout>
     <v-container class="pa-4" fluid>
       <!-- ================================
-           Add New Driver Form Card
+           Edit Driver Form Card
            ================================ -->
       <v-card elevation="2" class="pa-4 rounded-2xl">
-        <v-card-title class="text-xl font-bold">Add New Driver</v-card-title>
+        <v-card-title class="text-xl font-bold">Edit Driver</v-card-title>
 
         <v-card-text>
           <v-form lazy-validation ref="refVform" @submit.prevent="onFormSubmit">
@@ -130,7 +196,7 @@ const onSubmit = async () => {
               class="mt-4"
               type="submit"
             >
-              Save Driver
+              Update Driver
             </v-btn>
 
             <!-- Alert Notification (Success/Error) -->
