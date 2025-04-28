@@ -5,6 +5,12 @@
 import { ref, onMounted } from 'vue'
 import DashboardLayout from '@/components/system/DashboardLayout.vue'
 import { supabase } from '@/utils/supabase'
+import { useRouter } from 'vue-router'
+
+// ================================
+// Router Instance
+// ================================
+const router = useRouter()
 
 // ==================
 // Table Headers (for Data Table)
@@ -67,9 +73,9 @@ const confirmDeleteDriver = async () => {
   driverToDelete.value = null
 }
 
-// Edit driver (still console log for now)
-const editDriver = (driver) => {
-  console.log('Edit driver:', driver)
+// Navigate to Edit Driver Form with driver's ID
+const editDriver = (id) => {
+  router.push(`/driver/edit/${id}`)
 }
 
 // View driver details
@@ -135,7 +141,7 @@ onMounted(() => {
           <!-- Action Buttons (Edit/Delete) Column -->
           <template v-slot:item.action="{ item }">
             <div class="d-flex align-center" style="gap: 6px">
-              <v-btn @click="editDriver(item.name)" color="blue" icon size="x-small">
+              <v-btn @click="editDriver(item.id)" color="blue" icon size="x-small">
                 <v-icon size="18">mdi-pencil</v-icon>
               </v-btn>
               <v-btn @click="askDeleteDriver(item.full_name)" color="red" icon size="x-small">
