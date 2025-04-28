@@ -135,6 +135,11 @@ const menuItems = [
         <!-- <router-view /> -->
       </v-container>
     </v-main>
+
+    <!-- Footer -->
+    <v-footer app color="primary" class="text-center white--text py-3">
+      <span>&copy; 2025 CGB Motorpol System. All rights reserved.</span>
+    </v-footer>
   </v-app>
 </template>
 

@@ -30,19 +30,21 @@ const router = createRouter({
     // For driver
     {
       path: '/driver',
-      name: 'driver',
+      name: 'driver-list',
       component: DriverView,
     },
     {
       path: '/driver/add',
-      name: 'driver',
+      name: 'driver-add',
       component: DriverForm,
     },
+    // For Vehicle
     {
       path: '/vehicle',
       name: 'vehicle',
       component: VehicleView,
     },
+    // For Request
     {
       path: '/request',
       name: 'request',
