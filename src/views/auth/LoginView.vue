@@ -73,14 +73,14 @@ const router = useRouter()
         Please enter your credentials to Login.
       </v-card-subtitle>
 
-      <!-- Alert message -->
-      <AlertNotification
-        :form-success-message="formAction.formSuccessMessage"
-        :form-error-message="formAction.formErrorMessage"
-      ></AlertNotification>
-
       <v-card-text>
         <v-divider class="mb-3" />
+
+        <!-- Alert message -->
+        <AlertNotification
+          :form-success-message="formAction.formSuccessMessage"
+          :form-error-message="formAction.formErrorMessage"
+        ></AlertNotification>
         <v-form ref="refVform" @submit.prevent="onFormSubmit">
           <v-text-field
             label="Email"
