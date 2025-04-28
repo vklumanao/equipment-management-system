@@ -16,6 +16,7 @@ const router = useRouter()
 // Table Headers (for Data Table)
 // ==================
 const tableTitles = [
+  { title: 'No.', key: 'row_number', align: 'center' },
   { title: 'Full Name', key: 'full_name', align: 'start' },
   { title: 'License Number', key: 'license_number', align: 'start' },
   { title: 'License Expiry', key: 'license_expiry', align: 'start' },
@@ -108,6 +109,11 @@ onMounted(() => {
           height="600"
           fixed-header
         >
+          <!-- Row Number Column -->
+          <template v-slot:item.row_number="{ index }">
+            {{ index + 1 }}
+          </template>
+
           <!-- Status Column -->
           <template v-slot:item.status="{ item }">
             <v-chip
