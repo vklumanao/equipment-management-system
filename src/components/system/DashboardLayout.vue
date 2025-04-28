@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-// import { isAuthenticated } from '@/utils/supabase'
+import { isAuthenticated } from '@/utils/supabase'
 import { getAvatarText } from '@/utils/helpers'
 import { formActionDefault, supabase } from '@/utils/supabase'
 import { useRouter } from 'vue-router'
@@ -23,6 +23,24 @@ const getLoggedStatus = async () => {
   isLoggedin.value = await isAuthenticated()
 }
 
+const getUser = async () => {
+  const { data, error } = await supabase.auth.getUser()
+
+  if (error) {
+    console.error('Error fetching user:', error.message)
+    return
+  }
+
+  if (data && data.user) {
+    const metadata = data.user.user_metadata || {}
+
+    userData.value.email = metadata.email || data.user.email || ''
+    const firstname = metadata.firstname || ''
+    const lastname = metadata.lastname || ''
+    userData.value.fullname = `${firstname} ${lastname}`.trim()
+    userData.value.initials = getAvatarText(userData.value.fullname || 'User')
+  }
+}
 
 const formAction = ref({
   ...formActionDefault,
@@ -117,7 +135,7 @@ const menuVisible = ref(false)
                 <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Profile" />
               </v-avatar>
               <div>
-                <div class="text-subtitle-2 font-weight-medium">{{ userData.firstname }}</div>
+                <div class="text-subtitle-2 font-weight-medium">{{ userData.fullname }}</div>
               </div>
             </div>
 
