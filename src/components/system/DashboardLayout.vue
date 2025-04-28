@@ -1,11 +1,24 @@
 <script setup>
+// ================================
+// Imports
+// ================================
 import { onMounted, ref } from 'vue'
-import { isAuthenticated } from '@/utils/supabase'
-import { getAvatarText } from '@/utils/helpers'
-import { formActionDefault, supabase } from '@/utils/supabase'
 import { useRouter } from 'vue-router'
+import { isAuthenticated, formActionDefault, supabase } from '@/utils/supabase'
+import { getAvatarText } from '@/utils/helpers'
 
+// ================================
+// Router Instance
+// ================================
 const router = useRouter()
+
+// ================================
+// State Variables
+// ================================
+const drawer = ref(true)
+const menuVisible = ref(false)
+const isLoggedin = ref()
+const formAction = ref({ ...formActionDefault })
 
 const userData = ref({
   initials: '',
@@ -14,60 +27,9 @@ const userData = ref({
   role: '',
 })
 
-const drawer = ref(true)
-
-// Load Variables
-const isLoggedin = ref()
-
-// Load Authentication status from supabase
-const getLoggedStatus = async () => {
-  isLoggedin.value = await isAuthenticated()
-}
-
-const getUser = async () => {
-  const { data, error } = await supabase.auth.getUser()
-
-  if (error) {
-    console.error('Error fetching user:', error.message)
-    return
-  }
-
-  if (data && data.user) {
-    const metadata = data.user.user_metadata || {}
-
-    userData.value.email = metadata.email || data.user.email || ''
-    const firstname = metadata.firstname || ''
-    const lastname = metadata.lastname || ''
-    const role = metadata.role || ''
-    userData.value.fullname = `${firstname} ${lastname}`.trim()
-    userData.value.initials = getAvatarText(userData.value.fullname || 'User')
-    userData.value.role = role
-  }
-}
-
-const formAction = ref({
-  ...formActionDefault,
-})
-
-const onLogout = async () => {
-  formAction.value = { ...formActionDefault }
-  formAction.value.formProcess = true
-
-  const { error } = await supabase.auth.signOut()
-  if (error) {
-    console.error('Error during logout: ', error)
-    return
-  }
-  formAction.value.formProcess = false
-  router.replace('/')
-}
-
-// Load Functions during component rendering
-onMounted(() => {
-  getLoggedStatus()
-  getUser()
-})
-
+// ================================
+// Menu Items for Sidebar
+// ================================
 const menuItems = [
   {
     title: 'Dashboard',
@@ -102,12 +64,66 @@ const menuItems = [
   },
 ]
 
-const menuVisible = ref(false)
+// ================================
+// Functions
+// ================================
+
+// Check Authentication Status
+const getLoggedStatus = async () => {
+  isLoggedin.value = await isAuthenticated()
+}
+
+// Get Current User Information
+const getUser = async () => {
+  const { data, error } = await supabase.auth.getUser()
+
+  if (error) {
+    console.error('Error fetching user:', error.message)
+    return
+  }
+
+  if (data?.user) {
+    const metadata = data.user.user_metadata || {}
+    const firstname = metadata.firstname || ''
+    const lastname = metadata.lastname || ''
+    const role = metadata.role || ''
+
+    userData.value.email = metadata.email || data.user.email || ''
+    userData.value.fullname = `${firstname} ${lastname}`.trim()
+    userData.value.initials = getAvatarText(userData.value.fullname || 'User')
+    userData.value.role = role
+  }
+}
+
+// Logout User
+const onLogout = async () => {
+  formAction.value = { ...formActionDefault }
+  formAction.value.formProcess = true
+
+  const { error } = await supabase.auth.signOut()
+  if (error) {
+    console.error('Error during logout: ', error)
+    return
+  }
+
+  formAction.value.formProcess = false
+  router.replace('/')
+}
+
+// ================================
+// Lifecycle Hooks
+// ================================
+onMounted(() => {
+  getLoggedStatus()
+  getUser()
+})
 </script>
 
 <template>
   <v-app class="bg-blue-lighten-5">
-    <!-- App Bar / Header -->
+    <!-- ================================
+         App Bar (Top Navigation)
+         ================================ -->
     <v-app-bar
       app
       color="primary"
@@ -115,13 +131,13 @@ const menuVisible = ref(false)
       elevation="3"
       class="px-4 d-flex align-center justify-space-between"
     >
-      <!-- Left side -->
+      <!-- Left Side -->
       <div class="d-flex align-center gap-3">
         <v-app-bar-nav-icon variant="text" @click="drawer = !drawer" />
         <v-toolbar-title class="text-h6 font-weight-bold"> Dashboard </v-toolbar-title>
       </div>
 
-      <!-- Right side (Avatar with dropdown) -->
+      <!-- Right Side (User Avatar with Menu) -->
       <div class="ml-auto">
         <v-menu v-model="menuVisible" offset-y transition="scale-transition">
           <template #activator="{ props }">
@@ -133,6 +149,7 @@ const menuVisible = ref(false)
           </template>
 
           <v-card class="pa-4" width="250">
+            <!-- User Info -->
             <div class="d-flex align-center mb-4">
               <v-avatar size="50" color="primary" class="mr-3 text-white font-weight-bold">
                 {{ userData.initials }}
@@ -143,7 +160,7 @@ const menuVisible = ref(false)
               </div>
             </div>
 
-            <v-divider></v-divider>
+            <v-divider />
 
             <!-- Logout Button -->
             <v-btn
@@ -161,7 +178,9 @@ const menuVisible = ref(false)
       </div>
     </v-app-bar>
 
-    <!-- Navigation Drawer / Sidebar -->
+    <!-- ================================
+         Navigation Drawer (Sidebar)
+         ================================ -->
     <v-navigation-drawer
       app
       v-model="drawer"
@@ -170,17 +189,15 @@ const menuVisible = ref(false)
     >
       <v-list dense>
         <template v-for="item in menuItems" :key="item.title">
-          <!-- If item has children, show dropdown -->
+          <!-- List with Children -->
           <v-list-group v-if="item.children" :prepend-icon="item.icon" color="primary">
             <template #activator="{ props }">
               <v-list-item v-bind="props" class="px-4 py-3">
-                <v-list-item-title class="font-weight-medium">
-                  {{ item.title }}
-                </v-list-item-title>
+                <v-list-item-title class="font-weight-medium">{{ item.title }}</v-list-item-title>
               </v-list-item>
             </template>
 
-            <!-- Child items -->
+            <!-- Child Menu Items -->
             <v-list-item
               v-for="child in item.children"
               :key="child.title"
@@ -193,7 +210,7 @@ const menuVisible = ref(false)
             </v-list-item>
           </v-list-group>
 
-          <!-- If no children, render normal item -->
+          <!-- Single List Item -->
           <v-list-item
             v-else
             :to="item.route"
@@ -202,28 +219,27 @@ const menuVisible = ref(false)
             active-class="bg-blue-dark text-blue"
           >
             <div class="d-flex align-center gap-3">
-              <v-icon color="primary" class="text-h5">
-                {{ item.icon }}
-              </v-icon>
-              <span class="px-2 text-body-1 font-weight-medium">
-                {{ item.title }}
-              </span>
+              <v-icon color="primary" class="text-h5">{{ item.icon }}</v-icon>
+              <span class="px-2 text-body-1 font-weight-medium">{{ item.title }}</span>
             </div>
           </v-list-item>
         </template>
       </v-list>
     </v-navigation-drawer>
 
-    <!-- Main Content -->
+    <!-- ================================
+         Main Content Area
+         ================================ -->
     <v-main>
       <v-container fluid>
         <slot />
-        <!-- OR -->
-        <!-- <router-view /> -->
+        <!-- OR: <router-view /> -->
       </v-container>
     </v-main>
 
-    <!-- Footer -->
+    <!-- ================================
+         Footer
+         ================================ -->
     <v-footer app color="primary" class="text-center white--text py-3 d-flex justify-center">
       <span>&copy; {{ new Date().getFullYear() }} CGB - Motorpol System. All rights reserved.</span>
     </v-footer>
