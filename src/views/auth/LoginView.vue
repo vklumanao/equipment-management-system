@@ -30,8 +30,11 @@ const onFormSubmit = () => {
 }
 
 const onSubmit = async () => {
-  // Reset Form Action utils; Turn on processing at the same time
-  formAction.value = { ...formActionDefault, formProcess: true }
+  //  Turn on processing
+  formAction.value.formProcess = true
+  // Reset error/success messages before the form submission
+  formAction.value.formErrorMessage = ''
+  formAction.value.formSuccessMessage = ''
 
   const { data, error } = await supabase.auth.signInWithPassword({
     email: formData.value.email,
@@ -50,7 +53,7 @@ const onSubmit = async () => {
   }
 
   // Reset Form
-  refVForm.value?.reset()
+  refVform.value?.reset()
   // Turn off processing
   formAction.value.formProcess = false
 }
@@ -83,7 +86,7 @@ const router = useRouter()
         ></AlertNotification>
 
         <!-- Email -->
-        <v-form ref="refVform" @submit.prevent="onFormSubmit">
+        <v-form class="mt-2" ref="refVform" @submit.prevent="onFormSubmit">
           <v-text-field
             label="Email"
             prepend-inner-icon="mdi-account-circle"
