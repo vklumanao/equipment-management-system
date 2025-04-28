@@ -35,7 +35,7 @@ const router = createRouter({
     },
     {
       path: '/driver/add',
-      name: 'driver-form',
+      name: 'driver',
       component: DriverForm,
     },
     {
