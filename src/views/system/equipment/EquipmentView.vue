@@ -17,9 +17,9 @@ const router = useRouter()
 // ==================
 const tableTitles = [
   { title: 'No.', key: 'row_number', align: 'center' },
-  { title: 'Type', key: 'type', align: 'start' },
-  { title: 'Model', key: 'model', align: 'start' },
-  { title: 'Serial Number', key: 'serial_number', align: 'start' },
+  { title: 'Type', key: 'type', align: 'center' },
+  { title: 'Model', key: 'model', align: 'center' },
+  { title: 'Serial Number', key: 'serial_number', align: 'center' },
   { title: 'Purchase Date', key: 'purchase_date', align: 'center' },
   { title: 'Location', key: 'location', align: 'center' },
   { title: 'Status', key: 'status', align: 'center' },
@@ -143,7 +143,7 @@ const breadcrumbs = ref([
           <!-- Title Column -->
           <template v-slot:headers="{ columns }">
             <tr>
-              <th v-for="column in columns" :key="column.key" class="text-start font-weight-bold">
+              <th v-for="column in columns" :key="column.key" class="text-center font-weight-bold">
                 {{ column.title }}
               </th>
             </tr>

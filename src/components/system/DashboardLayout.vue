@@ -136,7 +136,7 @@ onMounted(() => {
       <!-- Left Side -->
       <div class="d-flex align-center gap-3">
         <v-app-bar-nav-icon variant="text" @click="drawer = !drawer" />
-        <v-toolbar-title class="text-h6 font-weight-bold"> Dashboard </v-toolbar-title>
+        <v-toolbar-title class="font-weight-bold"> Dashboard </v-toolbar-title>
       </div>
 
       <!-- Right Side (User Avatar with Menu) -->
@@ -203,10 +203,15 @@ onMounted(() => {
       <v-list dense>
         <template v-for="item in menuItems" :key="item.title">
           <!-- List with Children -->
-          <v-list-group v-if="item.children" :prepend-icon="item.icon" color="primary">
+          <v-list-group v-if="item.children" color="primary">
             <template #activator="{ props }">
               <v-list-item v-bind="props" class="px-4 py-3">
-                <v-list-item-title class="font-weight-medium">{{ item.title }}</v-list-item-title>
+                <div class="d-flex align-center">
+                  <v-icon color="primary" class="text-h5 me-2">{{ item.icon }}</v-icon>
+                  <v-list-item-title class="font-weight-medium mb-0">
+                    {{ item.title }}
+                  </v-list-item-title>
+                </div>
               </v-list-item>
             </template>
 
@@ -233,7 +238,7 @@ onMounted(() => {
           >
             <div class="d-flex align-center gap-3">
               <v-icon color="primary" class="text-h5">{{ item.icon }}</v-icon>
-              <span class="px-2 text-body-1 font-weight-medium">{{ item.title }}</span>
+              <span class="px-2 font-weight-medium">{{ item.title }}</span>
             </div>
           </v-list-item>
         </template>
