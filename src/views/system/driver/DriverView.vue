@@ -159,9 +159,9 @@ const breadcrumbs = ref([
               <v-btn icon size="small" color="red" @click="askDeleteDriver(item)">
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
-              <v-btn icon size="small" color="green" @click="viewDetails(item)">
+              <!-- <v-btn icon size="small" color="green" @click="viewDetails(item)">
                 <v-icon>mdi-eye</v-icon>
-              </v-btn>
+              </v-btn> -->
             </div>
           </template>
 
