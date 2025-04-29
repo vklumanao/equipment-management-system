@@ -86,14 +86,39 @@ const viewDetails = (driver) => {
 onMounted(() => {
   fetchDrivers()
 })
+
+// ================================
+// Breadcrumb Items
+// ================================
+const breadcrumbs = ref([
+  { title: 'Dashboard', disabled: false, href: '/dashboard' },
+  { title: 'Drivers', disabled: true, href: '/driver' }, // Current Page
+])
 </script>
 
 <template>
   <DashboardLayout>
     <div class="pa-4">
       <!-- Header and Add Button -->
-      <div class="d-flex justify-space-between align-center mb-6">
-        <h2 class="text-h5 font-weight-bold">Driver Management</h2>
+      <div class="d-flex justify-space-between align-center mb-0">
+        <!-- ================================
+           Breadcrumbs
+           ================================ -->
+        <v-breadcrumbs :items="breadcrumbs" class="mb-0">
+          <template #divider>
+            <v-icon>mdi-chevron-right</v-icon>
+          </template>
+
+          <template #item="{ item }">
+            <v-breadcrumbs-item
+              :to="!item.disabled ? item.href : undefined"
+              :disabled="item.disabled"
+              link
+            >
+              {{ item.title }}
+            </v-breadcrumbs-item>
+          </template>
+        </v-breadcrumbs>
         <RouterLink to="/driver/add" style="text-decoration: none">
           <v-btn color="primary" prepend-icon="mdi-account-plus" elevation="2"> Add Driver </v-btn>
         </RouterLink>
