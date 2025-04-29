@@ -62,10 +62,29 @@ const fetchEquipmentCount = async () => {
   }
 }
 
+// Function to fetch request count from Supabase
+// const fetchRequestCount = async () => {
+//   const { data, count, error } = await supabase
+//     .from('requests')
+//     .select('*', { count: 'exact', head: true }) // Only fetch count, no actual data
+
+//   if (error) {
+//     console.error('Error fetching requests count:', error)
+//     return
+//   }
+
+//   // Find the Request card and update its value
+//   const requestCard = cardData.value.find((card) => card.title === 'Request')
+//   if (requestCard) {
+//     requestCard.value = count
+//   }
+// }
+
 // Lifecycle hook: Fetch driver count when component is mounted
 onMounted(() => {
   fetchDriverCount()
   fetchEquipmentCount()
+  // fetchRequestCount()
 })
 </script>
 
