@@ -9,20 +9,20 @@ const cardData = ref([
   {
     icon: 'mdi-dump-truck',
     color: 'primary',
-    title: 'Vehicle',
-    value: '0', // Placeholder, will be updated later
+    title: 'Equipment',
+    value: '0',
   },
   {
     icon: 'mdi-account',
     color: 'green',
     title: 'Driver',
-    value: '0', // Will fetch actual count from Supabase
+    value: '0',
   },
   {
     icon: 'mdi-message-plus',
     color: 'yellow',
     title: 'Request',
-    value: '0', // Placeholder
+    value: '0',
   },
 ])
 
@@ -44,9 +44,28 @@ const fetchDriverCount = async () => {
   }
 }
 
+// Function to fetch equipment count from Supabase
+const fetchEquipmentCount = async () => {
+  const { data, count, error } = await supabase
+    .from('equipments')
+    .select('*', { count: 'exact', head: true }) // Only fetch count, no actual data
+
+  if (error) {
+    console.error('Error fetching equipments count:', error)
+    return
+  }
+
+  // Find the Equipment card and update its value
+  const equipmentCard = cardData.value.find((card) => card.title === 'Equipment')
+  if (equipmentCard) {
+    equipmentCard.value = count
+  }
+}
+
 // Lifecycle hook: Fetch driver count when component is mounted
 onMounted(() => {
   fetchDriverCount()
+  fetchEquipmentCount()
 })
 </script>
 
