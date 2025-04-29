@@ -120,9 +120,6 @@ const breadcrumbs = ref([
             </v-breadcrumbs-item>
           </template>
         </v-breadcrumbs>
-        <RouterLink to="/equipment/add" style="text-decoration: none">
-          <v-btn color="primary" prepend-icon="mdi-account-plus" elevation="2"> Add Vehicle </v-btn>
-        </RouterLink>
       </div>
 
       <!-- Driver Data Table -->
@@ -177,11 +174,30 @@ const breadcrumbs = ref([
 
           <!-- Top Toolbar -->
           <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>Equipment Information</v-toolbar-title>
-              <v-spacer />
-              <v-btn icon @click="refreshData">
-                <v-icon>mdi-refresh</v-icon>
+            <v-toolbar
+              flat
+              class="bg-gradient-to-r from-blue-500 to-teal-400 py-2 shadow-md d-flex justify-center align-center"
+            >
+              <!-- Add Equipment Button on the left -->
+              <RouterLink to="/equipment/add" style="text-decoration: none">
+                <v-btn
+                  color="primary"
+                  prepend-icon="mdi-account-plus"
+                  elevation="2"
+                  class="ml-4 text-uppercase font-weight-bold"
+                >
+                  Add Equipment
+                </v-btn>
+              </RouterLink>
+
+              <!-- Title in the Center -->
+              <v-toolbar-title class="text-center font-weight-bold text-black">
+                Equipment Information
+              </v-toolbar-title>
+
+              <!-- Refresh Button on the Right -->
+              <v-btn icon @click="refreshData" class="mr-4">
+                <v-icon class="black">mdi-refresh</v-icon>
               </v-btn>
             </v-toolbar>
           </template>
