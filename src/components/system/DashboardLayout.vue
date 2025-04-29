@@ -37,12 +37,11 @@ const menuItems = [
     route: '/dashboard',
   },
   {
-    title: 'Vehicles',
+    title: 'Equipment',
     icon: 'mdi-dump-truck',
     children: [
-      { title: 'All Vehicles', route: '/vehicle' },
-      { title: 'Add Vehicle', route: '/vehicle/add' },
-      { title: 'Vehicle Types', route: '/vehicle/types' },
+      { title: 'All Equipment', route: '/equipment' },
+      { title: 'Add Equipment', route: '/equipment/add' },
     ],
   },
   {

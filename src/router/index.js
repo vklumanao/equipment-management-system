@@ -3,7 +3,7 @@ import LoginView from '@/views/auth/LoginView.vue'
 import RegisterView from '@/views/auth/RegisterView.vue'
 import DashboardView from '@/views/system/DashboardView.vue'
 import DriverView from '@/views/system/driver/DriverView.vue'
-import VehicleView from '@/views/system/vehicle/VehicleView.vue'
+import EquipmentView from '@/views/system/equipment/EquipmentView.vue'
 import DriverForm from '@/views/system/driver/DriverForm.vue'
 import RequestView from '@/views/system/RequestView.vue'
 import EditDriverForm from '@/views/system/driver/EditDriverForm.vue'
@@ -47,9 +47,9 @@ const router = createRouter({
     },
     // For Vehicle
     {
-      path: '/vehicle',
-      name: 'vehicle',
-      component: VehicleView,
+      path: '/equipment',
+      name: 'ListEquipment',
+      component: EquipmentView,
     },
     // For Request
     {
