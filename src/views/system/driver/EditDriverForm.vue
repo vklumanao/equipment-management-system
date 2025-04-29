@@ -117,7 +117,7 @@ const onSubmit = async () => {
   if (error) {
     formAction.value.formErrorMessage = error.message
     formAction.value.formStatus = error.status
-  } else if (data) {
+  } else {
     // console.log('Data received:', data)
     formAction.value.formSuccessMessage = 'Successfully updated driver.'
     console.log(formAction.value.formSuccessMessage)

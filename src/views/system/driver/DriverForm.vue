@@ -59,7 +59,7 @@ const onSubmit = async () => {
     // Handle error
     formAction.value.formErrorMessage = error.message
     formAction.value.formStatus = error.status
-  } else if (data) {
+  } else {
     // Handle success
     formAction.value.formSuccessMessage = 'Successfully added driver.'
     router.push('/driver') // Navigate back to driver list
