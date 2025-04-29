@@ -78,9 +78,9 @@ const editDriver = (id) => {
 }
 
 // View Details
-const viewDetails = (driver) => {
-  console.log('View details:', driver)
-}
+// const viewDetails = (driver) => {
+//   console.log('View details:', driver)
+// }
 
 // On mount
 onMounted(() => {
