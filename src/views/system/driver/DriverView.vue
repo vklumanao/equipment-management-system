@@ -7,30 +7,30 @@ import DashboardLayout from '@/components/system/DashboardLayout.vue'
 import { supabase } from '@/utils/supabase'
 import { useRouter } from 'vue-router'
 
-// ================================
+// ==================
 // Router Instance
-// ================================
+// ==================
 const router = useRouter()
 
 // ==================
 // Table Headers (for Data Table)
 // ==================
 const tableTitles = [
-  { title: 'Full Name', align: 'start', key: 'full_name' },
-  { title: 'License Number', align: 'start', key: 'license_number' },
-  { title: 'License Expiry', align: 'start', key: 'license_expiry' },
-  { title: 'Years of Experience', align: 'start', key: 'experience_year' },
-  { title: 'Status', align: 'start', key: 'status' },
-  { title: 'Action', align: 'start', key: 'action' },
-  { title: 'Details', align: 'start', key: 'details' },
+  { title: 'No.', key: 'row_number', align: 'center' },
+  { title: 'Full Name', key: 'full_name', align: 'start' },
+  { title: 'License Number', key: 'license_number', align: 'start' },
+  { title: 'License Expiry', key: 'license_expiry', align: 'start' },
+  { title: 'Years of Experience', key: 'experience_year', align: 'center' },
+  { title: 'Status', key: 'status', align: 'center' },
+  { title: 'Actions', key: 'actions', align: 'center' },
 ]
 
 // ==================
 // Reactive Variables
 // ==================
-const drivers = ref([]) // List of drivers from database
-const isDeleteDialogOpen = ref(false) // Control for delete confirmation modal
-const driverToDelete = ref(null) // Selected driver to delete
+const drivers = ref([])
+const isDeleteDialogOpen = ref(false)
+const driverToDelete = ref(null)
 
 // ==================
 // Functions
@@ -46,25 +46,24 @@ const fetchDrivers = async () => {
   }
 }
 
-// Refresh the data (re-fetch)
+// Refresh Data
 const refreshData = () => {
   fetchDrivers()
 }
 
-// Open the delete confirmation dialog
-const askDeleteDriver = (driverName) => {
-  driverToDelete.value = driverName
+// Open Delete Dialog
+const askDeleteDriver = (driver) => {
+  driverToDelete.value = driver
   isDeleteDialogOpen.value = true
 }
 
-// Confirm and delete the driver
+// Confirm Delete
 const confirmDeleteDriver = async () => {
   if (!driverToDelete.value) return
 
-  const { error } = await supabase.from('drivers').delete().eq('full_name', driverToDelete.value)
+  const { error } = await supabase.from('drivers').delete().eq('id', driverToDelete.value.id)
   if (error) {
     console.error('Error deleting driver:', error.message)
-    // You can show an alert here if needed
   } else {
     refreshData()
   }
@@ -73,64 +72,73 @@ const confirmDeleteDriver = async () => {
   driverToDelete.value = null
 }
 
-// Navigate to Edit Driver Form with driver's ID
+// Edit Driver
 const editDriver = (id) => {
   router.push(`/driver/edit/${id}`)
 }
 
-// View driver details
-const viewDetails = (driver) => {
-  console.log('View details:', driver)
-}
+// View Details
+// const viewDetails = (driver) => {
+//   console.log('View details:', driver)
+// }
 
-// ==================
-// Lifecycle Hooks
-// ==================
-
-// On page mount, automatically fetch drivers
+// On mount
 onMounted(() => {
   fetchDrivers()
 })
+
+// ================================
+// Breadcrumb Items
+// ================================
+const breadcrumbs = ref([
+  { title: 'Dashboard', disabled: false, href: '/dashboard' },
+  { title: 'Drivers', disabled: true, href: '/driver' }, // Current Page
+])
 </script>
 
 <template>
   <DashboardLayout>
-    <div class="pa-0">
-      <!-- ====================
-           Add Driver Button Section
-           ==================== -->
-      <div class="mb-6 d-flex justify-start align-center">
+    <div class="pa-4">
+      <!-- Header and Add Button -->
+      <div class="d-flex justify-space-between align-center mb-0">
+        <!-- ================================
+           Breadcrumbs
+           ================================ -->
+        <v-breadcrumbs :items="breadcrumbs" class="mb-0">
+          <template #divider>
+            <v-icon>mdi-chevron-right</v-icon>
+          </template>
+
+          <template #item="{ item }">
+            <v-breadcrumbs-item
+              :to="!item.disabled ? item.href : undefined"
+              :disabled="item.disabled"
+              link
+            >
+              {{ item.title }}
+            </v-breadcrumbs-item>
+          </template>
+        </v-breadcrumbs>
         <RouterLink to="/driver/add" style="text-decoration: none">
-          <v-btn
-            color=""
-            prepend-icon="mdi-account-circle"
-            class="d-flex align-center"
-            elevation="2"
-            style="text-transform: none; font-weight: bold"
-          >
-            <template v-slot:prepend>
-              <v-icon color="success" class="mr-2"></v-icon>
-            </template>
-            Add Driver
-            <template v-slot:append>
-              <v-icon color="warning" class="ml-2"></v-icon>
-            </template>
-          </v-btn>
+          <v-btn color="primary" prepend-icon="mdi-account-plus" elevation="2"> Add Driver </v-btn>
         </RouterLink>
       </div>
 
-      <!-- ====================
-           Drivers Data Table Section
-           ==================== -->
-      <div class="table-container">
-        <v-data-table-virtual
+      <!-- Driver Data Table -->
+      <v-card flat elevation="2">
+        <v-data-table
           :headers="tableTitles"
           :items="drivers"
+          item-value="id"
+          class="rounded-lg"
           height="600"
-          item-value="full_name"
           fixed-header
-          class="elevation-1"
         >
+          <!-- Row Number Column -->
+          <template v-slot:item.row_number="{ index }">
+            {{ index + 1 }}
+          </template>
+
           <!-- Title Column -->
           <template v-slot:headers="{ columns }">
             <tr>
@@ -142,83 +150,83 @@ onMounted(() => {
 
           <!-- Status Column -->
           <template v-slot:item.status="{ item }">
-            <v-chip :color="item.status === 'Active' ? 'green' : 'red'" class="text-white" small>
+            <v-chip
+              :color="item.status === 'Active' ? 'success' : 'error'"
+              text-color="white"
+              size="small"
+            >
               {{ item.status }}
             </v-chip>
           </template>
 
-          <!-- Action Buttons (Edit/Delete) Column -->
-          <template v-slot:item.action="{ item }">
-            <div class="d-flex align-center" style="gap: 6px">
-              <v-btn @click="editDriver(item.id)" color="blue" icon size="x-small">
-                <v-icon size="18">mdi-pencil</v-icon>
+          <!-- Actions Column -->
+          <template v-slot:item.actions="{ item }">
+            <div class="d-flex justify-center align-center" style="gap: 8px">
+              <v-btn icon size="small" color="blue" @click="editDriver(item.id)">
+                <v-icon>mdi-pencil</v-icon>
               </v-btn>
-              <v-btn @click="askDeleteDriver(item.full_name)" color="red" icon size="x-small">
-                <v-icon size="18">mdi-delete</v-icon>
+              <v-btn icon size="small" color="red" @click="askDeleteDriver(item)">
+                <v-icon>mdi-delete</v-icon>
               </v-btn>
+              <!-- <v-btn icon size="small" color="green" @click="viewDetails(item)">
+                <v-icon>mdi-eye</v-icon>
+              </v-btn> -->
             </div>
           </template>
 
-          <!-- Details Button Column -->
-          <template v-slot:item.details="{ item }">
-            <v-btn @click="viewDetails(item.name)" color="green" icon size="x-small">
-              <v-icon size="18">mdi-eye</v-icon>
-            </v-btn>
-          </template>
-
-          <!-- Table Toolbar (Title + Refresh) -->
+          <!-- Top Toolbar -->
           <template v-slot:top>
             <v-toolbar flat>
-              <v-toolbar-title class="text-h6">Driver Information</v-toolbar-title>
+              <v-toolbar-title>Driver Information</v-toolbar-title>
+              <v-spacer />
               <v-btn icon @click="refreshData">
                 <v-icon>mdi-refresh</v-icon>
               </v-btn>
             </v-toolbar>
           </template>
-        </v-data-table-virtual>
+        </v-data-table>
+      </v-card>
 
-        <!-- ====================
-             Delete Confirmation Modal
-             ==================== -->
-        <v-dialog v-model="isDeleteDialogOpen" max-width="400px">
-          <v-card>
-            <v-card-title class="text-h6">Confirm Deletion</v-card-title>
-            <v-card-text>
-              Are you sure you want to delete <strong>{{ driverToDelete }}</strong
-              >?
-            </v-card-text>
-            <v-card-actions class="justify-end">
-              <v-btn color="grey" text @click="isDeleteDialogOpen = false">Cancel</v-btn>
-              <v-btn color="red" text @click="confirmDeleteDriver">Yes, Delete</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </div>
+      <!-- Delete Confirmation Dialog -->
+      <v-dialog v-model="isDeleteDialogOpen" max-width="400px">
+        <v-card class="pa-4">
+          <v-card-title class="text-h6 font-weight-bold">
+            <v-icon color="error" class="mr-2">mdi-alert</v-icon>
+            Confirm Deletion
+          </v-card-title>
+          <v-card-text>
+            Are you sure you want to delete
+            <strong>{{ driverToDelete?.full_name }}</strong
+            >?
+          </v-card-text>
+          <v-card-actions class="justify-end">
+            <v-btn text color="grey" @click="isDeleteDialogOpen = false">Cancel</v-btn>
+            <v-btn text color="red" @click="confirmDeleteDriver">Yes, Delete</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </DashboardLayout>
 </template>
 
 <style scoped>
-.v-data-table-virtual {
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  width: 100%;
+.v-data-table {
+  background-color: #ffffff;
 }
 
-.table-container {
-  max-width: 100%;
-  overflow-x: auto;
-}
-
-.v-btn {
-  transition: transform 0.3s ease;
-}
-
-.v-btn:hover {
-  transform: scale(1.05);
+.v-card {
+  border-radius: 12px;
 }
 
 .v-toolbar-title {
   font-weight: bold;
+}
+
+.v-btn {
+  transition: transform 0.2s ease;
+}
+
+.v-btn:hover {
+  transform: scale(1.05);
 }
 </style>
