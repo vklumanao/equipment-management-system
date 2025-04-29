@@ -7,6 +7,7 @@ import EquipmentView from '@/views/system/equipment/EquipmentView.vue'
 import DriverForm from '@/views/system/driver/DriverForm.vue'
 import RequestView from '@/views/system/RequestView.vue'
 import EditDriverForm from '@/views/system/driver/EditDriverForm.vue'
+import EquipmentForm from '@/views/system/equipment/EquipmentForm.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +51,11 @@ const router = createRouter({
       path: '/equipment',
       name: 'ListEquipment',
       component: EquipmentView,
+    },
+    {
+      path: '/equipment/add',
+      name: 'AddEquipment',
+      component: EquipmentForm,
     },
     // For Request
     {
