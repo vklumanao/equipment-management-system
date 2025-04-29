@@ -72,23 +72,48 @@ onMounted(() => {
 <template>
   <DashboardLayout>
     <v-row>
-      <!-- Loop through cardData to render each card -->
-      <v-col v-for="(item, index) in cardData" :key="index" cols="12" md="4">
-        <v-card class="pa-4" outlined>
-          <!-- Icon -->
-          <v-icon :color="item.color" large size="52px">
-            {{ item.icon }}
-          </v-icon>
+      <v-col v-for="(item, index) in cardData" :key="index" cols="12" sm="6" md="4">
+        <v-card
+          class="pa-6 rounded-2xl"
+          elevation="4"
+          style="
+            border-radius: 20px;
+            background-color: #f9fafb;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+          "
+        >
+          <div class="d-flex align-center mb-4">
+            <div
+              class="rounded-circle d-flex align-center justify-center"
+              :style="{
+                width: '60px',
+                height: '60px',
+                backgroundColor: `var(--v-theme-${item.color}-lighten5)`,
+              }"
+            >
+              <v-icon :color="item.color" size="60">{{ item.icon }}</v-icon>
+            </div>
+          </div>
 
-          <!-- Title -->
-          <div class="text-h6 mt-2">
+          <div
+            class="text-grey mb-1 font-weight-medium text-uppercase tracking-widest"
+            style="font-size: 24px"
+          >
             {{ item.title }}
           </div>
-
-          <!-- Value -->
-          <div class="text-subtitle-1">
+          <div class="font-weight-bold text-black mb-2" style="font-size: 2rem">
             {{ item.value }}
           </div>
+
+          <v-progress-linear
+            :color="item.color"
+            height="10"
+            rounded
+            background-color="grey-lighten-3"
+            value="100"
+            class="shadow-sm"
+          />
         </v-card>
       </v-col>
     </v-row>
