@@ -98,7 +98,7 @@ const breadcrumbs = ref([
 
 <template>
   <DashboardLayout>
-    <div class="pa-4">
+    <div class="px-2">
       <!-- Header and Add Button -->
       <div class="d-flex justify-space-between align-center mb-0">
         <!-- ================================
