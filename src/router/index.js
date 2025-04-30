@@ -14,120 +14,162 @@ import ForbiddenView from '@/views/errors/ForbiddenView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+
   routes: [
-    // Auth Pages
+    // Root path: redirect logic will handle whether to go to login or dashboard
     {
       path: '/',
       name: 'home',
+      meta: { outsiderOnly: true }, // Only accessible to users not logged in
     },
 
+    // Login page
     {
       path: '/login',
       name: 'login',
       component: LoginView,
+      meta: {
+        outsiderOnly: true, // Prevent access if already logged in
+      },
     },
 
+    // Registration page
     {
       path: '/register',
       name: 'register',
       component: RegisterView,
+      meta: {
+        outsiderOnly: true, // Prevent access if already logged in
+      },
     },
-    // System Pages
+
+    // System dashboard (for admins only)
     {
-      path: '/system/dashboard',
+      path: '/dashboard',
       name: 'dashboard',
       component: DashboardView,
+      meta: {
+        requiresAuth: true, // User must be logged in
+        requiresAdmin: true, // User must be an admin
+      },
     },
-    // For driver
+
+    // List all drivers
     {
-      path: '/system/driver',
+      path: '/driver',
       name: 'ListDriver',
       component: DriverView,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true,
+      },
     },
+
+    // Add new driver
     {
-      path: '/system/driver/add',
+      path: '/driver/add',
       name: 'AddDriver',
       component: DriverForm,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true,
+      },
     },
+
+    // Edit driver (uses dynamic route `:id`)
     {
-      path: '/system/driver/edit/:id',
+      path: '/driver/edit/:id',
       name: 'EditDriver',
       component: EditDriverForm,
-      props: true,
+      props: true, // Route param `id` will be passed as a prop
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true,
+      },
     },
-    // For Vehicle
+
+    // List all equipment/vehicles
     {
-      path: '/system/equipment',
+      path: '/equipment',
       name: 'ListEquipment',
       component: EquipmentView,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true,
+      },
     },
+
+    // Add new equipment
     {
-      path: '/system/equipment/add',
+      path: '/equipment/add',
       name: 'AddEquipment',
       component: EquipmentForm,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true,
+      },
     },
+
+    // Edit existing equipment (uses dynamic route `:id`)
     {
-      path: '/system/equipment/edit/:id',
+      path: '/equipment/edit/:id',
       name: 'EditEquipment',
       component: EditEquipmentForm,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true,
+      },
     },
-    // For Request
+
+    // View requests
     {
-      path: '/system/request',
+      path: '/request',
       name: 'request',
       component: RequestView,
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true,
+      },
     },
-    // Errors Pages
+
+    // Forbidden page (shown when user tries to access unauthorized content)
     {
       path: '/forbidden',
       name: 'forbidden',
       component: ForbiddenView,
+      meta: {
+        title: 'Forbidden',
+      },
     },
   ],
 })
 
 router.beforeEach(async (to) => {
-  // Check if the user is currently authenticated (via Supabase)
+  // Check if the user is logged in using Supabase session
   const isLoggedIn = await isAuthenticated()
 
-  // If the user is trying to access '/home'
-  // Redirect to dashboard if logged in, otherwise redirect to login
-  if (to.name === 'home') {
-    return isLoggedIn ? { name: 'dashboard' } : { name: 'login' }
-  }
-
-  // If the user is already logged in and tries to access login or register pages,
-  // redirect them to the dashboard to prevent access to auth pages
-  if (isLoggedIn && (to.name === 'login' || to.name === 'register')) {
+  // If the route is meant only for outsiders (not logged-in users),
+  // and the user is already logged in, redirect them to the dashboard.
+  if (to.meta.outsiderOnly && isLoggedIn) {
     return { name: 'dashboard' }
   }
 
-  // Check if the user is Logged In
-  if (isLoggedIn) {
-    // Retrieve information about the user
-    const userMetadata = await getUserInformation()
-    const isAdmin = userMetadata?.isAdmin === true
-
-    // Check if the user is not Admin
-    if (!isAdmin) {
-      // Check if the user is trying to access a system route
-      if (to.path.startsWith('/system')) {
-        // If they are, redirect them to the forbidden page
-        return { name: 'forbidden' }
-      }
-    }
-  }
-
-  // Check if the user is logged in and not an admin
-
-  // If the user is not logged in and tries to access a protected /system route,
-  // redirect them to the login page
-  if (!isLoggedIn && to.path.startsWith('/system')) {
+  // If the route requires authentication and the user is not logged in,
+  // redirect them to the login page.
+  if (to.meta.requiresAuth && !isLoggedIn) {
     return { name: 'login' }
   }
 
-  // If the route does not match any defined route (404),
-  // redirect to a not-found error page
+  // If the route requires admin access and the user is logged in,
+  // check if the user has admin privileges; if not, redirect to forbidden page.
+  if (to.meta.requiresAdmin && isLoggedIn) {
+    const userMetadata = await getUserInformation()
+    if (!userMetadata?.isAdmin) {
+      return { name: 'forbidden' }
+    }
+  }
+
+  // If no route matches the requested path, redirect to a 404 not-found page.
   if (router.resolve(to).matched.length === 0) {
     return { name: 'not-found' }
   }
