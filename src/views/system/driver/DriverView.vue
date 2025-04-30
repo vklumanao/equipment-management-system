@@ -11,6 +11,7 @@ import { useRouter } from 'vue-router'
 // Router Instance
 // ==================
 const router = useRouter()
+const isLoading = ref(false)
 
 // ==================
 // Table Headers (for Data Table)
@@ -38,12 +39,14 @@ const driverToDelete = ref(null)
 
 // Fetch drivers from Supabase
 const fetchDrivers = async () => {
+  isLoading.value = true
   const { data, error } = await supabase.from('drivers').select('*')
   if (error) {
     console.error('Error fetching drivers:', error.message)
   } else {
     drivers.value = data
   }
+  isLoading.value = false
 }
 
 // Refresh Data
@@ -122,7 +125,7 @@ const breadcrumbs = ref([
       </div>
 
       <!-- Driver Data Table -->
-      <v-card flat elevation="2">
+      <v-card :loading="isLoading" flat elevation="2">
         <v-data-table
           :headers="tableTitles"
           :items="drivers"
