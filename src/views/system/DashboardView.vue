@@ -2,7 +2,7 @@
 // Imports
 import { ref, onMounted } from 'vue'
 import DashboardLayout from '@/components/system/DashboardLayout.vue'
-import { supabase } from '@/utils/supabase'
+import { supabase, getUserInformation } from '@/utils/supabase'
 
 // Reactive array for dashboard cards
 const cardData = ref([
@@ -87,20 +87,12 @@ const userData = ref({
 
 // Get Current User Information
 const getUser = async () => {
-  const { data, error } = await supabase.auth.getUser()
+  const metadata = await getUserInformation()
 
-  if (error) {
-    console.error('Error fetching user:', error.message)
-    return
-  }
-
-  if (data?.user) {
-    const metadata = data.user.user_metadata || {}
-    const firstname = metadata.firstname || ''
-    const lastname = metadata.lastname || ''
-
-    userData.value.fullname = firstname + ' ' + lastname
-  }
+  userData.value.email = metadata.email
+  userData.value.fullname = metadata.firstname + ' ' + metadata.lastname
+  userData.value.initials = getAvatarText(userData.value.fullname)
+  userData.value.role = role
 }
 
 // Lifecycle hook: Fetch driver count when component is mounted
