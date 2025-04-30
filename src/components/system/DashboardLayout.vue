@@ -158,7 +158,7 @@ onMounted(() => {
               <v-avatar
                 size="56"
                 color="primary"
-                class="text-white font-weight-bold elevation-2 mr-5"
+                class="text-white font-weight-bold elevation-2 mr-2"
               >
                 {{ userData.initials }}
               </v-avatar>
