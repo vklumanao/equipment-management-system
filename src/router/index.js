@@ -102,6 +102,13 @@ router.beforeEach(async (to) => {
     return { name: 'dashboard' }
   }
 
+  // Check if the user is logged in and not an admin
+  if (isLoggedIn && !isAdmin) {
+    if (to.name.startsWith('system/dashboard')) {
+      return { name: 'forbidden' }
+    }
+  }
+
   // If the user is not logged in and tries to access a protected /system route,
   // redirect them to the login page
   if (!isLoggedIn && to.path.startsWith('/system')) {
