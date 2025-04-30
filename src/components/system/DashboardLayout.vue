@@ -34,31 +34,31 @@ const menuItems = [
   {
     title: 'Dashboard',
     icon: 'mdi-view-dashboard',
-    route: '/system/dashboard',
+    route: '/dashboard',
   },
   {
     title: 'Equipment',
     icon: 'mdi-dump-truck',
     children: [
-      { title: 'All Equipment', route: '/system/equipment' },
-      { title: 'Add Equipment', route: '/system/equipment/add' },
+      { title: 'All Equipment', route: '/equipment' },
+      { title: 'Add Equipment', route: '/equipment/add' },
     ],
   },
   {
     title: 'Drivers',
     icon: 'mdi-account',
     children: [
-      { title: 'All Drivers', route: '/system/driver' },
-      { title: 'Add Driver', route: '/system/driver/add' },
+      { title: 'All Drivers', route: '/driver' },
+      { title: 'Add Driver', route: '/driver/add' },
     ],
   },
   {
     title: 'Requests',
     icon: 'mdi-message-plus',
     children: [
-      { title: 'All Requests', route: '/system/request' },
-      { title: 'New Request', route: '/system/request/new' },
-      { title: 'Request History', route: '/system/request/history' },
+      { title: 'All Requests', route: '/request' },
+      { title: 'New Request', route: '/request/new' },
+      { title: 'Request History', route: '/request/history' },
     ],
   },
 ]
@@ -82,7 +82,7 @@ const getUser = async () => {
   userData.value.email = metadata.email
   userData.value.fullname = metadata.firstname + ' ' + metadata.lastname
   userData.value.initials = getAvatarText(userData.value.fullname)
-  userData.value.role = role
+  userData.value.role = metadata.role
 }
 
 // Logout User

@@ -62,7 +62,7 @@ const onSubmit = async () => {
   } else {
     // Handle success
     formAction.value.formSuccessMessage = 'Successfully added driver.'
-    router.push('/system/driver') // Navigate back to driver list
+    router.push('/driver') // Navigate back to driver list
   }
 
   // Reset form
@@ -74,8 +74,8 @@ const onSubmit = async () => {
 // Breadcrumb Items
 // ================================
 const breadcrumbs = ref([
-  { title: 'Dashboard', disabled: false, href: '/system/dashboard' },
-  { title: 'Drivers', disabled: false, href: '/system/driver' },
+  { title: 'Dashboard', disabled: false, href: '/dashboard' },
+  { title: 'Drivers', disabled: false, href: '/driver' },
   { title: 'Add Driver', disabled: true }, // Current Page
 ])
 </script>

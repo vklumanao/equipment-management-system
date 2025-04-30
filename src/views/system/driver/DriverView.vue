@@ -74,7 +74,7 @@ const confirmDeleteDriver = async () => {
 
 // Edit Driver
 const editDriver = (id) => {
-  router.push(`/system/driver/edit/${id}`)
+  router.push(`/driver/edit/${id}`)
 }
 
 // View Details
@@ -178,7 +178,7 @@ const breadcrumbs = ref([
               class="bg-gradient-to-r from-blue-500 to-teal-400 py-2 shadow-md d-flex justify-center align-center"
             >
               <!-- Add Driver Button on the Left -->
-              <RouterLink to="/system/driver/add" style="text-decoration: none">
+              <RouterLink to="/driver/add" style="text-decoration: none">
                 <v-btn
                   color="primary"
                   prepend-icon="mdi-account-plus"

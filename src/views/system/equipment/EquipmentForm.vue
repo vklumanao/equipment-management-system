@@ -63,7 +63,7 @@ const onSubmit = async () => {
   } else {
     // Handle success
     formAction.value.formSuccessMessage = 'Successfully added equipment.'
-    router.push('/system/equipment') // Navigate back to driver list
+    router.push('/equipment') // Navigate back to driver list
   }
 
   // Reset form
@@ -75,8 +75,8 @@ const onSubmit = async () => {
 // Breadcrumb Items
 // ================================
 const breadcrumbs = ref([
-  { title: 'Dashboard', disabled: false, href: '/system/dashboard' },
-  { title: 'Equipments', disabled: false, href: '/system/equipment' },
+  { title: 'Dashboard', disabled: false, href: '/dashboard' },
+  { title: 'Equipments', disabled: false, href: '/equipment' },
   { title: 'Add Equipment', disabled: true }, // Current Page
 ])
 </script>
