@@ -139,68 +139,97 @@ onMounted(() => {
 
 <template>
   <DashboardLayout>
-    <v-container class="pa-4" fluid>
-      <!-- ================================
-           Edit Driver Form Card
-           ================================ -->
-      <v-card elevation="2" class="pa-4 rounded-2xl">
-        <v-card-title class="text-xl font-bold">Edit Driver</v-card-title>
+    <v-container fluid class="pa-6">
+      <!-- Form Card -->
+      <v-card class="rounded-xl elevation-2">
+        <!-- Header -->
+        <div class="py-6 px-8 bg-grey-lighten-5 border-b">
+          <h2 class="font-weight-bold mb-1">Edit Driver</h2>
+          <p class="text-grey-darken-2">Update the driver information below.</p>
+        </div>
 
-        <v-card-text>
+        <!-- Form Body -->
+        <v-card-text class="px-8 py-6">
           <v-form lazy-validation ref="refVform" @submit.prevent="onFormSubmit">
-            <!-- Full Name Field -->
-            <v-text-field
-              v-model="driver.full_name"
-              label="Full Name"
-              :rules="[requiredValidator]"
-              required
-            />
+            <v-row dense>
+              <!-- Full Name Field -->
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="driver.full_name"
+                  label="Full Name"
+                  :rules="[requiredValidator]"
+                  required
+                  variant="outlined"
+                  density="comfortable"
+                />
+              </v-col>
 
-            <!-- License Number Field -->
-            <v-text-field
-              v-model="driver.license_number"
-              label="License Number"
-              :rules="[requiredValidator]"
-              required
-            />
+              <!-- License Number Field -->
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="driver.license_number"
+                  label="License Number"
+                  :rules="[requiredValidator]"
+                  required
+                  variant="outlined"
+                  density="comfortable"
+                />
+              </v-col>
 
-            <!-- License Expiry Date Field -->
-            <v-text-field
-              v-model="driver.license_expiry"
-              label="License Expiry Date"
-              type="date"
-              :rules="[requiredValidator]"
-            />
+              <!-- License Expiry Date Field -->
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="driver.license_expiry"
+                  label="License Expiry Date"
+                  type="date"
+                  :rules="[requiredValidator]"
+                  variant="outlined"
+                  density="comfortable"
+                />
+              </v-col>
 
-            <!-- Years of Experience Field -->
-            <v-text-field
-              v-model="driver.experience_year"
-              label="Years of Experience"
-              type="number"
-              :rules="[requiredValidator]"
-            />
+              <!-- Years of Experience Field -->
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="driver.experience_year"
+                  label="Years of Experience"
+                  type="number"
+                  :rules="[requiredValidator]"
+                  variant="outlined"
+                  density="comfortable"
+                />
+              </v-col>
 
-            <!-- Status Dropdown -->
-            <v-select
-              v-model="driver.status"
-              :items="['Active', 'Inactive']"
-              label="Status"
-              :rules="[requiredValidator]"
-            />
+              <!-- Status Dropdown -->
+              <v-col cols="12" md="6">
+                <v-select
+                  v-model="driver.status"
+                  :items="['Active', 'Inactive']"
+                  label="Status"
+                  :rules="[requiredValidator]"
+                  variant="outlined"
+                  density="comfortable"
+                />
+              </v-col>
+            </v-row>
 
             <!-- Submit Button -->
-            <v-btn
-              :loading="formAction.formProcess"
-              :disabled="formAction.formProcess"
-              color="primary"
-              class="mt-4"
-              type="submit"
-            >
-              Update Driver
-            </v-btn>
+            <div class="d-flex justify-end mt-6">
+              <v-btn
+                :loading="formAction.formProcess"
+                :disabled="formAction.formProcess"
+                color="primary"
+                class="px-6 text-capitalize"
+                size="large"
+                type="submit"
+              >
+                Update Driver
+              </v-btn>
+            </div>
 
-            <!-- Alert Notification (Success/Error) -->
+            <!-- Alert Notification -->
             <AlertNotification
+              class="mt-6"
               :form-success-message="formAction.formSuccessMessage"
               :form-error-message="formAction.formErrorMessage"
             />
