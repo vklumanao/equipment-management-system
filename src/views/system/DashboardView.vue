@@ -127,7 +127,15 @@ onMounted(() => {
     >
       <div class="d-flex align-center justify-space-between">
         <div>
-          <h2 class="font-weight-bold mb-2">Welcome, {{ userData.fullname }} 👋</h2>
+          <h2 class="font-weight-bold mb-2">
+            Welcome,
+            <span
+              class="px-3 py-1 bg-blue-lighten-5 text-primary rounded-pill font-weight-semibold"
+            >
+              {{ userData.fullname }}
+            </span>
+            👋
+          </h2>
           <p class="text-grey-darken-1">Here’s a quick overview of the system activity.</p>
         </div>
         <div
