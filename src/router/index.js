@@ -17,7 +17,7 @@ const router = createRouter({
   routes: [
     // Auth Pages
     {
-      path: '/home',
+      path: '/',
       name: 'home',
     },
 
