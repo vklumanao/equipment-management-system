@@ -184,6 +184,7 @@ const breadcrumbs = ref([
                   color="primary"
                   prepend-icon="mdi-account-plus"
                   elevation="2"
+                  variant="elevated"
                   class="ml-4 text-uppercase font-weight-bold"
                 >
                   Add Equipment
