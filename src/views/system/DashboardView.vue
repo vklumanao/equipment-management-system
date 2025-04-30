@@ -80,11 +80,35 @@ const fetchEquipmentCount = async () => {
 //   }
 // }
 
+const userData = ref({
+  email: '',
+  fullname: '',
+})
+
+// Get Current User Information
+const getUser = async () => {
+  const { data, error } = await supabase.auth.getUser()
+
+  if (error) {
+    console.error('Error fetching user:', error.message)
+    return
+  }
+
+  if (data?.user) {
+    const metadata = data.user.user_metadata || {}
+    const firstname = metadata.firstname || ''
+    const lastname = metadata.lastname || ''
+
+    userData.value.fullname = firstname + ' ' + lastname
+  }
+}
+
 // Lifecycle hook: Fetch driver count when component is mounted
 onMounted(() => {
   fetchDriverCount()
   fetchEquipmentCount()
   // fetchRequestCount()
+  getUser()
 })
 </script>
 
@@ -103,7 +127,7 @@ onMounted(() => {
     >
       <div class="d-flex align-center justify-space-between">
         <div>
-          <h2 class="font-weight-bold mb-2">Welcome, Manager 👋</h2>
+          <h2 class="font-weight-bold mb-2">Welcome, {{ userData.fullname }} 👋</h2>
           <p class="text-grey-darken-1">Here’s a quick overview of the system activity.</p>
         </div>
         <div
