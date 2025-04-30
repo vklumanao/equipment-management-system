@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { isAuthenticated } from '@/utils/supabase'
+import { isAuthenticated, getUserInformation } from '@/utils/supabase'
 import LoginView from '@/views/auth/LoginView.vue'
 import RegisterView from '@/views/auth/RegisterView.vue'
 import DashboardView from '@/views/system/DashboardView.vue'
@@ -79,7 +79,7 @@ const router = createRouter({
     },
     // Errors Pages
     {
-      path: '/system/forbidden',
+      path: '/forbidden',
       name: 'forbidden',
       component: ForbiddenView,
     },
@@ -89,6 +89,9 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   // Check if the user is currently authenticated (via Supabase)
   const isLoggedIn = await isAuthenticated()
+  const userMetadata = await getUserInformation()
+
+  const isAdmin = userMetadata?.isAdmin === true
 
   // If the user is trying to access '/home'
   // Redirect to dashboard if logged in, otherwise redirect to login
@@ -103,11 +106,13 @@ router.beforeEach(async (to) => {
   }
 
   // Check if the user is logged in and not an admin
-  // if (isLoggedIn && !isAdmin) {
-  //   if (to.name.startsWith('system/dashboard')) {
-  //     return { name: 'forbidden' }
-  //   }
-  // }
+  if (isLoggedIn && !isAdmin) {
+    // Check if the user is trying to access a system route
+    if (to.path.startsWith('/system')) {
+      // If they are, redirect them to the forbidden page
+      return { name: 'forbidden' }
+    }
+  }
 
   // If the user is not logged in and tries to access a protected /system route,
   // redirect them to the login page

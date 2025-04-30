@@ -4,7 +4,7 @@
 // ================================
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { isAuthenticated, formActionDefault, supabase } from '@/utils/supabase'
+import { isAuthenticated, formActionDefault, supabase, getUserInformation } from '@/utils/supabase'
 import { getAvatarText } from '@/utils/helpers'
 
 // ================================
@@ -77,24 +77,12 @@ const getLoggedStatus = async () => {
 
 // Get Current User Information
 const getUser = async () => {
-  const { data, error } = await supabase.auth.getUser()
+  const metadata = await getUserInformation()
 
-  if (error) {
-    console.error('Error fetching user:', error.message)
-    return
-  }
-
-  if (data?.user) {
-    const metadata = data.user.user_metadata || {}
-    const firstname = metadata.firstname || ''
-    const lastname = metadata.lastname || ''
-    const role = metadata.role || ''
-
-    userData.value.email = metadata.email || data.user.email || ''
-    userData.value.fullname = firstname + ' ' + lastname
-    userData.value.initials = getAvatarText(userData.value.fullname || 'User')
-    userData.value.role = role
-  }
+  userData.value.email = metadata.email
+  userData.value.fullname = metadata.firstname + ' ' + metadata.lastname
+  userData.value.initials = getAvatarText(userData.value.fullname)
+  userData.value.role = role
 }
 
 // Logout User
