@@ -9,6 +9,7 @@ import RequestView from '@/views/system/RequestView.vue'
 import EditDriverForm from '@/views/system/driver/EditDriverForm.vue'
 import EquipmentForm from '@/views/system/equipment/EquipmentForm.vue'
 import EditEquipmentForm from '@/views/system/equipment/EditEquipmentForm.vue'
+import ForbiddenView from '@/views/errors/ForbiddenView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -69,6 +70,12 @@ const router = createRouter({
       path: '/request',
       name: 'request',
       component: RequestView,
+    },
+    // Errors Pages
+    {
+      path: '/forbidden',
+      name: 'forbidden',
+      component: ForbiddenView,
     },
   ],
 })
