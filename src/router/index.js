@@ -13,6 +13,7 @@ import EditEquipmentForm from '@/views/system/equipment/EditEquipmentForm.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // Auth Pages
     {
       path: '/',
       name: 'login',
@@ -24,7 +25,7 @@ const router = createRouter({
       name: 'register',
       component: RegisterView,
     },
-
+    // System Pages
     {
       path: '/dashboard',
       name: 'dashboard',
