@@ -7,6 +7,12 @@ import { supabase } from '@/utils/supabase'
 // Reactive array for dashboard cards
 const cardData = ref([
   {
+    icon: 'mdi-account',
+    color: 'black',
+    title: 'Users',
+    value: '0',
+  },
+  {
     icon: 'mdi-dump-truck',
     color: 'primary',
     title: 'Equipment',
