@@ -82,15 +82,12 @@ const breadcrumbs = ref([
 
 <template>
   <DashboardLayout>
-    <v-container class="pa-4" fluid>
-      <!-- ================================
-           Breadcrumbs
-           ================================ -->
+    <v-container fluid class="pa-6">
+      <!-- Breadcrumbs -->
       <v-breadcrumbs :items="breadcrumbs" class="mb-4">
         <template #divider>
           <v-icon>mdi-chevron-right</v-icon>
         </template>
-
         <template #item="{ item }">
           <v-breadcrumbs-item
             :to="!item.disabled ? item.href : undefined"
@@ -102,67 +99,68 @@ const breadcrumbs = ref([
         </template>
       </v-breadcrumbs>
 
-      <!-- ================================
-           Add New Driver Form Card
-           ================================ -->
-      <v-card elevation="2" class="pa-8 rounded-2xl">
-        <v-card-title class="text-2xl font-bold mb-4">Add New Driver</v-card-title>
+      <!-- Form Card -->
+      <v-card class="rounded-xl elevation-2">
+        <!-- Header -->
+        <div class="py-6 px-8 bg-grey-lighten-5 border-b">
+          <h2 class="font-weight-bold mb-1">Add New Driver</h2>
+          <p class="text-grey-darken-2">Fill in the required fields to register a new driver.</p>
+        </div>
 
-        <v-card-text>
-          <v-form lazy-validation ref="refVform" @submit.prevent="onFormSubmit">
+        <!-- Form Body -->
+        <v-card-text class="px-8 py-6">
+          <v-form ref="refVform" @submit.prevent="onFormSubmit" lazy-validation>
             <v-row dense>
-              <!-- Full Name Field -->
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model="driver.full_name"
                   label="Full Name"
-                  :rules="[requiredValidator]"
-                  required
                   variant="outlined"
+                  :rules="[requiredValidator]"
+                  density="comfortable"
                 />
               </v-col>
 
-              <!-- License Number Field -->
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model="driver.license_number"
                   label="License Number"
-                  :rules="[requiredValidator]"
-                  required
                   variant="outlined"
+                  :rules="[requiredValidator]"
+                  density="comfortable"
                 />
               </v-col>
 
-              <!-- License Expiry Date Field -->
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model="driver.license_expiry"
                   label="License Expiry Date"
                   type="date"
-                  :rules="[requiredValidator]"
                   variant="outlined"
+                  :rules="[requiredValidator]"
+                  density="comfortable"
                 />
               </v-col>
 
-              <!-- Years of Experience Field -->
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model="driver.experience_year"
                   label="Years of Experience"
                   type="number"
-                  :rules="[requiredValidator]"
                   variant="outlined"
+                  :rules="[requiredValidator]"
+                  density="comfortable"
                 />
               </v-col>
 
-              <!-- Status Dropdown -->
               <v-col cols="12" md="6">
                 <v-select
                   v-model="driver.status"
                   :items="['Active', 'Inactive']"
                   label="Status"
-                  :rules="[requiredValidator]"
                   variant="outlined"
+                  :rules="[requiredValidator]"
+                  density="comfortable"
                 />
               </v-col>
             </v-row>
@@ -170,19 +168,20 @@ const breadcrumbs = ref([
             <!-- Submit Button -->
             <div class="d-flex justify-end mt-6">
               <v-btn
+                type="submit"
+                color="primary"
                 :loading="formAction.formProcess"
                 :disabled="formAction.formProcess"
-                color="primary"
-                class="text-capitalize"
+                class="px-6 text-capitalize"
                 size="large"
-                type="submit"
               >
                 Save Driver
               </v-btn>
             </div>
 
-            <!-- Alert Notification (Success/Error) -->
+            <!-- Notifications -->
             <AlertNotification
+              class="mt-6"
               :form-success-message="formAction.formSuccessMessage"
               :form-error-message="formAction.formErrorMessage"
             />

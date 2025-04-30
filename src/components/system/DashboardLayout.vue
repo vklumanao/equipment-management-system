@@ -91,7 +91,7 @@ const getUser = async () => {
     const role = metadata.role || ''
 
     userData.value.email = metadata.email || data.user.email || ''
-    userData.value.fullname = `${firstname} ${lastname}`.trim()
+    userData.value.fullname = firstname + ' ' + lastname
     userData.value.initials = getAvatarText(userData.value.fullname || 'User')
     userData.value.role = role
   }
@@ -136,7 +136,7 @@ onMounted(() => {
       <!-- Left Side -->
       <div class="d-flex align-center gap-3">
         <v-app-bar-nav-icon variant="text" @click="drawer = !drawer" />
-        <v-toolbar-title class="font-weight-bold"> Dashboard </v-toolbar-title>
+        <v-toolbar-title class="font-weight-bold"> CGB - Motorpol System </v-toolbar-title>
       </div>
 
       <!-- Right Side (User Avatar with Menu) -->
@@ -150,16 +150,29 @@ onMounted(() => {
             </v-btn>
           </template>
 
-          <v-card class="pa-4" width="250">
+          <v-card class="pa-4" width="300">
             <!-- User Info -->
-            <div class="d-flex align-center mb-4">
-              <v-avatar size="50" color="primary" class="mr-3 text-white font-weight-bold">
+            <div
+              class="d-flex align-center gap-6 pa-4 rounded-lg elevation-1 bg-grey-lighten-5 mb-6"
+            >
+              <v-avatar
+                size="56"
+                color="primary"
+                class="text-white font-weight-bold elevation-2 mr-5"
+              >
                 {{ userData.initials }}
               </v-avatar>
-              <div>
-                <div class="text-subtitle-3 font-weight-bold">{{ userData.fullname }}</div>
-                <div class="text-subtitle-2 font-weight-medium">{{ userData.email }}</div>
-                <div class="text-subtitle-2 font-weight-medium">{{ userData.role }}</div>
+
+              <div class="d-flex flex-column justify-center">
+                <div class="font-weight-semibold text-grey-darken-4">
+                  {{ userData.fullname }}
+                </div>
+                <div class="text-grey-darken-1">
+                  {{ userData.email }}
+                </div>
+                <div class="text-grey-darken-1">
+                  {{ userData.role }}
+                </div>
               </div>
             </div>
 
