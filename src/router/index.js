@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { isAuthenticated } from '@/utils/supabase'
 import LoginView from '@/views/auth/LoginView.vue'
 import RegisterView from '@/views/auth/RegisterView.vue'
 import DashboardView from '@/views/system/DashboardView.vue'
@@ -83,6 +84,35 @@ const router = createRouter({
       component: ForbiddenView,
     },
   ],
+})
+
+router.beforeEach(async (to) => {
+  // Check if the user is currently authenticated (via Supabase)
+  const isLoggedIn = await isAuthenticated()
+
+  // If the user is trying to access '/home'
+  // Redirect to dashboard if logged in, otherwise redirect to login
+  if (to.name === 'home') {
+    return isLoggedIn ? { name: 'dashboard' } : { name: 'login' }
+  }
+
+  // If the user is already logged in and tries to access login or register pages,
+  // redirect them to the dashboard to prevent access to auth pages
+  if (isLoggedIn && (to.name === 'login' || to.name === 'register')) {
+    return { name: 'dashboard' }
+  }
+
+  // If the user is not logged in and tries to access a protected /system route,
+  // redirect them to the login page
+  if (!isLoggedIn && to.path.startsWith('/system')) {
+    return { name: 'login' }
+  }
+
+  // If the route does not match any defined route (404),
+  // redirect to a not-found error page
+  if (router.resolve(to).matched.length === 0) {
+    return { name: 'not-found' }
+  }
 })
 
 export default router
