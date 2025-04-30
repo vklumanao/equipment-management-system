@@ -98,7 +98,7 @@ const breadcrumbs = ref([
 
 <template>
   <DashboardLayout>
-    <div class="px-2">
+    <v-container class="px-2">
       <!-- Header and Add Button -->
       <div class="d-flex justify-space-between align-center mb-0">
         <!-- ================================
@@ -221,7 +221,7 @@ const breadcrumbs = ref([
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </div>
+    </v-container>
   </DashboardLayout>
 </template>
 

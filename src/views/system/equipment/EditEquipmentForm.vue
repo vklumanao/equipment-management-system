@@ -151,7 +151,7 @@ const breadcrumbs = ref([
 
 <template>
   <DashboardLayout>
-    <v-container fluid class="pa-6">
+    <v-container fluid class="px-2">
       <!-- Breadcrumbs -->
       <v-breadcrumbs :items="breadcrumbs" class="mb-4">
         <template #divider>
