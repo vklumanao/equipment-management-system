@@ -145,7 +145,7 @@ onMounted(() => {
 const breadcrumbs = ref([
   { title: 'Dashboard', disabled: false, href: '/dashboard' },
   { title: 'Equipments', disabled: false, href: '/equipment' },
-  { title: 'Edit Equipment', disabled: true }, // Current Page
+  { title: 'Edit Equipment Detail', disabled: true }, // Current Page
 ])
 </script>
 
@@ -172,7 +172,7 @@ const breadcrumbs = ref([
       <v-card class="rounded-xl elevation-2">
         <!-- Header -->
         <div class="py-6 px-8 bg-grey-lighten-5 border-b">
-          <h2 class="font-weight-bold mb-1">Edit Equipment</h2>
+          <h2 class="font-weight-bold mb-1">Edit Equipment Details</h2>
           <p class="text-grey-darken-2">
             Update the necessary fields to modify the equipment details.
           </p>
@@ -266,7 +266,7 @@ const breadcrumbs = ref([
                 size="large"
                 type="submit"
               >
-                Save Equipment
+                Update Equipment
               </v-btn>
             </div>
 
