@@ -90,6 +90,32 @@ onMounted(() => {
 
 <template>
   <DashboardLayout>
+    <!-- Welcome Manager Card -->
+    <v-card
+      class="mb-6 pa-6 rounded-2xl"
+      elevation="4"
+      style="
+        border-radius: 20px;
+        background-color: #f9fafb;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+        transition: all 0.3s ease;
+      "
+    >
+      <div class="d-flex align-center justify-space-between">
+        <div>
+          <h2 class="font-weight-bold mb-2">Welcome, Manager 👋</h2>
+          <p class="text-grey-darken-1">Here’s a quick overview of the system activity.</p>
+        </div>
+        <div
+          class="rounded-circle d-flex align-center justify-center"
+          style="width: 60px; height: 60px; background-color: var(--v-theme-primary-lighten5)"
+        >
+          <v-icon size="36" color="primary">mdi-account-tie</v-icon>
+        </div>
+      </div>
+    </v-card>
+
+    <!-- Dashboard Stats Cards -->
     <v-row>
       <v-col v-for="(item, index) in cardData" :key="index" cols="12" sm="6" md="4">
         <v-card
