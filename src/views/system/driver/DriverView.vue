@@ -74,7 +74,7 @@ const confirmDeleteDriver = async () => {
 
 // Edit Driver
 const editDriver = (id) => {
-  router.push(`/driver/edit/${id}`)
+  router.push(`/system/driver/edit/${id}`)
 }
 
 // View Details
@@ -178,7 +178,7 @@ const breadcrumbs = ref([
               class="bg-gradient-to-r from-blue-500 to-teal-400 py-2 shadow-md d-flex justify-center align-center"
             >
               <!-- Add Driver Button on the Left -->
-              <RouterLink to="/driver/add" style="text-decoration: none">
+              <RouterLink to="/system/driver/add" style="text-decoration: none">
                 <v-btn
                   color="primary"
                   prepend-icon="mdi-account-plus"
@@ -196,8 +196,14 @@ const breadcrumbs = ref([
               </v-toolbar-title>
 
               <!-- Refresh Button on the Right -->
-              <v-btn icon @click="refreshData" class="mr-4">
-                <v-icon color="black">mdi-refresh</v-icon>
+              <v-btn
+                icon
+                @click="refreshData"
+                class="mr-6"
+                elevation="3"
+                style="background-color: #4caf50; color: white; border-radius: 50%"
+              >
+                <v-icon>mdi-refresh</v-icon>
               </v-btn>
             </v-toolbar>
           </template>

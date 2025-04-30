@@ -122,7 +122,7 @@ const onSubmit = async () => {
     formAction.value.formSuccessMessage = 'Successfully updated driver.'
     console.log(formAction.value.formSuccessMessage)
 
-    router.replace('/driver') // Navigate back to driver list
+    router.replace('/system/driver') // Navigate back to driver list
   }
 
   formAction.value.formProcess = false
@@ -140,8 +140,8 @@ onMounted(() => {
 // Breadcrumb Items
 // ================================
 const breadcrumbs = ref([
-  { title: 'Dashboard', disabled: false, href: '/dashboard' },
-  { title: 'Drivers', disabled: false, href: '/Driver' },
+  { title: 'Dashboard', disabled: false, href: '/system/dashboard' },
+  { title: 'Drivers', disabled: false, href: '/system/driver' },
   { title: 'Edit Driver Information', disabled: true }, // Current Page
 ])
 </script>

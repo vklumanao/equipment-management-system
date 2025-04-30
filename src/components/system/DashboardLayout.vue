@@ -4,7 +4,7 @@
 // ================================
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { isAuthenticated, formActionDefault, supabase } from '@/utils/supabase'
+import { isAuthenticated, formActionDefault, supabase, getUserInformation } from '@/utils/supabase'
 import { getAvatarText } from '@/utils/helpers'
 
 // ================================
@@ -34,31 +34,31 @@ const menuItems = [
   {
     title: 'Dashboard',
     icon: 'mdi-view-dashboard',
-    route: '/dashboard',
+    route: '/system/dashboard',
   },
   {
     title: 'Equipment',
     icon: 'mdi-dump-truck',
     children: [
-      { title: 'All Equipment', route: '/equipment' },
-      { title: 'Add Equipment', route: '/equipment/add' },
+      { title: 'All Equipment', route: '/system/equipment' },
+      { title: 'Add Equipment', route: '/system/equipment/add' },
     ],
   },
   {
     title: 'Drivers',
     icon: 'mdi-account',
     children: [
-      { title: 'All Drivers', route: '/driver' },
-      { title: 'Add Driver', route: '/driver/add' },
+      { title: 'All Drivers', route: '/system/driver' },
+      { title: 'Add Driver', route: '/system/driver/add' },
     ],
   },
   {
     title: 'Requests',
     icon: 'mdi-message-plus',
     children: [
-      { title: 'All Requests', route: '/request' },
-      { title: 'New Request', route: '/request/new' },
-      { title: 'Request History', route: '/request/history' },
+      { title: 'All Requests', route: '/system/request' },
+      { title: 'New Request', route: '/system/request/new' },
+      { title: 'Request History', route: '/system/request/history' },
     ],
   },
 ]
@@ -77,24 +77,12 @@ const getLoggedStatus = async () => {
 
 // Get Current User Information
 const getUser = async () => {
-  const { data, error } = await supabase.auth.getUser()
+  const metadata = await getUserInformation()
 
-  if (error) {
-    console.error('Error fetching user:', error.message)
-    return
-  }
-
-  if (data?.user) {
-    const metadata = data.user.user_metadata || {}
-    const firstname = metadata.firstname || ''
-    const lastname = metadata.lastname || ''
-    const role = metadata.role || ''
-
-    userData.value.email = metadata.email || data.user.email || ''
-    userData.value.fullname = firstname + ' ' + lastname
-    userData.value.initials = getAvatarText(userData.value.fullname || 'User')
-    userData.value.role = role
-  }
+  userData.value.email = metadata.email
+  userData.value.fullname = metadata.firstname + ' ' + metadata.lastname
+  userData.value.initials = getAvatarText(userData.value.fullname)
+  userData.value.role = role
 }
 
 // Logout User
@@ -109,7 +97,7 @@ const onLogout = async () => {
   }
 
   formAction.value.formProcess = false
-  router.replace('/')
+  router.replace('/login')
 }
 
 // ================================
