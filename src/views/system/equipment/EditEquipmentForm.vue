@@ -145,21 +145,18 @@ onMounted(() => {
 const breadcrumbs = ref([
   { title: 'Dashboard', disabled: false, href: '/dashboard' },
   { title: 'Equipments', disabled: false, href: '/equipment' },
-  { title: 'Add Equipment', disabled: true }, // Current Page
+  { title: 'Edit Equipment', disabled: true }, // Current Page
 ])
 </script>
 
 <template>
   <DashboardLayout>
-    <v-container class="pa-4" fluid>
-      <!-- ================================
-           Breadcrumbs
-           ================================ -->
+    <v-container fluid class="pa-6">
+      <!-- Breadcrumbs -->
       <v-breadcrumbs :items="breadcrumbs" class="mb-4">
         <template #divider>
           <v-icon>mdi-chevron-right</v-icon>
         </template>
-
         <template #item="{ item }">
           <v-breadcrumbs-item
             :to="!item.disabled ? item.href : undefined"
@@ -171,13 +168,18 @@ const breadcrumbs = ref([
         </template>
       </v-breadcrumbs>
 
-      <!-- ================================
-           Add New Equipment Form Card
-           ================================ -->
-      <v-card elevation="2" class="pa-8 rounded-2xl">
-        <v-card-title class="text-2xl font-bold mb-4">Add New Equipment</v-card-title>
+      <!-- Form Card -->
+      <v-card class="rounded-xl elevation-2">
+        <!-- Header -->
+        <div class="py-6 px-8 bg-grey-lighten-5 border-b">
+          <h2 class="font-weight-bold mb-1">Edit Equipment</h2>
+          <p class="text-grey-darken-2">
+            Update the necessary fields to modify the equipment details.
+          </p>
+        </div>
 
-        <v-card-text>
+        <!-- Form Body -->
+        <v-card-text class="px-8 py-6">
           <v-form lazy-validation ref="refVform" @submit.prevent="onFormSubmit">
             <v-row dense>
               <!-- Equipment Type -->
@@ -189,6 +191,7 @@ const breadcrumbs = ref([
                   :rules="[requiredValidator]"
                   required
                   variant="outlined"
+                  density="comfortable"
                 />
               </v-col>
 
@@ -200,6 +203,7 @@ const breadcrumbs = ref([
                   :rules="[requiredValidator]"
                   required
                   variant="outlined"
+                  density="comfortable"
                 />
               </v-col>
 
@@ -211,6 +215,7 @@ const breadcrumbs = ref([
                   :rules="[requiredValidator]"
                   required
                   variant="outlined"
+                  density="comfortable"
                 />
               </v-col>
 
@@ -222,6 +227,7 @@ const breadcrumbs = ref([
                   type="date"
                   :rules="[requiredValidator]"
                   variant="outlined"
+                  density="comfortable"
                 />
               </v-col>
 
@@ -233,6 +239,7 @@ const breadcrumbs = ref([
                   :rules="[requiredValidator]"
                   required
                   variant="outlined"
+                  density="comfortable"
                 />
               </v-col>
 
@@ -244,6 +251,7 @@ const breadcrumbs = ref([
                   label="Status"
                   :rules="[requiredValidator]"
                   variant="outlined"
+                  density="comfortable"
                 />
               </v-col>
             </v-row>
@@ -254,7 +262,7 @@ const breadcrumbs = ref([
                 :loading="formAction.formProcess"
                 :disabled="formAction.formProcess"
                 color="primary"
-                class="text-capitalize"
+                class="px-6 text-capitalize"
                 size="large"
                 type="submit"
               >
@@ -264,6 +272,7 @@ const breadcrumbs = ref([
 
             <!-- Alert Notification -->
             <AlertNotification
+              class="mt-6"
               :form-success-message="formAction.formSuccessMessage"
               :form-error-message="formAction.formErrorMessage"
             />
