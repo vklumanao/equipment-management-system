@@ -99,7 +99,7 @@ const breadcrumbs = ref([
 
 <template>
   <DashboardLayout>
-    <div class="px-2">
+    <v-container class="px-2">
       <!-- Header and Add Button -->
       <div class="d-flex justify-space-between align-center mb-0">
         <!-- ================================
@@ -184,6 +184,7 @@ const breadcrumbs = ref([
                   color="primary"
                   prepend-icon="mdi-account-plus"
                   elevation="2"
+                  variant="elevated"
                   class="ml-4 text-uppercase font-weight-bold"
                 >
                   Add Equipment
@@ -222,7 +223,7 @@ const breadcrumbs = ref([
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </div>
+    </v-container>
   </DashboardLayout>
 </template>
 

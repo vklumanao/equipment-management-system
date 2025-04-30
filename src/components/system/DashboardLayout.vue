@@ -158,7 +158,7 @@ onMounted(() => {
               <v-avatar
                 size="56"
                 color="primary"
-                class="text-white font-weight-bold elevation-2 mr-5"
+                class="text-white font-weight-bold elevation-2 mr-2"
               >
                 {{ userData.initials }}
               </v-avatar>
@@ -207,20 +207,15 @@ onMounted(() => {
     <!-- ================================
          Navigation Drawer (Sidebar)
          ================================ -->
-    <v-navigation-drawer
-      app
-      v-model="drawer"
-      class="bg-gradient-to-b from-blue lighten-4 to-indigo lighten-4 elevation-8 rounded-lg"
-      width="230"
-    >
+    <v-navigation-drawer app v-model="drawer" class="elevation-8" width="250">
       <v-list dense>
         <template v-for="item in menuItems" :key="item.title">
           <!-- List with Children -->
           <v-list-group v-if="item.children" color="primary">
             <template #activator="{ props }">
-              <v-list-item v-bind="props" class="px-4 py-3">
+              <v-list-item v-bind="props" class="px-6 py-4">
                 <div class="d-flex align-center">
-                  <v-icon color="primary" class="text-h5 me-2">{{ item.icon }}</v-icon>
+                  <v-icon size="36" color="primary" class="me-2">{{ item.icon }}</v-icon>
                   <v-list-item-title class="font-weight-medium mb-0">
                     {{ item.title }}
                   </v-list-item-title>
@@ -246,11 +241,11 @@ onMounted(() => {
             v-else
             :to="item.route"
             link
-            class="my-1 px-4 py-3 transition-all duration-200 ease-in-out hover:bg-blue-darken-3"
+            class="my-1 px-6 py-3 transition-all duration-200 ease-in-out hover:bg-blue-darken-3"
             active-class="bg-blue-dark text-blue"
           >
             <div class="d-flex align-center gap-3">
-              <v-icon color="primary" class="text-h5">{{ item.icon }}</v-icon>
+              <v-icon size="36" color="primary">{{ item.icon }}</v-icon>
               <span class="px-2 font-weight-medium">{{ item.title }}</span>
             </div>
           </v-list-item>
