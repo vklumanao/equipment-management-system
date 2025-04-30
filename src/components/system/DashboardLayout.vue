@@ -91,7 +91,7 @@ const getUser = async () => {
     const role = metadata.role || ''
 
     userData.value.email = metadata.email || data.user.email || ''
-    userData.value.fullname = `${firstname} ${lastname}`.trim()
+    userData.value.fullname = firstname + ' ' + lastname
     userData.value.initials = getAvatarText(userData.value.fullname || 'User')
     userData.value.role = role
   }
