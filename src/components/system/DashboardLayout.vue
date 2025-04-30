@@ -136,7 +136,7 @@ onMounted(() => {
       <!-- Left Side -->
       <div class="d-flex align-center gap-3">
         <v-app-bar-nav-icon variant="text" @click="drawer = !drawer" />
-        <v-toolbar-title class="font-weight-bold"> Dashboard </v-toolbar-title>
+        <v-toolbar-title class="font-weight-bold"> CGB - Motorpol System </v-toolbar-title>
       </div>
 
       <!-- Right Side (User Avatar with Menu) -->
