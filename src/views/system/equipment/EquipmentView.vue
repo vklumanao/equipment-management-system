@@ -75,7 +75,7 @@ const confirmDeleteEquipment = async () => {
 
 // Edit Driver
 const editEquipment = (id) => {
-  router.push(`/equipment/edit/${id}`)
+  router.push(`/system/equipment/edit/${id}`)
 }
 
 // View Details
@@ -92,8 +92,8 @@ onMounted(() => {
 // Breadcrumb Items
 // ================================
 const breadcrumbs = ref([
-  { title: 'Dashboard', disabled: false, href: '/dashboard' },
-  { title: 'Equipments', disabled: true, href: '/equipment' }, // Current Page
+  { title: 'Dashboard', disabled: false, href: '/system/dashboard' },
+  { title: 'Equipments', disabled: true, href: '/system/equipment' }, // Current Page
 ])
 </script>
 
@@ -179,7 +179,7 @@ const breadcrumbs = ref([
               class="bg-gradient-to-r from-blue-500 to-teal-400 py-2 shadow-md d-flex justify-center align-center"
             >
               <!-- Add Equipment Button on the left -->
-              <RouterLink to="/equipment/add" style="text-decoration: none">
+              <RouterLink to="/system/equipment/add" style="text-decoration: none">
                 <v-btn
                   color="primary"
                   prepend-icon="mdi-account-plus"

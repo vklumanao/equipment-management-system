@@ -69,7 +69,7 @@ const onSubmit = async () => {
   } else if (data) {
     // Add Success Message
     formAction.value.formSuccessMessage = 'Successfully Registered Account.'
-    router.replace('/dashboard')
+    router.replace('/system/dashboard')
   }
   // Reset Form
   refVform.value?.reset()
@@ -204,7 +204,7 @@ const router = useRouter()
         <!-- Already have an Account -->
         <p class="text-center mt-4">
           Already have an Account?
-          <RouterLink to="/" class="text-decoration-none register-link-text">
+          <RouterLink to="/login" class="text-decoration-none register-link-text">
             Click to Login
           </RouterLink>
         </p>

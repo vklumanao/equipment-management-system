@@ -16,7 +16,12 @@ const router = createRouter({
   routes: [
     // Auth Pages
     {
-      path: '/',
+      path: '/home',
+      name: 'home',
+    },
+
+    {
+      path: '/login',
       name: 'login',
       component: LoginView,
     },
@@ -28,52 +33,52 @@ const router = createRouter({
     },
     // System Pages
     {
-      path: '/dashboard',
+      path: '/system/dashboard',
       name: 'dashboard',
       component: DashboardView,
     },
     // For driver
     {
-      path: '/driver',
+      path: '/system/driver',
       name: 'ListDriver',
       component: DriverView,
     },
     {
-      path: '/driver/add',
+      path: '/system/driver/add',
       name: 'AddDriver',
       component: DriverForm,
     },
     {
-      path: '/driver/edit/:id',
+      path: '/system/driver/edit/:id',
       name: 'EditDriver',
       component: EditDriverForm,
       props: true,
     },
     // For Vehicle
     {
-      path: '/equipment',
+      path: '/system/equipment',
       name: 'ListEquipment',
       component: EquipmentView,
     },
     {
-      path: '/equipment/add',
+      path: '/system/equipment/add',
       name: 'AddEquipment',
       component: EquipmentForm,
     },
     {
-      path: '/equipment/edit/:id',
+      path: '/system/equipment/edit/:id',
       name: 'EditEquipment',
       component: EditEquipmentForm,
     },
     // For Request
     {
-      path: '/request',
+      path: '/system/request',
       name: 'request',
       component: RequestView,
     },
     // Errors Pages
     {
-      path: '/forbidden',
+      path: '/system/forbidden',
       name: 'forbidden',
       component: ForbiddenView,
     },

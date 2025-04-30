@@ -125,7 +125,7 @@ const onSubmit = async () => {
     formAction.value.formSuccessMessage = 'Successfully updated equipment.'
     console.log(formAction.value.formSuccessMessage)
 
-    router.replace('/equipment') // Navigate back to driver list
+    router.replace('/system/equipment') // Navigate back to driver list
   }
 
   formAction.value.formProcess = false
@@ -143,8 +143,8 @@ onMounted(() => {
 // Breadcrumb Items
 // ================================
 const breadcrumbs = ref([
-  { title: 'Dashboard', disabled: false, href: '/dashboard' },
-  { title: 'Equipments', disabled: false, href: '/equipment' },
+  { title: 'Dashboard', disabled: false, href: '/system/dashboard' },
+  { title: 'Equipments', disabled: false, href: '/system/equipment' },
   { title: 'Edit Equipment Detail', disabled: true }, // Current Page
 ])
 </script>
