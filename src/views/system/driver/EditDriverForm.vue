@@ -135,17 +135,43 @@ const onSubmit = async () => {
 onMounted(() => {
   fetchDriver()
 })
+
+// ================================
+// Breadcrumb Items
+// ================================
+const breadcrumbs = ref([
+  { title: 'Dashboard', disabled: false, href: '/dashboard' },
+  { title: 'Drivers', disabled: false, href: '/Driver' },
+  { title: 'Edit Driver Information', disabled: true }, // Current Page
+])
 </script>
 
 <template>
   <DashboardLayout>
     <v-container fluid class="pa-6">
+      <!-- Breadcrumbs -->
+      <v-breadcrumbs :items="breadcrumbs" class="mb-4">
+        <template #divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+        <template #item="{ item }">
+          <v-breadcrumbs-item
+            :to="!item.disabled ? item.href : undefined"
+            :disabled="item.disabled"
+            link
+          >
+            {{ item.title }}
+          </v-breadcrumbs-item>
+        </template>
+      </v-breadcrumbs>
       <!-- Form Card -->
       <v-card class="rounded-xl elevation-2">
         <!-- Header -->
         <div class="py-6 px-8 bg-grey-lighten-5 border-b">
-          <h2 class="font-weight-bold mb-1">Edit Driver</h2>
-          <p class="text-grey-darken-2">Update the driver information below.</p>
+          <h2 class="font-weight-bold mb-1">Edit Driver Information</h2>
+          <p class="text-grey-darken-2">
+            Update the necessary fields to modify the driver's information.
+          </p>
         </div>
 
         <!-- Form Body -->
