@@ -82,7 +82,7 @@ const getUser = async () => {
   userData.value.email = metadata.email
   userData.value.fullname = metadata.firstname + ' ' + metadata.lastname
   userData.value.initials = getAvatarText(userData.value.fullname)
-  userData.value.role = role
+  userData.value.role = metadata.role
 }
 
 // Logout User
