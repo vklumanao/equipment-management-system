@@ -89,9 +89,6 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   // Check if the user is currently authenticated (via Supabase)
   const isLoggedIn = await isAuthenticated()
-  const userMetadata = await getUserInformation()
-
-  const isAdmin = userMetadata?.isAdmin === true
 
   // If the user is trying to access '/home'
   // Redirect to dashboard if logged in, otherwise redirect to login
@@ -105,14 +102,20 @@ router.beforeEach(async (to) => {
     return { name: 'dashboard' }
   }
 
-  // Check if the user is logged in and not an admin
-  if (isLoggedIn && !isAdmin) {
-    // Check if the user is trying to access a system route
-    if (to.path.startsWith('/system')) {
-      // If they are, redirect them to the forbidden page
-      return { name: 'forbidden' }
+  if (isLoggedIn) {
+    const userMetadata = await getUserInformation()
+    const isAdmin = userMetadata?.isAdmin === true
+
+    if (!isAdmin) {
+      // Check if the user is trying to access a system route
+      if (to.path.startsWith('/system')) {
+        // If they are, redirect them to the forbidden page
+        return { name: 'forbidden' }
+      }
     }
   }
+
+  // Check if the user is logged in and not an admin
 
   // If the user is not logged in and tries to access a protected /system route,
   // redirect them to the login page
