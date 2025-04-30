@@ -102,10 +102,13 @@ router.beforeEach(async (to) => {
     return { name: 'dashboard' }
   }
 
+  // Check if the user is Logged In
   if (isLoggedIn) {
+    // Retrieve information about the user
     const userMetadata = await getUserInformation()
     const isAdmin = userMetadata?.isAdmin === true
 
+    // Check if the user is not Admin
     if (!isAdmin) {
       // Check if the user is trying to access a system route
       if (to.path.startsWith('/system')) {
