@@ -169,7 +169,7 @@ const breadcrumbs = ref([
                 <v-autocomplete
                   v-model="equipment.location"
                   :items="barangayStore.list"
-                  label="Barangay"
+                  label="Location"
                   :search-input.sync="searchQuery"
                   item-title="name"
                   item-value="name"
