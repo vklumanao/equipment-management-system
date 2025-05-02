@@ -5,10 +5,13 @@ import DashboardView from '@/views/system/DashboardView.vue'
 import DriverView from '@/views/system/driver/DriverView.vue'
 import EquipmentView from '@/views/system/equipment/EquipmentView.vue'
 import DriverForm from '@/views/system/driver/DriverForm.vue'
-import RequestView from '@/views/system/RequestView.vue'
+import RequestView from '@/views/system/request/RequestView.vue'
+import RequestForm from '@/views/system/request/RequestForm.vue'
 import EditDriverForm from '@/views/system/driver/EditDriverForm.vue'
 import EquipmentForm from '@/views/system/equipment/EquipmentForm.vue'
 import EditEquipmentForm from '@/views/system/equipment/EditEquipmentForm.vue'
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,8 +69,13 @@ const router = createRouter({
     // For Request
     {
       path: '/request',
-      name: 'request',
+      name: 'RequestView',
       component: RequestView,
+    },
+    {
+      path: '/request/add',
+      name: 'AddRequest',
+      component: RequestForm,
     },
   ],
 })
