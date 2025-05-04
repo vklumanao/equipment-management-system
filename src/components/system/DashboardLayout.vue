@@ -57,7 +57,7 @@ const menuItems = [
     icon: 'mdi-message-plus',
     children: [
       { title: 'All Requests', route: '/request' },
-      { title: 'New Request', route: '/request/new' },
+      { title: 'New Request', route: '/request/add' },
       { title: 'Request History', route: '/request/history' },
     ],
   },
