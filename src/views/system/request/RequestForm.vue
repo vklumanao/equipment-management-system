@@ -151,7 +151,7 @@ const breadcrumbs = ref([
             <v-row dense>
               <!-- <v-col cols="12" md="6">
                 <v-text-field
-                  v-model="request.request_type"
+                  v-model=""
                   label="Request Type"
                   variant="outlined"
                   :rules="[requiredValidator]"
