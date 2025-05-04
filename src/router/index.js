@@ -13,8 +13,6 @@ import EquipmentForm from '@/views/system/equipment/EquipmentForm.vue'
 import EditEquipmentForm from '@/views/system/equipment/EditEquipmentForm.vue'
 import ForbiddenView from '@/views/errors/ForbiddenView.vue'
 
-
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
 
