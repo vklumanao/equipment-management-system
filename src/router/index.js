@@ -7,6 +7,7 @@ import EquipmentView from '@/views/system/equipment/EquipmentView.vue'
 import DriverForm from '@/views/system/driver/DriverForm.vue'
 import RequestView from '@/views/system/request/RequestView.vue'
 import RequestForm from '@/views/system/request/RequestForm.vue'
+import EditRequestForm from '@/views/system/request/EditRequestForm.vue'
 import EditDriverForm from '@/views/system/driver/EditDriverForm.vue'
 import EquipmentForm from '@/views/system/equipment/EquipmentForm.vue'
 import EditEquipmentForm from '@/views/system/equipment/EditEquipmentForm.vue'
@@ -76,6 +77,11 @@ const router = createRouter({
       path: '/request/add',
       name: 'AddRequest',
       component: RequestForm,
+    },
+    {
+      path: '/request/edit/:id',
+      name: 'EditRequest',
+      component: EditRequestForm,
     },
   ],
 })
