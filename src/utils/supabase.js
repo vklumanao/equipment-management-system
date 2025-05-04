@@ -24,3 +24,15 @@ export const isAuthenticated = async () => {
   }
   return !!data.session
 }
+
+// Get Current User Information
+export const getUserInformation = async () => {
+  const { data, error } = await supabase.auth.getUser()
+
+  if (error || !data?.user) {
+    console.error('User not found or error fetching user:', error?.message)
+    return null
+  }
+
+  return data.user.user_metadata
+}

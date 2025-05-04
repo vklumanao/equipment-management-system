@@ -56,7 +56,8 @@ const onSubmit = async () => {
         firstname: formData.value.firstname,
         lastname: formData.value.lastname,
         username: formData.value.username,
-        // is_admin: true // Just turn to true if admin account
+        // Just turn to true if admin account
+        isAdmin: false,
         // role: 'Admin'
       },
     },
@@ -204,7 +205,7 @@ const router = useRouter()
         <!-- Already have an Account -->
         <p class="text-center mt-4">
           Already have an Account?
-          <RouterLink to="/" class="text-decoration-none register-link-text">
+          <RouterLink to="/login" class="text-decoration-none register-link-text">
             Click to Login
           </RouterLink>
         </p>
