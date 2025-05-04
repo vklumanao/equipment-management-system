@@ -141,14 +141,14 @@ onMounted(() => {
 // ================================
 const breadcrumbs = ref([
   { title: 'Dashboard', disabled: false, href: '/dashboard' },
-  { title: 'Drivers', disabled: false, href: '/Driver' },
+  { title: 'Drivers', disabled: false, href: '/driver' },
   { title: 'Edit Driver Information', disabled: true }, // Current Page
 ])
 </script>
 
 <template>
   <DashboardLayout>
-    <v-container fluid class="pa-6">
+    <v-container fluid class="px-2">
       <!-- Breadcrumbs -->
       <v-breadcrumbs :items="breadcrumbs" class="mb-4">
         <template #divider>

@@ -11,6 +11,7 @@ import { useRouter } from 'vue-router'
 // Router Instance
 // ==================
 const router = useRouter()
+const isLoading = ref(false)
 
 // ==================
 // Table Headers (for Data Table)
@@ -39,12 +40,14 @@ const equipmentToDelete = ref(null)
 
 // Fetch drivers from Supabase
 const fetchEquipments = async () => {
+  isLoading.value = true
   const { data, error } = await supabase.from('equipments').select('*')
   if (error) {
     console.error('Error fetching equipment:', error.message)
   } else {
     equipments.value = data
   }
+  isLoading.value = false
 }
 
 // Refresh Data
@@ -99,7 +102,7 @@ const breadcrumbs = ref([
 
 <template>
   <DashboardLayout>
-    <div class="px-2">
+    <v-container class="px-2">
       <!-- Header and Add Button -->
       <div class="d-flex justify-space-between align-center mb-0">
         <!-- ================================
@@ -123,7 +126,7 @@ const breadcrumbs = ref([
       </div>
 
       <!-- Driver Data Table -->
-      <v-card flat elevation="2">
+      <v-card :loading="isLoading" flat elevation="2">
         <v-data-table
           :headers="tableTitles"
           :items="equipments"
@@ -184,6 +187,7 @@ const breadcrumbs = ref([
                   color="primary"
                   prepend-icon="mdi-account-plus"
                   elevation="2"
+                  variant="elevated"
                   class="ml-4 text-uppercase font-weight-bold"
                 >
                   Add Equipment
@@ -196,8 +200,14 @@ const breadcrumbs = ref([
               </v-toolbar-title>
 
               <!-- Refresh Button on the Right -->
-              <v-btn icon @click="refreshData" class="mr-4">
-                <v-icon class="black">mdi-refresh</v-icon>
+              <v-btn
+                icon
+                @click="refreshData"
+                class="mr-6"
+                elevation="3"
+                style="background-color: #4caf50; color: white; border-radius: 50%"
+              >
+                <v-icon>mdi-refresh</v-icon>
               </v-btn>
             </v-toolbar>
           </template>
@@ -222,7 +232,7 @@ const breadcrumbs = ref([
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </div>
+    </v-container>
   </DashboardLayout>
 </template>
 
