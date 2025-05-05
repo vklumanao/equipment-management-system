@@ -3,14 +3,17 @@ import { isAuthenticated, getUserInformation } from '@/utils/supabase'
 import LoginView from '@/views/auth/LoginView.vue'
 import RegisterView from '@/views/auth/RegisterView.vue'
 import DashboardView from '@/views/system/DashboardView.vue'
-import DriverView from '@/views/system/driver/DriverView.vue'
-import EquipmentView from '@/views/system/equipment/EquipmentView.vue'
-import DriverForm from '@/views/system/driver/DriverForm.vue'
-import RequestView from '@/views/system/RequestView.vue'
-import EditDriverForm from '@/views/system/driver/EditDriverForm.vue'
-import EquipmentForm from '@/views/system/equipment/EquipmentForm.vue'
-import EditEquipmentForm from '@/views/system/equipment/EditEquipmentForm.vue'
+import DriverView from '@/views/system/admin-management/driver-management/DriverView.vue'
+import EquipmentView from '@/views/system/admin-management/equipment-management/EquipmentView.vue'
+import DriverForm from '@/views/system/admin-management/driver-management/DriverForm.vue'
+import RequestView from '@/views/system/request/RequestView.vue'
+import RequestForm from '@/views/system/request/RequestForm.vue'
+import EditRequestForm from '@/views/system/request/EditRequestForm.vue'
+import EditDriverForm from '@/views/system/admin-management/driver-management/EditDriverForm.vue'
+import EquipmentForm from '@/views/system/admin-management/equipment-management/EquipmentForm.vue'
+import EditEquipmentForm from '@/views/system/admin-management/equipment-management/EditEquipmentForm.vue'
 import ForbiddenView from '@/views/errors/ForbiddenView.vue'
+import EditUserForm from '@/views/system/user-information/EditUserForm.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,6 +54,15 @@ const router = createRouter({
       meta: {
         requiresAuth: true, // User must be logged in
         requiresAdmin: true, // User must be an admin
+      },
+    },
+
+    {
+      path: '/user-settings',
+      name: 'user-settings',
+      component: EditUserForm,
+      meta: {
+        requiresAuth: true,
       },
     },
 
@@ -124,7 +136,7 @@ const router = createRouter({
     // View requests
     {
       path: '/request',
-      name: 'request',
+      name: 'RequestView',
       component: RequestView,
       meta: {
         requiresAuth: true,
@@ -140,6 +152,16 @@ const router = createRouter({
       meta: {
         title: 'Forbidden',
       },
+    },
+    {
+      path: '/request/add',
+      name: 'AddRequest',
+      component: RequestForm,
+    },
+    {
+      path: '/request/edit/:id',
+      name: 'EditRequest',
+      component: EditRequestForm,
     },
   ],
 })

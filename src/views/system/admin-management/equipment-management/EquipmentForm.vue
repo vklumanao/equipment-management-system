@@ -1,18 +1,24 @@
-<script setup>
+  <script setup>
 // ================================
 // Imports
 // ================================
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import DashboardLayout from '@/components/system/DashboardLayout.vue'
+import DashboardLayout from '@/components/system/admin-management/DashboardLayout.vue'
 import AlertNotification from '@/components/common/AlertNotification.vue'
 import { supabase, formActionDefault } from '@/utils/supabase'
 import { requiredValidator } from '@/utils/validators'
+import { useBarangayStore } from '@/stores/barangayStores'
 
 // ================================
 // Router Instance
 // ================================
 const router = useRouter()
+const barangayStore = useBarangayStore()
+
+onMounted(() => {
+  barangayStore.loadBarangays()
+})
 
 // ================================
 // Equipment Form Data
@@ -160,12 +166,18 @@ const breadcrumbs = ref([
 
               <!-- Location -->
               <v-col cols="12" md="6">
-                <v-text-field
+                <v-autocomplete
                   v-model="equipment.location"
+                  :items="barangayStore.list"
                   label="Location"
+                  :search-input.sync="searchQuery"
+                  item-title="name"
+                  item-value="name"
                   :rules="[requiredValidator]"
                   variant="outlined"
                   density="comfortable"
+                  :loading="barangayStore.isLoading"
+                  no-data-text="No barangays found"
                 />
               </v-col>
 

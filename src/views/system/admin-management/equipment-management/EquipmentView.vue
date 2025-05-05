@@ -3,7 +3,7 @@
 // Imports
 // ==================
 import { ref, onMounted } from 'vue'
-import DashboardLayout from '@/components/system/DashboardLayout.vue'
+import DashboardLayout from '@/components/system/admin-management/DashboardLayout.vue'
 import { supabase } from '@/utils/supabase'
 import { useRouter } from 'vue-router'
 
@@ -11,6 +11,7 @@ import { useRouter } from 'vue-router'
 // Router Instance
 // ==================
 const router = useRouter()
+const isLoading = ref(false)
 
 // ==================
 // Table Headers (for Data Table)
@@ -39,12 +40,14 @@ const equipmentToDelete = ref(null)
 
 // Fetch drivers from Supabase
 const fetchEquipments = async () => {
+  isLoading.value = true
   const { data, error } = await supabase.from('equipments').select('*')
   if (error) {
     console.error('Error fetching equipment:', error.message)
   } else {
     equipments.value = data
   }
+  isLoading.value = false
 }
 
 // Refresh Data
@@ -123,7 +126,7 @@ const breadcrumbs = ref([
       </div>
 
       <!-- Driver Data Table -->
-      <v-card flat elevation="2">
+      <v-card :loading="isLoading" flat elevation="2">
         <v-data-table
           :headers="tableTitles"
           :items="equipments"
