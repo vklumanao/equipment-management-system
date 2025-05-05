@@ -18,6 +18,7 @@ const router = useRouter()
 // Request Form Data
 // ================================
 const equipment_requests = ref({
+  // user_id: '',
   equipment_id: '',
   created_at: '',
   description: '',
@@ -35,12 +36,12 @@ const getUser = async () => {
   const metadata = await getUserInformation()
 
   userData.value.email = metadata.email
-  // userData.value.fullname = metadata.firstname + ' ' + metadata.lastname
+  userData.value.fullname = metadata.firstname + ' ' + metadata.lastname
   // userData.value.initials = getAvatarText(userData.value.fullname)
   // userData.value.role = role
 
-  equipment_requests.value.requestor_id = metadata.id
-  equipment_requests.value.user_id = metadata.id
+  equipment_requests.value.requestor_id = metadata.sub
+  // equipment_requests.value.user_id = metadata.sub
 }
 
 const equipmentList = ref([])
@@ -92,7 +93,7 @@ const onSubmit = async () => {
 
 // Lifecycle hook: Fetch driver count when component is mounted
 onMounted(async () => {
-  await getUser()
+  getUser()
 
   const { data, error } = await supabase
     .from('equipments')
