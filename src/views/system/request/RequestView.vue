@@ -189,6 +189,7 @@ const breadcrumbs = ref([
                   color="primary"
                   prepend-icon="mdi-plus-box"
                   elevation="2"
+                  variant="elevated"
                   class="ml-4 text-uppercase font-weight-bold"
                 >
                   Add Request
@@ -199,8 +200,15 @@ const breadcrumbs = ref([
                 Equipment Requests
               </v-toolbar-title>
 
-              <v-btn icon @click="refreshData" class="mr-4">
-                <v-icon color="black">mdi-refresh</v-icon>
+              <!-- Refresh Button on the Right -->
+              <v-btn
+                icon
+                @click="refreshData"
+                class="mr-6"
+                elevation="3"
+                style="background-color: #4caf50; color: white; border-radius: 50%"
+              >
+                <v-icon>mdi-refresh</v-icon>
               </v-btn>
             </v-toolbar>
           </template>
