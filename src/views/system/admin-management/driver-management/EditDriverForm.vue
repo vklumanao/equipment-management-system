@@ -3,29 +3,26 @@
 // Imports
 // ================================
 import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import DashboardLayout from '@/components/system/DashboardLayout.vue'
+import { useRouter, useRoute } from 'vue-router'
+import DashboardLayout from '@/components/system/admin-management/DashboardLayout.vue'
 import AlertNotification from '@/components/common/AlertNotification.vue'
 import { supabase, formActionDefault } from '@/utils/supabase'
 import { requiredValidator } from '@/utils/validators'
-import { useBarangayStore } from '@/stores/barangayStores'
 
 // ================================
-// Router Instance
+// Router and Route Instances
 // ================================
 const router = useRouter()
 const route = useRoute()
-const barangayStore = useBarangayStore()
 
 // ================================
-// Equipment Form Data
+// Driver Form Data
 // ================================
-const equipment = ref({
-  type: '',
-  model: '',
-  serial_number: '',
-  purchase_date: '',
-  location: '',
+const driver = ref({
+  full_name: '',
+  license_number: '',
+  license_expiry: '',
+  experience_year: '',
   status: '',
 })
 
@@ -42,23 +39,22 @@ const refVform = ref()
 // ================================
 // Fetch Existing Driver Data (for Edit)
 // ================================
-const fetchEquipments = async () => {
+const fetchDriver = async () => {
   const id = route.params.id
 
-  const { data, error } = await supabase.from('equipments').select('*').eq('id', id).single()
+  const { data, error } = await supabase.from('drivers').select('*').eq('id', id).single()
 
   if (error) {
-    console.error('Error fetching equipment:', error.message)
+    console.error('Error fetching driver:', error.message)
     return
   }
 
   if (data) {
-    equipment.value = {
-      type: data.type,
-      model: data.model,
-      serial_number: data.serial_number,
-      purchase_date: data.purchase_date,
-      location: data.location,
+    driver.value = {
+      full_name: data.full_name,
+      license_number: data.license_number,
+      license_expiry: data.license_expiry,
+      experience_year: data.experience_year,
       status: data.status,
     }
   }
@@ -83,39 +79,38 @@ const onSubmit = async () => {
   const id = route.params.id
 
   // Check if the driver exists before attempting the update
-  const { data: equipmentData, error: fetchError } = await supabase
-    .from('equipments')
+  const { data: driverData, error: fetchError } = await supabase
+    .from('drivers')
     .select('*')
     .eq('id', id)
     .single()
 
   if (fetchError) {
-    console.error('Error fetching equipment before update:', fetchError.message)
+    console.error('Error fetching driver before update:', fetchError.message)
     formAction.value.formErrorMessage = fetchError.message
     formAction.value.formStatus = fetchError.status
     formAction.value.formProcess = false
     return
   }
 
-  if (!equipmentData) {
-    console.log('Equipment not found with ID:', id)
-    formAction.value.formErrorMessage = 'Equipment not found'
+  if (!driverData) {
+    console.log('Driver not found with ID:', id)
+    formAction.value.formErrorMessage = 'Driver not found'
     formAction.value.formProcess = false
     return
   }
 
-  console.log('Equipment found:', equipmentData)
+  console.log('Driver found:', driverData)
 
-  // Proceed with update if equipment exists
+  // Proceed with update if driver exists
   const { data, error } = await supabase
-    .from('equipments')
+    .from('drivers')
     .update({
-      type: equipment.value.type,
-      model: equipment.value.model,
-      serial_number: equipment.value.serial_number,
-      purchase_date: equipment.value.purchase_date,
-      location: equipment.value.location,
-      status: equipment.value.status,
+      full_name: driver.value.full_name,
+      license_number: driver.value.license_number,
+      license_expiry: driver.value.license_expiry,
+      experience_year: driver.value.experience_year,
+      status: driver.value.status,
     })
     .eq('id', id)
 
@@ -124,10 +119,10 @@ const onSubmit = async () => {
     formAction.value.formStatus = error.status
   } else {
     // console.log('Data received:', data)
-    formAction.value.formSuccessMessage = 'Successfully updated equipment.'
+    formAction.value.formSuccessMessage = 'Successfully updated driver.'
     console.log(formAction.value.formSuccessMessage)
 
-    router.replace('/equipment') // Navigate back to driver list
+    router.replace('/driver') // Navigate back to driver list
   }
 
   formAction.value.formProcess = false
@@ -138,8 +133,7 @@ const onSubmit = async () => {
 // ================================
 // Fetch driver data when component is mounted
 onMounted(() => {
-  fetchEquipments()
-  barangayStore.loadBarangays()
+  fetchDriver()
 })
 
 // ================================
@@ -147,8 +141,8 @@ onMounted(() => {
 // ================================
 const breadcrumbs = ref([
   { title: 'Dashboard', disabled: false, href: '/dashboard' },
-  { title: 'Equipments', disabled: false, href: '/equipment' },
-  { title: 'Edit Equipment Detail', disabled: true }, // Current Page
+  { title: 'Drivers', disabled: false, href: '/driver' },
+  { title: 'Edit Driver Information', disabled: true }, // Current Page
 ])
 </script>
 
@@ -170,14 +164,13 @@ const breadcrumbs = ref([
           </v-breadcrumbs-item>
         </template>
       </v-breadcrumbs>
-
       <!-- Form Card -->
       <v-card class="rounded-xl elevation-2">
         <!-- Header -->
         <div class="py-6 px-8 bg-grey-lighten-5 border-b">
-          <h2 class="font-weight-bold mb-1">Edit Equipment Details</h2>
+          <h2 class="font-weight-bold mb-1">Edit Driver Information</h2>
           <p class="text-grey-darken-2">
-            Update the necessary fields to modify the equipment details.
+            Update the necessary fields to modify the driver's information.
           </p>
         </div>
 
@@ -185,12 +178,11 @@ const breadcrumbs = ref([
         <v-card-text class="px-8 py-6">
           <v-form lazy-validation ref="refVform" @submit.prevent="onFormSubmit">
             <v-row dense>
-              <!-- Equipment Type -->
+              <!-- Full Name Field -->
               <v-col cols="12" md="6">
-                <v-select
-                  v-model="equipment.type"
-                  :items="['Forklift', 'Crane', 'Truck', 'Excavator']"
-                  label="Type"
+                <v-text-field
+                  v-model="driver.full_name"
+                  label="Full Name"
                   :rules="[requiredValidator]"
                   required
                   variant="outlined"
@@ -198,11 +190,11 @@ const breadcrumbs = ref([
                 />
               </v-col>
 
-              <!-- Model -->
+              <!-- License Number Field -->
               <v-col cols="12" md="6">
                 <v-text-field
-                  v-model="equipment.model"
-                  label="Model"
+                  v-model="driver.license_number"
+                  label="License Number"
                   :rules="[requiredValidator]"
                   required
                   variant="outlined"
@@ -210,23 +202,11 @@ const breadcrumbs = ref([
                 />
               </v-col>
 
-              <!-- Serial Number -->
+              <!-- License Expiry Date Field -->
               <v-col cols="12" md="6">
                 <v-text-field
-                  v-model="equipment.serial_number"
-                  label="Serial Number"
-                  :rules="[requiredValidator]"
-                  required
-                  variant="outlined"
-                  density="comfortable"
-                />
-              </v-col>
-
-              <!-- Purchase Date -->
-              <v-col cols="12" md="6">
-                <v-text-field
-                  v-model="equipment.purchase_date"
-                  label="Purchase Date"
+                  v-model="driver.license_expiry"
+                  label="License Expiry Date"
                   type="date"
                   :rules="[requiredValidator]"
                   variant="outlined"
@@ -234,27 +214,22 @@ const breadcrumbs = ref([
                 />
               </v-col>
 
-              <!-- Location -->
+              <!-- Years of Experience Field -->
               <v-col cols="12" md="6">
-                <v-autocomplete
-                  v-model="equipment.location"
-                  :items="barangayStore.list"
-                  label="Location"
-                  :search-input.sync="searchQuery"
-                  item-title="name"
-                  item-value="name"
+                <v-text-field
+                  v-model="driver.experience_year"
+                  label="Years of Experience"
+                  type="number"
                   :rules="[requiredValidator]"
                   variant="outlined"
                   density="comfortable"
-                  :loading="barangayStore.isLoading"
-                  no-data-text="No barangays found"
                 />
               </v-col>
 
-              <!-- Status -->
+              <!-- Status Dropdown -->
               <v-col cols="12" md="6">
                 <v-select
-                  v-model="equipment.status"
+                  v-model="driver.status"
                   :items="['Active', 'Inactive']"
                   label="Status"
                   :rules="[requiredValidator]"
@@ -274,7 +249,7 @@ const breadcrumbs = ref([
                 size="large"
                 type="submit"
               >
-                Update Equipment
+                Update Driver
               </v-btn>
             </div>
 

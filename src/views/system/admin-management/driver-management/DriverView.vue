@@ -3,7 +3,7 @@
 // Imports
 // ==================
 import { ref, onMounted } from 'vue'
-import DashboardLayout from '@/components/system/DashboardLayout.vue'
+import DashboardLayout from '@/components/system/admin-management/DashboardLayout.vue'
 import { supabase } from '@/utils/supabase'
 import { useRouter } from 'vue-router'
 

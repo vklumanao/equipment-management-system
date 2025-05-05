@@ -2,11 +2,11 @@
 // ================================
 // Imports
 // ================================
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import DashboardLayout from '@/components/system/DashboardLayout.vue'
+import DashboardLayout from '@/components/system/admin-management/DashboardLayout.vue'
 import AlertNotification from '@/components/common/AlertNotification.vue'
-import { supabase, formActionDefault } from '@/utils/supabase'
+import { supabase, formActionDefault, getUserInformation } from '@/utils/supabase'
 import { requiredValidator } from '@/utils/validators'
 
 // ================================
@@ -14,17 +14,37 @@ import { requiredValidator } from '@/utils/validators'
 // ================================
 const router = useRouter()
 
-
 // ================================
 // Request Form Data
 // ================================
-const request = ref({
-  request_type: '',
+const equipment_requests = ref({
+  // user_id: '',
+  equipment_id: '',
+  created_at: '',
   description: '',
-  request_date: '',
-  status: '',
-  requested_by: '',
+  requestor_id: '', // from auth
 })
+
+const userData = ref({
+  id: '',
+  email: '',
+  fullname: '',
+})
+
+// Get Current User Information
+const getUser = async () => {
+  const metadata = await getUserInformation()
+
+  userData.value.email = metadata.email
+  userData.value.fullname = metadata.firstname + ' ' + metadata.lastname
+  // userData.value.initials = getAvatarText(userData.value.fullname)
+  // userData.value.role = role
+
+  equipment_requests.value.requestor_id = metadata.sub
+  // equipment_requests.value.user_id = metadata.sub
+}
+
+const equipmentList = ref([])
 
 // ================================
 // Form Action State
@@ -49,22 +69,46 @@ const onFormSubmit = () => {
 // Actual Submit Logic
 // ================================
 const onSubmit = async () => {
-  formAction.value = { ...formActionDefault }
-  formAction.value.formProcess = true
+  // if (!equipment_requests.value.requestor_id) {
+  //   // formAction.value.formErrorMessage = 'Requestor ID is required.'
+  //   formAction.value.formProcess = false
+  //   return
+  // }
 
-  const { data, error } = await supabase.from('requests').insert([request.value])
+  formAction.value.formProcess = true
+  const { data, error } = await supabase
+    .from('equipment_requests')
+    .insert([equipment_requests.value])
 
   if (error) {
     formAction.value.formErrorMessage = error.message
     formAction.value.formStatus = error.status
   } else {
     formAction.value.formSuccessMessage = 'Request successfully added.'
-    router.push('/request') // Redirect to request list
+    router.push('/request') // Redirect after success
   }
 
-  refVform.value?.reset()
   formAction.value.formProcess = false
 }
+
+// Lifecycle hook: Fetch driver count when component is mounted
+onMounted(async () => {
+  getUser()
+
+  const { data, error } = await supabase
+    .from('equipments')
+    .select('id, model, type, status, serial_number')
+
+  if (error) {
+    console.error('Error fetching equipment:', error.message)
+    return
+  }
+
+  equipmentList.value = data.map((item) => ({
+    ...item,
+    display_name: `${item.type} - ${item.model} (${item.serial_number})`,
+  }))
+})
 
 // ================================
 // Breadcrumb Items
@@ -103,10 +147,23 @@ const breadcrumbs = ref([
         <v-card-text class="px-8 py-6">
           <v-form ref="refVform" @submit.prevent="onFormSubmit" lazy-validation>
             <v-row dense>
-              <v-col cols="12" md="6">
+              <!-- <v-col cols="12" md="6">
                 <v-text-field
-                  v-model="request.request_type"
+                  v-model=""
                   label="Request Type"
+                  variant="outlined"
+                  :rules="[requiredValidator]"
+                  density="comfortable"
+                />
+              </v-col> -->
+
+              <v-col cols="12" md="6">
+                <v-select
+                  v-model="equipment_requests.equipment_id"
+                  :items="equipmentList"
+                  item-title="display_name"
+                  item-value="id"
+                  label="Select Equipment"
                   variant="outlined"
                   :rules="[requiredValidator]"
                   density="comfortable"
@@ -115,7 +172,7 @@ const breadcrumbs = ref([
 
               <v-col cols="12" md="6">
                 <v-text-field
-                  v-model="request.request_date"
+                  v-model="equipment_requests.created_at"
                   label="Request Date"
                   type="date"
                   variant="outlined"
@@ -126,7 +183,7 @@ const breadcrumbs = ref([
 
               <v-col cols="12">
                 <v-textarea
-                  v-model="request.description"
+                  v-model="equipment_requests.description"
                   label="Description"
                   variant="outlined"
                   :rules="[requiredValidator]"
@@ -135,24 +192,30 @@ const breadcrumbs = ref([
                 />
               </v-col>
 
-              <v-col cols="12" md="6">
+              <!-- <v-col cols="12" md="6">
                 <v-select
-                  v-model="request.status"
+                  v-model="equipment_requests.status"
                   :items="['Pending', 'Approved', 'Rejected']"
                   label="Status"
                   variant="outlined"
                   :rules="[requiredValidator]"
                   density="comfortable"
                 />
-              </v-col>
+              </v-col> -->
 
               <v-col cols="12" md="6">
                 <v-text-field
-                  v-model="request.requested_by"
-                  label="Requested By"
+                  :model-value="equipment_requests.requestor_id"
+                  label="Requested By (User ID)"
                   variant="outlined"
-                  :rules="[requiredValidator]"
-                  density="comfortable"
+                  disabled
+                />
+
+                <v-text-field
+                  :model-value="userData.fullname"
+                  label="Requested By (Full Name)"
+                  variant="outlined"
+                  disabled
                 />
               </v-col>
             </v-row>
