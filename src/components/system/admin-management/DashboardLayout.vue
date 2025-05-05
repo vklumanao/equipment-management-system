@@ -25,6 +25,7 @@ const userData = ref({
   email: '',
   fullname: '',
   role: '',
+  avatar_url: '',
 })
 
 // ================================
@@ -87,6 +88,7 @@ const getUser = async () => {
   userData.value.fullname = metadata.firstname + ' ' + metadata.lastname
   userData.value.initials = getAvatarText(userData.value.fullname)
   userData.value.role = metadata.role
+  userData.value.avatar_url = metadata.avatar_url || ''
 }
 
 // Logout User
@@ -139,8 +141,9 @@ onMounted(() => {
         <v-menu v-model="menuVisible" offset-y transition="scale-transition">
           <template #activator="{ props }">
             <v-btn icon v-bind="props">
-              <v-avatar size="50" color="primary" class="elevation-1 text-white font-weight-bold">
-                {{ userData.initials }}
+              <v-avatar size="50" color="primary"  class="elevation-1 text-white font-weight-bold">
+               <img v-if="userData.avatar_url" :src="userData.avatar_url"  style="width: 100%; height: 100%; object-fit: cover"> 
+               <span v-else >{{  userData.initials }}</span>
               </v-avatar>
             </v-btn>
           </template>
@@ -155,7 +158,8 @@ onMounted(() => {
                 color="primary"
                 class="text-white font-weight-bold elevation-2 mr-2"
               >
-                {{ userData.initials }}
+              <img v-if="userData.avatar_url" :src="userData.avatar_url"  style="width: 100%; height: 100%; object-fit: cover"> 
+              <span v-else >{{  userData.initials }}</span>
               </v-avatar>
 
               <div class="d-flex flex-column justify-center">
