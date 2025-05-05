@@ -4,7 +4,7 @@
 // ================================
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import DashboardLayout from '@/components/system/DashboardLayout.vue'
+import DashboardLayout from '@/components/system/admin-management/DashboardLayout.vue'
 import AlertNotification from '@/components/common/AlertNotification.vue'
 import { supabase, formActionDefault, getUserInformation } from '@/utils/supabase'
 import { requiredValidator } from '@/utils/validators'
