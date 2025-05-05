@@ -21,7 +21,7 @@ const userData = ref({
 })
 
 const fullname = ref('')
-const isEditing = ref(false)  // Flag to toggle edit mode
+const isEditing = ref(false) // Flag to toggle edit mode
 const imageFile = ref(null)
 const imageUrl = ref('')
 const originalUserData = ref({})
@@ -91,19 +91,19 @@ const saveProfile = async () => {
       return
     }
 
-    
+    // Make sure fullname is updated with both firstname and lastname
+    updateFullname()
+
+    // Update user metadata with firstname, lastname, email, and avatar_url
     const { error: updateError } = await supabase.auth.updateUser({
       data: {
         firstname: userData.value.firstname,
         lastname: userData.value.lastname,
         email: userData.value.email,
         avatar_url: userData.value.avatar_url,
-        fullname: fullname.value,  // Ensure fullname contains both firstname and lastname
+        fullname: fullname.value, // Ensure fullname contains both firstname and lastname
       },
     })
-    console.log('Before Update:', userData.value);
-console.log('New Avatar URL:', userData.value.avatar_url);
-
 
     if (updateError) {
       console.error('Failed to update user metadata:', updateError.message)
@@ -112,13 +112,22 @@ console.log('New Avatar URL:', userData.value.avatar_url);
     }
 
     alert('Profile updated successfully!')
-    isEditing.value = false  // Disable editing after saving
+    isEditing.value = false // Disable editing after saving
   } catch (error) {
     console.error('Unexpected error while saving profile:', error)
     alert('An unexpected error occurred. Please try again later.')
   }
 }
 
+// Toggle edit mode
+const toggleEditMode = () => {
+  isEditing.value = !isEditing.value
+}
+
+// Update fullname when userData is changed
+const updateFullnameOnChange = () => {
+  updateFullname()
+}
 
 // ================================
 // Breadcrumb Items
@@ -153,12 +162,9 @@ onMounted(() => {
       </v-breadcrumbs>
 
       <div class="justify-center mb-4 text-primary font-weight-bold">
-          
-          <h1>User Profile</h1>
-        </div>
-      <!-- ===========================
-             User Settings Form
-             =========================== -->
+        <h1>User Profile</h1>
+      </div>
+
       <v-card
         class="mt-4 pa-8 mx-auto text-center"
         elevation="3"
@@ -166,13 +172,11 @@ onMounted(() => {
         rounded="xl"
         color="grey-lighten-5"
       >
-        
-
         <v-card-text>
           <v-form>
             <!-- Avatar + Upload -->
             <v-avatar size="140" class="mx-auto mb-4 elevation-2">
-              <v-img :src="userData.avatar_url" />
+              <v-img :src="userData.avatar_url || 'default-avatar-url.png'" />
             </v-avatar>
 
             <v-file-input
@@ -184,24 +188,24 @@ onMounted(() => {
               prepend-icon="mdi-camera"
               @change="handlePhotoUpload"
               hide-details
-              :disabled="!isEditing"  
+              :disabled="!isEditing"
             />
 
             <!-- Full Name -->
             <v-text-field
-              v-if="!isEditing" 
+              v-if="!isEditing"
               v-model="fullname"
               label="Full Name"
               prepend-inner-icon="mdi-account"
               variant="underlined"
               density="comfortable"
               class="mb-4"
-              :disabled="!isEditing"  
+              :disabled="!isEditing"
             />
 
             <!-- First Name (editable when in edit mode) -->
             <v-text-field
-              v-if="isEditing" 
+              v-if="isEditing"
               v-model="userData.firstname"
               label="First Name"
               prepend-inner-icon="mdi-account"
@@ -212,7 +216,7 @@ onMounted(() => {
             />
 
             <v-text-field
-              v-if="isEditing" 
+              v-if="isEditing"
               v-model="userData.lastname"
               label="Last Name"
               prepend-inner-icon="mdi-account"
@@ -230,7 +234,7 @@ onMounted(() => {
               variant="underlined"
               density="comfortable"
               class="mb-6"
-              :disabled="!isEditing"  
+              :disabled="!isEditing"
             />
 
             <!-- Edit Button -->
@@ -248,16 +252,16 @@ onMounted(() => {
 
             <!-- Save Button -->
             <v-btn
-              v-if="isEditing" 
+              v-if="isEditing"
               color="primary"
               size="large"
               class="text-white px-8"
               rounded="xl"
               elevation="1"
               @click="saveProfile"
-              :disabled="!isEditing" 
+              :disabled="!isEditing"
             >
-              <v-icon start >mdi-content-save</v-icon>
+              <v-icon start>mdi-content-save</v-icon>
               Save Changes
             </v-btn>
           </v-form>
@@ -267,4 +271,11 @@ onMounted(() => {
   </DashboardLayout>
 </template>
 
-<style scoped></style>
+<style scoped>
+.v-card {
+  border-radius: 12px;
+}
+.v-btn:hover {
+  transform: scale(1.05);
+}
+</style>
