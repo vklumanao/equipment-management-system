@@ -145,39 +145,70 @@ onMounted(() => {
       <!-- ===========================
              User Settings Form
              =========================== -->
-      <v-card class="mt-4 pa-6" elevation="2">
-        <v-card-title class="font-weight-bold">User Information</v-card-title>
+      <v-card
+        class="mt-4 pa-8 mx-auto text-center"
+        elevation="3"
+        max-width="100%"
+        rounded="xl"
+        color="grey-lighten-5"
+      >
+        <v-card-title class="justify-center mb-4 text-primary font-weight-bold">
+          <v-icon class="me-2" size="60">mdi-account-circle</v-icon>
+          <h1>User Profile</h1>
+        </v-card-title>
+
         <v-card-text>
           <v-form>
-            <div class="d-flex align-center mb-4">
-              <v-avatar size="96" class="me-4">
-                <v-img :src="imagePreviewUrl || defaultPhoto" alt="Profile Photo" />
-              </v-avatar>
+            <!-- Avatar + Upload -->
+            <v-avatar size="140" class="mx-auto mb-4 elevation-2">
+              <v-img :src="imagePreviewUrl || defaultPhoto" />
+            </v-avatar>
 
-              <v-file-input
-                label="Upload Profile Photo"
-                accept="image/*"
-                prepend-icon="mdi-camera"
-                @change="handlePhotoUpload"
-                hide-details
-              />
-            </div>
+            <v-file-input
+              class="mb-6"
+              variant="underlined"
+              density="compact"
+              label="Change Profile Photo"
+              accept="image/*"
+              prepend-icon="mdi-camera"
+              @change="handlePhotoUpload"
+              hide-details
+            />
 
+            <!-- Full Name -->
             <v-text-field
               v-model="userData.fullname"
               label="Full Name"
               prepend-inner-icon="mdi-account"
               readonly
+              variant="underlined"
+              density="comfortable"
+              class="mb-4"
             />
+
+            <!-- Email -->
             <v-text-field
               v-model="userData.email"
               label="Email"
               prepend-inner-icon="mdi-email"
               readonly
+              variant="underlined"
+              density="comfortable"
+              class="mb-6"
             />
 
             <!-- Save Button -->
-            <v-btn color="primary" class="mt-4" @click="saveProfile"> Save Changes </v-btn>
+            <v-btn
+              color="primary"
+              size="large"
+              class="text-white px-8"
+              rounded="xl"
+              elevation="1"
+              @click="saveProfile"
+            >
+              <v-icon start>mdi-content-save</v-icon>
+              Save Changes
+            </v-btn>
           </v-form>
         </v-card-text>
       </v-card>
@@ -185,24 +216,4 @@ onMounted(() => {
   </DashboardLayout>
 </template>
 
-<style scoped>
-.v-data-table {
-  background-color: #ffffff;
-}
-
-.v-card {
-  border-radius: 12px;
-}
-
-.v-toolbar-title {
-  font-weight: bold;
-}
-
-.v-btn {
-  transition: transform 0.2s ease;
-}
-
-.v-btn:hover {
-  transform: scale(1.05);
-}
-</style>
+<style scoped></style>
