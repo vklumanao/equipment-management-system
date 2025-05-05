@@ -76,8 +76,8 @@ const onSubmit = async () => {
   // }
 
   formAction.value.formProcess = true
-  
-  equipment_requests.value.fullname = userData.value.fullname;
+
+  equipment_requests.value.fullname = userData.value.fullname
 
   const { data, error } = await supabase
     .from('equipment_requests')
@@ -125,8 +125,8 @@ const breadcrumbs = ref([
 
 <template>
   <DashboardLayout>
-    <v-container fluid class="pa-6">
-      <v-breadcrumbs :items="breadcrumbs" class="mb-4">
+    <v-container class="px-2">
+      <v-breadcrumbs :items="breadcrumbs" class="mb-0">
         <template #divider>
           <v-icon>mdi-chevron-right</v-icon>
         </template>

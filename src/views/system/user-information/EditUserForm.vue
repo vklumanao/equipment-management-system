@@ -146,14 +146,18 @@ onMounted(() => {
         </template>
       </v-breadcrumbs>
 
+      <!-- ===========================
+             User Settings Form
+             =========================== -->
       <v-card class="mt-4 pa-6" elevation="2">
         <v-card-title class="font-weight-bold">User Information</v-card-title>
         <v-card-text>
           <v-form>
             <div class="d-flex align-center mb-4">
               <v-avatar size="96" class="me-4">
-                <v-img :src="userData.avatar_url" alt="Profile Photo" />
+                <v-img :src="imagePreviewUrl || defaultPhoto" alt="Profile Photo" />
               </v-avatar>
+
               <v-file-input
                 label="Upload Profile Photo"
                 accept="image/*"
@@ -163,22 +167,30 @@ onMounted(() => {
               />
             </div>
 
+            <!-- Full Name -->
             <v-text-field
               v-model="userData.fullname"
               label="Full Name"
               prepend-inner-icon="mdi-account"
               readonly
+              variant="underlined"
+              density="comfortable"
+              class="mb-4"
             />
+
+            <!-- Email -->
             <v-text-field
               v-model="userData.email"
               label="Email"
               prepend-inner-icon="mdi-email"
               readonly
+              variant="underlined"
+              density="comfortable"
+              class="mb-6"
             />
 
-            <v-btn color="primary" class="mt-4" @click="saveProfile">
-              Save Changes
-            </v-btn>
+            <!-- Save Button -->
+            <v-btn color="primary" class="mt-4" @click="saveProfile"> Save Changes </v-btn>
           </v-form>
         </v-card-text>
       </v-card>
@@ -187,8 +199,16 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.v-data-table {
+  background-color: #ffffff;
+}
+
 .v-card {
   border-radius: 12px;
+}
+
+.v-toolbar-title {
+  font-weight: bold;
 }
 
 .v-btn {

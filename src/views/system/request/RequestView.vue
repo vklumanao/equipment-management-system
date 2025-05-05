@@ -11,6 +11,7 @@ import { useRouter } from 'vue-router'
 // Router Instance
 // ==================
 const router = useRouter()
+const isLoading = ref(false)
 
 // ==================
 // Table Headers
@@ -35,8 +36,8 @@ const requestToDelete = ref(null)
 // Fetch Requests
 // ==================
 const fetchRequests = async () => {
-  const { data, error } = await supabase.from('equipment_requests').select(`*
-    `)
+  isLoading.value = true
+  const { data, error } = await supabase.from('equipment_requests').select(`*`)
 
   if (error) {
     console.error('Error fetching requests:', error.message)
@@ -56,6 +57,7 @@ const fetchRequests = async () => {
 
     requests.value = parsed
   }
+  isLoading.value = false
 }
 
 // ==================
@@ -107,7 +109,7 @@ const breadcrumbs = ref([
 
 <template>
   <DashboardLayout>
-    <div class="px-2">
+    <v-container class="px-2">
       <!-- Breadcrumbs -->
       <v-breadcrumbs :items="breadcrumbs" class="mb-0">
         <template #divider>
@@ -126,7 +128,7 @@ const breadcrumbs = ref([
       </v-breadcrumbs>
 
       <!-- Request Data Table -->
-      <v-card flat elevation="2">
+      <v-card :loading="isLoading" flat elevation="2">
         <v-data-table
           :headers="tableTitles"
           :items="requests"
@@ -229,7 +231,7 @@ const breadcrumbs = ref([
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </div>
+    </v-container>
   </DashboardLayout>
 </template>
 

@@ -174,12 +174,7 @@ onMounted(() => {
             <v-divider />
 
             <!-- Account Settings Button -->
-            <v-btn
-              block
-              class="mt-4"
-              color="blue-darken-1"
-              @click="router.push('/account-settings')"
-            >
+            <v-btn block class="mt-4" color="blue-darken-1" @click="router.push('/user-settings')">
               <v-icon left>mdi-account-cog</v-icon> Account Settings
             </v-btn>
 
