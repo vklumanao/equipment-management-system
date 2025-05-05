@@ -199,7 +199,7 @@ onMounted(() => {
         <v-card-text>
           <v-form>
             <!-- Avatar + Upload -->
-            <v-avatar size="140" class="mx-auto mb-5 elevation-4" style="border: 3px solid #e0e0e0">
+            <v-avatar size="200" class="mx-auto mb-5 elevation-4" style="border: 3px solid #e0e0e0">
               <v-img :src="userData.avatar_url || 'default-avatar-url.png'" />
             </v-avatar>
 
@@ -270,7 +270,7 @@ onMounted(() => {
             <v-btn
               color="primary"
               size="large"
-              class="text-white"
+              class="ml-4 text-uppercase font-weight-bold"
               elevation="2"
               @click="toggleEditMode"
             >
@@ -283,7 +283,7 @@ onMounted(() => {
               v-if="isEditing"
               color="success"
               size="large"
-              class="text-white px-8"
+              class="ml-4 text-uppercase font-weight-bold"
               elevation="2"
               @click="saveProfile"
               :disabled="!isEditing"
