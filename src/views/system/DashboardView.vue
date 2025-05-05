@@ -63,22 +63,22 @@ const fetchEquipmentCount = async () => {
 }
 
 // Function to fetch request count from Supabase
-// const fetchRequestCount = async () => {
-//   const { data, count, error } = await supabase
-//     .from('requests')
-//     .select('*', { count: 'exact', head: true }) // Only fetch count, no actual data
+const fetchRequestCount = async () => {
+  const { data, count, error } = await supabase
+    .from('equipment_requests')
+    .select('*', { count: 'exact', head: true }) // Only fetch count, no actual data
 
-//   if (error) {
-//     console.error('Error fetching requests count:', error)
-//     return
-//   }
+  if (error) {
+    console.error('Error fetching requests count:', error)
+    return
+  }
 
-//   // Find the Request card and update its value
-//   const requestCard = cardData.value.find((card) => card.title === 'Request')
-//   if (requestCard) {
-//     requestCard.value = count
-//   }
-// }
+  // Find the Request card and update its value
+  const requestCard = cardData.value.find((card) => card.title === 'Request')
+  if (requestCard) {
+    requestCard.value = count
+  }
+}
 
 const userData = ref({
   email: '',
@@ -99,7 +99,7 @@ const getUser = async () => {
 onMounted(() => {
   fetchDriverCount()
   fetchEquipmentCount()
-  // fetchRequestCount()
+  fetchRequestCount()
   getUser()
 })
 </script>

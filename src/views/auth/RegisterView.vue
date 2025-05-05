@@ -57,7 +57,7 @@ const onSubmit = async () => {
         lastname: formData.value.lastname,
         username: formData.value.username,
         // Just turn to true if admin account
-        isAdmin: false,
+        isAdmin: true,
         // role: 'Admin'
       },
     },
