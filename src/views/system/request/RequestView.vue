@@ -35,20 +35,20 @@ const requestToDelete = ref(null)
 // Fetch Requests
 // ==================
 const fetchRequests = async () => {
-  const { data, error } = await supabase
-    .from('equipment_requests')
-    .select(`*
+  const { data, error } = await supabase.from('equipment_requests').select(`*
     `)
 
   if (error) {
     console.error('Error fetching requests:', error.message)
   } else {
     const parsed = data.map((req) => {
-      const latestApproval = req.request_approvals?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0]
+      const latestApproval = req.request_approvals?.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+      )[0]
       return {
         id: req.id,
         type: req.equipment_id,
-        requested_by: req.fullname  || 'Unknown',
+        requested_by: req.fullname || 'Unknown',
         date_requested: req.created_at,
         status: latestApproval?.status || 'Pending',
       }
@@ -143,11 +143,7 @@ const breadcrumbs = ref([
           <!-- Header -->
           <template v-slot:headers="{ columns }">
             <tr>
-              <th
-                v-for="column in columns"
-                :key="column.key"
-                class="text-center font-weight-bold"
-              >
+              <th v-for="column in columns" :key="column.key" class="text-center font-weight-bold">
                 {{ column.title }}
               </th>
             </tr>
@@ -156,7 +152,13 @@ const breadcrumbs = ref([
           <!-- Status -->
           <template v-slot:item.status="{ item }">
             <v-chip
-              :color="item.status === 'Approved' ? 'success' : item.status === 'Rejected' ? 'error' : 'warning'"
+              :color="
+                item.status === 'Approved'
+                  ? 'success'
+                  : item.status === 'Rejected'
+                    ? 'error'
+                    : 'warning'
+              "
               text-color="white"
               size="small"
             >
@@ -212,9 +214,7 @@ const breadcrumbs = ref([
             <v-icon color="error" class="mr-2">mdi-alert</v-icon>
             Confirm Deletion
           </v-card-title>
-          <v-card-text>
-            Are you sure you want to delete this request?
-          </v-card-text>
+          <v-card-text> Are you sure you want to delete this request? </v-card-text>
           <v-card-actions class="justify-end">
             <v-btn text color="grey" @click="isDeleteDialogOpen = false">Cancel</v-btn>
             <v-btn text color="red" @click="confirmDeleteRequest">Yes, Delete</v-btn>
