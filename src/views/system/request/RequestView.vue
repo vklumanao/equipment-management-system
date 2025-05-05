@@ -37,19 +37,7 @@ const requestToDelete = ref(null)
 const fetchRequests = async () => {
   const { data, error } = await supabase
     .from('equipment_requests')
-    .select(`
-      id,
-      equipment_id,
-      request_date,
-      description,
-      requestor_id,
-      request_approvals (
-        status,
-        created_at
-      ),
-      users:requestor_id (
-        full_name
-      )
+    .select(`*
     `)
 
   if (error) {
@@ -59,9 +47,9 @@ const fetchRequests = async () => {
       const latestApproval = req.request_approvals?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0]
       return {
         id: req.id,
-        type: `Equipment #${req.equipment_id}`,
-        requested_by: req.users?.full_name || 'Unknown',
-        date_requested: req.request_date,
+        type: req.equipment_id,
+        requested_by: req.fullname  || 'Unknown',
+        date_requested: req.created_at,
         status: latestApproval?.status || 'Pending',
       }
     })

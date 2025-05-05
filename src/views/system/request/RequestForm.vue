@@ -76,6 +76,9 @@ const onSubmit = async () => {
   // }
 
   formAction.value.formProcess = true
+  
+  equipment_requests.value.fullname = userData.value.fullname;
+
   const { data, error } = await supabase
     .from('equipment_requests')
     .insert([equipment_requests.value])
