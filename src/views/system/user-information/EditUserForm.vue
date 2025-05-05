@@ -68,9 +68,7 @@ const handlePhotoUpload = async (e) => {
   const userId = userData.value.email.replace(/[@.]/g, '_')
   const filePath = `profile-photos/${userId}_${Date.now()}_${file.name}`
 
-  const { error } = await supabase.storage
-    .from('profile-photos')
-    .upload(filePath, file)
+  const { error } = await supabase.storage.from('profile-photos').upload(filePath, file)
 
   if (error) {
     alert('Upload failed!')
@@ -93,10 +91,7 @@ const saveProfile = async () => {
       return
     }
 
-    // Make sure fullname is updated with both firstname and lastname
-    updateFullname()
-
-    // Update user metadata with firstname, lastname, email, and avatar_url
+    
     const { error: updateError } = await supabase.auth.updateUser({
       data: {
         firstname: userData.value.firstname,
@@ -106,6 +101,9 @@ const saveProfile = async () => {
         fullname: fullname.value,  // Ensure fullname contains both firstname and lastname
       },
     })
+    console.log('Before Update:', userData.value);
+console.log('New Avatar URL:', userData.value.avatar_url);
+
 
     if (updateError) {
       console.error('Failed to update user metadata:', updateError.message)
@@ -121,15 +119,6 @@ const saveProfile = async () => {
   }
 }
 
-// Toggle edit mode
-const toggleEditMode = () => {
-  isEditing.value = !isEditing.value
-}
-
-// Update fullname when userData is changed
-const updateFullnameOnChange = () => {
-  updateFullname()
-}
 
 // ================================
 // Breadcrumb Items
@@ -164,15 +153,26 @@ onMounted(() => {
       </v-breadcrumbs>
 
       <div class="justify-center mb-4 text-primary font-weight-bold">
-        <h1>User Profile</h1>
-      </div>
+          
+          <h1>User Profile</h1>
+        </div>
+      <!-- ===========================
+             User Settings Form
+             =========================== -->
+      <v-card
+        class="mt-4 pa-8 mx-auto text-center"
+        elevation="3"
+        max-width="100%"
+        rounded="xl"
+        color="grey-lighten-5"
+      >
+        
 
-      <v-card class="mt-4 pa-8 mx-auto text-center" elevation="3" max-width="100%" rounded="xl" color="grey-lighten-5">
         <v-card-text>
           <v-form>
             <!-- Avatar + Upload -->
             <v-avatar size="140" class="mx-auto mb-4 elevation-2">
-              <v-img :src="userData.avatar_url || 'default-avatar-url.png'" />
+              <v-img :src="userData.avatar_url" />
             </v-avatar>
 
             <v-file-input
@@ -267,11 +267,4 @@ onMounted(() => {
   </DashboardLayout>
 </template>
 
-<style scoped>
-.v-card {
-  border-radius: 12px;
-}
-.v-btn:hover {
-  transform: scale(1.05);
-}
-</style>
+<style scoped></style>
