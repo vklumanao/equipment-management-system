@@ -58,8 +58,12 @@ const menuItems = [
     children: [
       { title: 'All Requests', route: '/request' },
       { title: 'New Request', route: '/request/add' },
-      { title: 'Request History', route: '/request/history' },
     ],
+  },
+  {
+    title: 'User Settings',
+    icon: 'mdi-cog',
+    route: '/user-settings',
   },
 ]
 
@@ -125,7 +129,7 @@ onMounted(() => {
       <div class="d-flex align-center gap-3">
         <v-app-bar-nav-icon variant="text" @click="drawer = !drawer" />
         <div>
-          <v-img src="/images/logo.png" width="45" height="45"/>
+          <v-img src="/images/logo.png" width="45" height="45" />
         </div>
         <v-toolbar-title class="font-weight-bold mx-2"> CGB - Motorpol System </v-toolbar-title>
       </div>

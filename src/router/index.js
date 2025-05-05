@@ -13,6 +13,7 @@ import EditDriverForm from '@/views/system/admin-management/driver-management/Ed
 import EquipmentForm from '@/views/system/admin-management/equipment-management/EquipmentForm.vue'
 import EditEquipmentForm from '@/views/system/admin-management/equipment-management/EditEquipmentForm.vue'
 import ForbiddenView from '@/views/errors/ForbiddenView.vue'
+import EditUserForm from '@/views/system/user-information/EditUserForm.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,6 +54,15 @@ const router = createRouter({
       meta: {
         requiresAuth: true, // User must be logged in
         requiresAdmin: true, // User must be an admin
+      },
+    },
+
+    {
+      path: '/user-settings',
+      name: 'user-settings',
+      component: EditUserForm,
+      meta: {
+        requiresAuth: true,
       },
     },
 
