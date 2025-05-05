@@ -161,27 +161,51 @@ onMounted(() => {
         </template>
       </v-breadcrumbs>
 
-      <div class="justify-center mb-4 text-primary font-weight-bold">
-        <h1>User Profile</h1>
-      </div>
+      <!-- Welcome Manager Card -->
+      <v-card
+        class="mb-6 pa-6 rounded-2xl"
+        elevation="4"
+        style="
+          border-radius: 20px;
+          background-color: #f9fafb;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+          transition: all 0.3s ease;
+        "
+      >
+        <div class="d-flex align-center justify-space-between">
+          <div>
+            <h2 class="font-weight-bold mb-2">
+              Welcome,
+              <span
+                class="px-3 py-1 bg-blue-lighten-5 text-primary rounded-pill font-weight-semibold"
+              >
+                {{ fullname }}
+              </span>
+              👋
+            </h2>
+            <p class="text-grey-darken-1">Manage your personal information and profile photo.</p>
+          </div>
+        </div>
+      </v-card>
 
       <v-card
-        class="mt-4 pa-8 mx-auto text-center"
-        elevation="3"
+        class="mt-2 px-6 mx-auto text-center"
+        elevation="4"
         max-width="100%"
         rounded="xl"
-        color="grey-lighten-5"
+        color="white"
+        flat
       >
         <v-card-text>
           <v-form>
             <!-- Avatar + Upload -->
-            <v-avatar size="140" class="mx-auto mb-4 elevation-2">
+            <v-avatar size="140" class="mx-auto mb-5 elevation-4" style="border: 3px solid #e0e0e0">
               <v-img :src="userData.avatar_url || 'default-avatar-url.png'" />
             </v-avatar>
 
             <v-file-input
-              class="mb-6"
-              variant="underlined"
+              class="mb-5"
+              variant="outlined"
               density="compact"
               label="Change Profile Photo"
               accept="image/*"
@@ -189,6 +213,7 @@ onMounted(() => {
               @change="handlePhotoUpload"
               hide-details
               :disabled="!isEditing"
+              color="primary"
             />
 
             <!-- Full Name -->
@@ -197,9 +222,10 @@ onMounted(() => {
               v-model="fullname"
               label="Full Name"
               prepend-inner-icon="mdi-account"
-              variant="underlined"
+              variant="filled"
+              color="primary"
               density="comfortable"
-              class="mb-4"
+              class="mb-5"
               :disabled="!isEditing"
             />
 
@@ -209,9 +235,10 @@ onMounted(() => {
               v-model="userData.firstname"
               label="First Name"
               prepend-inner-icon="mdi-account"
-              variant="underlined"
+              variant="filled"
+              color="primary"
               density="comfortable"
-              class="mb-4"
+              class="mb-5"
               @input="updateFullnameOnChange"
             />
 
@@ -220,9 +247,10 @@ onMounted(() => {
               v-model="userData.lastname"
               label="Last Name"
               prepend-inner-icon="mdi-account"
-              variant="underlined"
+              variant="filled"
+              color="primary"
               density="comfortable"
-              class="mb-4"
+              class="mb-5"
               @input="updateFullnameOnChange"
             />
 
@@ -231,7 +259,8 @@ onMounted(() => {
               v-model="userData.email"
               label="Email"
               prepend-inner-icon="mdi-email"
-              variant="underlined"
+              variant="filled"
+              color="primary"
               density="comfortable"
               class="mb-6"
               :disabled="!isEditing"
@@ -241,9 +270,8 @@ onMounted(() => {
             <v-btn
               color="primary"
               size="large"
-              class="text-white px-8"
-              rounded="xl"
-              elevation="1"
+              class="text-white"
+              elevation="2"
               @click="toggleEditMode"
             >
               <v-icon start>mdi-pencil</v-icon>
@@ -253,11 +281,10 @@ onMounted(() => {
             <!-- Save Button -->
             <v-btn
               v-if="isEditing"
-              color="primary"
+              color="success"
               size="large"
               class="text-white px-8"
-              rounded="xl"
-              elevation="1"
+              elevation="2"
               @click="saveProfile"
               :disabled="!isEditing"
             >
