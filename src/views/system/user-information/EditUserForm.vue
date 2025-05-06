@@ -18,6 +18,12 @@ const userData = ref({
   lastname: '',
   role: '',
   avatar_url: '',
+  contact_number: '',
+  address: '',
+  birthday: '',
+  position: '',
+  gender: '',
+  about: '',
 })
 
 const fullname = ref('')
@@ -50,9 +56,17 @@ const getUser = async () => {
   userData.value.role = metadata.role
   userData.value.avatar_url = metadata.avatar_url || ''
 
-  updateFullname()
+  // Add new fields here
+  userData.value.contact_number = metadata.contact_number || ''
+  userData.value.address = metadata.address || ''
+  userData.value.birthday = metadata.birthday || ''
+  userData.value.position = metadata.position || ''
+  userData.value.gender = metadata.gender || ''
+  userData.value.about = metadata.about || ''
 
+  updateFullname()
   originalUserData.value = { ...userData.value }
+
   if (userData.value.avatar_url) {
     imageUrl.value = userData.value.avatar_url
   }
@@ -71,7 +85,7 @@ const handlePhotoUpload = async (e) => {
   const { error } = await supabase.storage.from('profile-photos').upload(filePath, file)
 
   if (error) {
-    alert('Upload failed!')
+    showSnackbar('Upload failed!')
     console.error(error)
     return
   }
@@ -87,35 +101,41 @@ const saveProfile = async () => {
 
     if (fetchError || !user) {
       console.error('Failed to fetch authenticated user:', fetchError?.message)
-      alert('User not authenticated. Please log in again.')
+      showSnackbar('User not authenticated. Please log in again.')
       return
     }
 
-    // Make sure fullname is updated with both firstname and lastname
     updateFullname()
 
-    // Update user metadata with firstname, lastname, email, and avatar_url
     const { error: updateError } = await supabase.auth.updateUser({
       data: {
         firstname: userData.value.firstname,
         lastname: userData.value.lastname,
         email: userData.value.email,
         avatar_url: userData.value.avatar_url,
-        fullname: fullname.value, // Ensure fullname contains both firstname and lastname
+        fullname: fullname.value,
+
+        // Additional fields
+        contact_number: userData.value.contact_number,
+        address: userData.value.address,
+        birthday: userData.value.birthday,
+        position: userData.value.position,
+        gender: userData.value.gender,
+        about: userData.value.about,
       },
     })
 
     if (updateError) {
       console.error('Failed to update user metadata:', updateError.message)
-      alert('Failed to save changes. Please try again.')
+      showSnackbar('Failed to save changes. Please try again.')
       return
     }
 
-    alert('Profile updated successfully!')
-    isEditing.value = false // Disable editing after saving
+    showSnackbar('Profile updated successfully!')
+    isEditing.value = false
   } catch (error) {
     console.error('Unexpected error while saving profile:', error)
-    alert('An unexpected error occurred. Please try again later.')
+    showSnackbar('An unexpected error occurred. Please try again later.')
   }
 }
 
@@ -134,8 +154,22 @@ const updateFullnameOnChange = () => {
 // ================================
 const breadcrumbs = ref([
   { title: 'Dashboard', disabled: false, href: '/dashboard' },
-  { title: 'User Settings', disabled: true, href: '/dashboard' },
+  { title: 'User Settings', disabled: true, href: '' },
 ])
+
+// Snackbar state
+const snackbar = ref({
+  show: false,
+  message: '',
+  color: 'success', // 'error', 'warning', etc.
+})
+
+// Snackbar trigger function
+const showSnackbar = (message, color = 'success') => {
+  snackbar.value.message = message
+  snackbar.value.color = color
+  snackbar.value.show = true
+}
 
 onMounted(() => {
   getLoggedStatus()
@@ -204,97 +238,193 @@ onMounted(() => {
             </v-avatar>
 
             <v-file-input
-              class="mb-5"
-              variant="outlined"
+              class="mb-6"
+              style="max-width: 250px; margin: 0 auto"
+              variant="solo"
               density="compact"
-              label="Change Profile Photo"
+              hide-details
               accept="image/*"
               prepend-icon="mdi-camera"
+              :label="isEditing ? 'Upload Photo' : ''"
+              :disabled="!isEditing"
+              color="primary"
               @change="handlePhotoUpload"
-              hide-details
-              :disabled="!isEditing"
-              color="primary"
             />
 
-            <!-- Full Name -->
-            <v-text-field
-              v-if="!isEditing"
-              v-model="fullname"
-              label="Full Name"
-              prepend-inner-icon="mdi-account"
-              variant="filled"
-              color="primary"
-              density="comfortable"
-              class="mb-5"
-              :disabled="!isEditing"
-            />
+            <v-row dense>
+              <!-- Full Name (View Mode Only) -->
+              <v-col cols="12" v-if="!isEditing">
+                <v-text-field
+                  v-model="fullname"
+                  label="Full Name"
+                  prepend-inner-icon="mdi-account"
+                  variant="filled"
+                  color="primary"
+                  density="comfortable"
+                  :disabled="!isEditing"
+                />
+              </v-col>
 
-            <!-- First Name (editable when in edit mode) -->
-            <v-text-field
-              v-if="isEditing"
-              v-model="userData.firstname"
-              label="First Name"
-              prepend-inner-icon="mdi-account"
-              variant="filled"
-              color="primary"
-              density="comfortable"
-              class="mb-5"
-              @input="updateFullnameOnChange"
-            />
+              <!-- First and Last Name -->
+              <v-col cols="12" md="6" v-if="isEditing">
+                <v-text-field
+                  v-model="userData.firstname"
+                  label="First Name"
+                  prepend-inner-icon="mdi-account"
+                  variant="filled"
+                  color="primary"
+                  density="comfortable"
+                  @input="updateFullnameOnChange"
+                />
+              </v-col>
+              <v-col cols="12" md="6" v-if="isEditing">
+                <v-text-field
+                  v-model="userData.lastname"
+                  label="Last Name"
+                  prepend-inner-icon="mdi-account"
+                  variant="filled"
+                  color="primary"
+                  density="comfortable"
+                  @input="updateFullnameOnChange"
+                />
+              </v-col>
 
-            <v-text-field
-              v-if="isEditing"
-              v-model="userData.lastname"
-              label="Last Name"
-              prepend-inner-icon="mdi-account"
-              variant="filled"
-              color="primary"
-              density="comfortable"
-              class="mb-5"
-              @input="updateFullnameOnChange"
-            />
+              <!-- Email -->
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="userData.email"
+                  label="Email"
+                  prepend-inner-icon="mdi-email"
+                  variant="filled"
+                  color="primary"
+                  density="comfortable"
+                  :disabled="!isEditing"
+                />
+              </v-col>
 
-            <!-- Email -->
-            <v-text-field
-              v-model="userData.email"
-              label="Email"
-              prepend-inner-icon="mdi-email"
-              variant="filled"
-              color="primary"
-              density="comfortable"
-              class="mb-6"
-              :disabled="!isEditing"
-            />
+              <!-- Contact Number -->
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="userData.contact_number"
+                  label="Contact Number"
+                  prepend-inner-icon="mdi-phone"
+                  variant="filled"
+                  color="primary"
+                  density="comfortable"
+                  :disabled="!isEditing"
+                />
+              </v-col>
 
-            <!-- Edit Button -->
-            <v-btn
-              color="primary"
-              size="large"
-              class="ml-4 text-uppercase font-weight-bold"
-              elevation="2"
-              @click="toggleEditMode"
-            >
-              <v-icon start>mdi-pencil</v-icon>
-              {{ isEditing ? 'Cancel' : 'Edit' }}
-            </v-btn>
+              <!-- Address -->
+              <v-col cols="12">
+                <v-text-field
+                  v-model="userData.address"
+                  label="Address"
+                  prepend-inner-icon="mdi-map-marker"
+                  variant="filled"
+                  color="primary"
+                  density="comfortable"
+                  :disabled="!isEditing"
+                />
+              </v-col>
 
-            <!-- Save Button -->
-            <v-btn
-              v-if="isEditing"
-              color="success"
-              size="large"
-              class="ml-4 text-uppercase font-weight-bold"
-              elevation="2"
-              @click="saveProfile"
-              :disabled="!isEditing"
-            >
-              <v-icon start>mdi-content-save</v-icon>
-              Save Changes
-            </v-btn>
+              <!-- Birthday -->
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="userData.birthday"
+                  label="Birthday"
+                  prepend-inner-icon="mdi-calendar"
+                  variant="filled"
+                  color="primary"
+                  density="comfortable"
+                  type="date"
+                  :disabled="!isEditing"
+                />
+              </v-col>
+
+              <!-- Position -->
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="userData.position"
+                  label="Position"
+                  prepend-inner-icon="mdi-briefcase"
+                  variant="filled"
+                  color="primary"
+                  density="comfortable"
+                  :disabled="!isEditing"
+                />
+              </v-col>
+
+              <!-- Gender -->
+              <v-col cols="12" md="6">
+                <v-select
+                  v-model="userData.gender"
+                  :items="['Male', 'Female', 'Other']"
+                  label="Gender"
+                  prepend-inner-icon="mdi-gender-male-female"
+                  variant="filled"
+                  color="primary"
+                  density="comfortable"
+                  :disabled="!isEditing"
+                />
+              </v-col>
+
+              <!-- About -->
+              <v-col cols="12">
+                <v-textarea
+                  v-model="userData.about"
+                  label="About Me"
+                  prepend-inner-icon="mdi-account-details"
+                  variant="filled"
+                  color="primary"
+                  density="comfortable"
+                  :disabled="!isEditing"
+                />
+              </v-col>
+
+              <!-- Buttons -->
+              <v-col cols="12" class="d-flex justify-end">
+                <v-btn
+                  color="primary"
+                  size="large"
+                  class="mr-2 text-uppercase font-weight-bold"
+                  elevation="2"
+                  @click="toggleEditMode"
+                >
+                  <v-icon start>mdi-pencil</v-icon>
+                  {{ isEditing ? 'Cancel' : 'Edit' }}
+                </v-btn>
+
+                <v-btn
+                  v-if="isEditing"
+                  color="success"
+                  size="large"
+                  class="text-uppercase font-weight-bold"
+                  elevation="2"
+                  @click="saveProfile"
+                >
+                  <v-icon start>mdi-content-save</v-icon>
+                  Save Changes
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-form>
         </v-card-text>
       </v-card>
     </v-container>
+    <v-snackbar
+      v-model="snackbar.show"
+      :color="snackbar.color"
+      location="top"
+      timeout="3000"
+      rounded="pill"
+      elevation="3"
+      class="text-center w-100"
+    >
+      <div class="d-flex justify-center w-100">
+        {{ snackbar.message }}
+      </div>
+    </v-snackbar>
   </DashboardLayout>
 </template>
 

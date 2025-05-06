@@ -23,6 +23,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
+      component: LoginView,
       meta: { outsiderOnly: true }, // Only accessible to users not logged in
     },
 
