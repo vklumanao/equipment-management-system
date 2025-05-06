@@ -11,72 +11,165 @@ const cardData = ref([
     color: 'primary',
     title: 'Equipment',
     value: '0',
+    details: {
+      active: '0',
+      inactive: '0',
+      crane: '0',
+      forklift: '0',
+      excavator: '0',
+      truck: '0',
+    },
   },
   {
     icon: 'mdi-account',
     color: 'green',
     title: 'Driver',
     value: '0',
+    details: {
+      active: '0',
+      inactive: '0',
+    },
   },
   {
     icon: 'mdi-message-plus',
     color: 'yellow',
     title: 'Request',
     value: '0',
+    details: {
+      pending: '0',
+      approved: '0',
+      rejected: '0',
+    },
   },
 ])
 
 // Function to fetch driver count from Supabase
 const fetchDriverCount = async () => {
-  const { data, count, error } = await supabase
+  const { count, error } = await supabase
     .from('drivers')
-    .select('*', { count: 'exact', head: true }) // Only fetch count, no actual data
+    .select('*', { count: 'exact', head: true })
+
+  const { count: availableCount } = await supabase
+    .from('drivers')
+    .select('*', { count: 'exact', head: true })
+    .ilike('status', 'active')
+
+  const { count: unavailableCount } = await supabase
+    .from('drivers')
+    .select('*', { count: 'exact', head: true })
+    .ilike('status', 'inactive')
 
   if (error) {
     console.error('Error fetching drivers count:', error)
     return
   }
 
-  // Find the Driver card and update its value
   const driverCard = cardData.value.find((card) => card.title === 'Driver')
   if (driverCard) {
     driverCard.value = count
+    driverCard.details = {
+      active: availableCount || 0,
+      inactive: unavailableCount || 0,
+    }
   }
 }
 
 // Function to fetch equipment count from Supabase
 const fetchEquipmentCount = async () => {
-  const { data, count, error } = await supabase
+  // Total equipment
+  const { count: totalCount, error: totalError } = await supabase
     .from('equipments')
-    .select('*', { count: 'exact', head: true }) // Only fetch count, no actual data
+    .select('*', { count: 'exact', head: true })
 
-  if (error) {
-    console.error('Error fetching equipments count:', error)
+  if (totalError) {
+    console.error('Error fetching total equipment count:', totalError)
     return
   }
 
-  // Find the Equipment card and update its value
+  // Active
+  const { count: activeCount } = await supabase
+    .from('equipments')
+    .select('*', { count: 'exact', head: true })
+    .ilike('status', 'active')
+
+  // Inactive
+  const { count: inactiveCount } = await supabase
+    .from('equipments')
+    .select('*', { count: 'exact', head: true })
+    .ilike('status', 'inactive')
+
+  // Crane
+  const { count: craneCount } = await supabase
+    .from('equipments')
+    .select('*', { count: 'exact', head: true })
+    .ilike('type', 'crane')
+
+  // Forklift
+  const { count: forkliftCount } = await supabase
+    .from('equipments')
+    .select('*', { count: 'exact', head: true })
+    .ilike('type', 'forklift')
+
+  // Excavator
+  const { count: excavatorCount } = await supabase
+    .from('equipments')
+    .select('*', { count: 'exact', head: true })
+    .ilike('type', 'excavator')
+
+  // Excavator
+  const { count: truckCount } = await supabase
+    .from('equipments')
+    .select('*', { count: 'exact', head: true })
+    .ilike('type', 'truck')
+
   const equipmentCard = cardData.value.find((card) => card.title === 'Equipment')
   if (equipmentCard) {
-    equipmentCard.value = count
+    equipmentCard.value = totalCount
+    equipmentCard.details = {
+      active: activeCount || 0,
+      inactive: inactiveCount || 0,
+      crane: craneCount || 0,
+      forklift: forkliftCount || 0,
+      excavator: excavatorCount || 0,
+      truck: truckCount || 0,
+    }
   }
 }
 
 // Function to fetch request count from Supabase
 const fetchRequestCount = async () => {
-  const { data, count, error } = await supabase
+  const { count, error } = await supabase
     .from('equipment_requests')
-    .select('*', { count: 'exact', head: true }) // Only fetch count, no actual data
+    .select('*', { count: 'exact', head: true })
+
+  const { count: pendingCount } = await supabase
+    .from('equipment_requests')
+    .select('*', { count: 'exact', head: true })
+    .ilike('status', 'pending')
+
+  const { count: approvedCount } = await supabase
+    .from('equipment_requests')
+    .select('*', { count: 'exact', head: true })
+    .ilike('status', 'approved')
+
+  const { count: rejectedCount } = await supabase
+    .from('equipment_requests')
+    .select('*', { count: 'exact', head: true })
+    .ilike('status', 'rejected')
 
   if (error) {
     console.error('Error fetching requests count:', error)
     return
   }
 
-  // Find the Request card and update its value
   const requestCard = cardData.value.find((card) => card.title === 'Request')
   if (requestCard) {
     requestCard.value = count
+    requestCard.details = {
+      pending: pendingCount || 0,
+      approved: approvedCount || 0,
+      rejected: rejectedCount || 0,
+    }
   }
 }
 
@@ -175,13 +268,36 @@ onMounted(() => {
             {{ item.value }}
           </div>
 
+          <!-- Breakdown for Equipment -->
+          <div v-if="item.title === 'Equipment'" class="mt-4 text-grey-darken-1">
+            <div>Active: {{ item.details.active }}</div>
+            <div>Inactive: {{ item.details.inactive }}</div>
+            <div>Crane: {{ item.details.crane }}</div>
+            <div>Forklift: {{ item.details.forklift }}</div>
+            <div>Excavator: {{ item.details.excavator }}</div>
+            <div>Truck: {{ item.details.truck }}</div>
+          </div>
+
+          <!-- Breakdown for Driver -->
+          <div v-else-if="item.title === 'Driver'" class="mt-4 text-grey-darken-1">
+            <div>Available: {{ item.details.active }}</div>
+            <div>Unavailable: {{ item.details.inactive }}</div>
+          </div>
+
+          <!-- Breakdown for Request -->
+          <!-- <div v-else-if="item.title === 'Request'" class="mt-4 text-grey-darken-1">
+            <div>Pending: {{ item.details.pending }}</div>
+            <div>Approved: {{ item.details.approved }}</div>
+            <div>Rejected: {{ item.details.rejected }}</div>
+          </div> -->
+
           <v-progress-linear
             :color="item.color"
             height="10"
             rounded
             background-color="grey-lighten-3"
             value="100"
-            class="shadow-sm"
+            class="shadow-sm mt-4"
           />
         </v-card>
       </v-col>
