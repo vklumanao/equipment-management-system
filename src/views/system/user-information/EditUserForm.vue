@@ -18,6 +18,12 @@ const userData = ref({
   lastname: '',
   role: '',
   avatar_url: '',
+  contact_number: '',
+  address: '',
+  birthday: '',
+  position: '',
+  gender: '',
+  about: '',
 })
 
 const fullname = ref('')
@@ -50,9 +56,17 @@ const getUser = async () => {
   userData.value.role = metadata.role
   userData.value.avatar_url = metadata.avatar_url || ''
 
-  updateFullname()
+  // Add new fields here
+  userData.value.contact_number = metadata.contact_number || ''
+  userData.value.address = metadata.address || ''
+  userData.value.birthday = metadata.birthday || ''
+  userData.value.position = metadata.position || ''
+  userData.value.gender = metadata.gender || ''
+  userData.value.about = metadata.about || ''
 
+  updateFullname()
   originalUserData.value = { ...userData.value }
+
   if (userData.value.avatar_url) {
     imageUrl.value = userData.value.avatar_url
   }
@@ -91,17 +105,23 @@ const saveProfile = async () => {
       return
     }
 
-    // Make sure fullname is updated with both firstname and lastname
     updateFullname()
 
-    // Update user metadata with firstname, lastname, email, and avatar_url
     const { error: updateError } = await supabase.auth.updateUser({
       data: {
         firstname: userData.value.firstname,
         lastname: userData.value.lastname,
         email: userData.value.email,
         avatar_url: userData.value.avatar_url,
-        fullname: fullname.value, // Ensure fullname contains both firstname and lastname
+        fullname: fullname.value,
+
+        // Additional fields
+        contact_number: userData.value.contact_number,
+        address: userData.value.address,
+        birthday: userData.value.birthday,
+        position: userData.value.position,
+        gender: userData.value.gender,
+        about: userData.value.about,
       },
     })
 
@@ -112,7 +132,7 @@ const saveProfile = async () => {
     }
 
     alert('Profile updated successfully!')
-    isEditing.value = false // Disable editing after saving
+    isEditing.value = false
   } catch (error) {
     console.error('Unexpected error while saving profile:', error)
     alert('An unexpected error occurred. Please try again later.')
@@ -259,6 +279,80 @@ onMounted(() => {
               v-model="userData.email"
               label="Email"
               prepend-inner-icon="mdi-email"
+              variant="filled"
+              color="primary"
+              density="comfortable"
+              class="mb-6"
+              :disabled="!isEditing"
+            />
+
+            <!-- Contact Number -->
+            <v-text-field
+              v-model="userData.contact_number"
+              label="Contact Number"
+              prepend-inner-icon="mdi-phone"
+              variant="filled"
+              color="primary"
+              density="comfortable"
+              class="mb-5"
+              :disabled="!isEditing"
+            />
+
+            <!-- Address -->
+            <v-text-field
+              v-model="userData.address"
+              label="Address"
+              prepend-inner-icon="mdi-map-marker"
+              variant="filled"
+              color="primary"
+              density="comfortable"
+              class="mb-5"
+              :disabled="!isEditing"
+            />
+
+            <!-- Birthday -->
+            <v-text-field
+              v-model="userData.birthday"
+              label="Birthday"
+              prepend-inner-icon="mdi-calendar"
+              variant="filled"
+              color="primary"
+              density="comfortable"
+              class="mb-5"
+              type="date"
+              :disabled="!isEditing"
+            />
+
+            <!-- Position / Title -->
+            <v-text-field
+              v-model="userData.position"
+              label="Position"
+              prepend-inner-icon="mdi-briefcase"
+              variant="filled"
+              color="primary"
+              density="comfortable"
+              class="mb-5"
+              :disabled="!isEditing"
+            />
+
+            <!-- Gender -->
+            <v-select
+              v-model="userData.gender"
+              :items="['Male', 'Female', 'Other']"
+              label="Gender"
+              prepend-inner-icon="mdi-gender-male-female"
+              variant="filled"
+              color="primary"
+              density="comfortable"
+              class="mb-5"
+              :disabled="!isEditing"
+            />
+
+            <!-- About / Bio -->
+            <v-textarea
+              v-model="userData.about"
+              label="About Me"
+              prepend-inner-icon="mdi-account-details"
               variant="filled"
               color="primary"
               density="comfortable"

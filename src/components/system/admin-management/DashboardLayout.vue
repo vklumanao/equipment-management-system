@@ -141,9 +141,13 @@ onMounted(() => {
         <v-menu v-model="menuVisible" offset-y transition="scale-transition">
           <template #activator="{ props }">
             <v-btn icon v-bind="props">
-              <v-avatar size="50" color="primary"  class="elevation-1 text-white font-weight-bold">
-               <img v-if="userData.avatar_url" :src="userData.avatar_url"  style="width: 100%; height: 100%; object-fit: cover"> 
-               <span v-else >{{  userData.initials }}</span>
+              <v-avatar size="50" color="primary" class="elevation-1 text-white font-weight-bold">
+                <img
+                  v-if="userData.avatar_url"
+                  :src="userData.avatar_url"
+                  style="width: 100%; height: 100%; object-fit: cover"
+                />
+                <span v-else>{{ userData.initials }}</span>
               </v-avatar>
             </v-btn>
           </template>
@@ -158,8 +162,12 @@ onMounted(() => {
                 color="primary"
                 class="text-white font-weight-bold elevation-2 mr-2"
               >
-              <img v-if="userData.avatar_url" :src="userData.avatar_url"  style="width: 100%; height: 100%; object-fit: cover"> 
-              <span v-else >{{  userData.initials }}</span>
+                <img
+                  v-if="userData.avatar_url"
+                  :src="userData.avatar_url"
+                  style="width: 100%; height: 100%; object-fit: cover"
+                />
+                <span v-else>{{ userData.initials }}</span>
               </v-avatar>
 
               <div class="d-flex flex-column justify-center">
@@ -201,7 +209,7 @@ onMounted(() => {
     <!-- ================================
          Navigation Drawer (Sidebar)
          ================================ -->
-    <v-navigation-drawer app v-model="drawer" class="elevation-8" width="250">
+    <v-navigation-drawer app v-model="drawer" class="elevation-8" width="310">
       <v-list dense>
         <template v-for="item in menuItems" :key="item.title">
           <!-- List with Children -->
