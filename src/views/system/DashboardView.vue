@@ -304,5 +304,3 @@ onMounted(() => {
     </v-row>
   </DashboardLayout>
 </template>
-
-<style scoped></style>
