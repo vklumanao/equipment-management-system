@@ -259,13 +259,12 @@ onMounted(() => {
             @click="goToDetailsPage(item)"
             :style="{
               borderRadius: '20px',
-              backgroundColor: isHovering
-                ? '#e3f2fd'
-                : '#f9fafb' /* Change background color on hover */,
+              backgroundColor: isHovering ? '#e3f2fd' : '#f9fafb',
               boxShadow: isHovering
                 ? '0 8px 24px rgba(0, 0, 0, 0.15)'
                 : '0 8px 24px rgba(0, 0, 0, 0.04)',
               transition: 'all 0.3s ease',
+              height: '100%',
             }"
           >
             <div class="d-flex align-center mb-4">
@@ -319,6 +318,7 @@ onMounted(() => {
         </v-hover>
       </v-col>
     </v-row>
+
     <!-- <v-row>
       <v-col cols="12" md="6">
         <EquipmentAvailabilityChart
