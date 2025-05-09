@@ -4,6 +4,9 @@ import { ref, onMounted } from 'vue'
 import DashboardLayout from '@/components/system/admin-management/DashboardLayout.vue'
 import { supabase, getUserInformation } from '@/utils/supabase'
 import EquipmentAvailabilityChart from '@/components/charts/EquipmentAvailabilityChart.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 // Reactive array for dashboard cards
 const cardData = ref([
@@ -174,6 +177,20 @@ const fetchRequestCount = async () => {
   }
 }
 
+// Function to handle card clicks
+const goToDetailsPage = (item) => {
+  if (item.title === 'Equipment') {
+    router.push('/equipment')
+    console.log('Redirecting to Equipment page')
+  } else if (item.title === 'Driver') {
+    router.push('/driver')
+    console.log('Redirecting to Driver page')
+  } else if (item.title === 'Request') {
+    router.push('/request')
+    console.log('Redirecting to Request page')
+  }
+}
+
 const userData = ref({
   email: '',
   fullname: '',
@@ -227,80 +244,79 @@ onMounted(() => {
         <div
           class="rounded-circle d-flex align-center justify-center"
           style="width: 60px; height: 60px; background-color: var(--v-theme-primary-lighten5)"
-        >
-          <v-icon size="36" color="primary">mdi-account-tie</v-icon>
-        </div>
+        ></div>
       </div>
     </v-card>
 
     <!-- Dashboard Stats Cards -->
     <v-row>
       <v-col v-for="(item, index) in cardData" :key="index" cols="12" sm="6" md="4">
-        <v-card
-          class="pa-6 rounded-2xl"
-          elevation="4"
-          style="
-            border-radius: 20px;
-            background-color: #f9fafb;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
-            transition: all 0.3s ease;
-          "
-        >
-          <div class="d-flex align-center mb-4">
-            <div
-              class="rounded-circle d-flex align-center justify-center"
-              :style="{
-                width: '60px',
-                height: '60px',
-                backgroundColor: `var(--v-theme-${item.color}-lighten5)`,
-              }"
-            >
-              <v-icon :color="item.color" size="60">{{ item.icon }}</v-icon>
-            </div>
-          </div>
-
-          <div
-            class="text-grey mb-1 font-weight-medium text-uppercase tracking-widest"
-            style="font-size: 24px"
+        <v-hover v-slot:default="{ isHovering, props }">
+          <v-card
+            v-bind="props"
+            class="pa-6 rounded-2xl"
+            elevation="4"
+            @click="goToDetailsPage(item)"
+            :style="{
+              borderRadius: '20px',
+              backgroundColor: isHovering
+                ? '#e3f2fd'
+                : '#f9fafb' /* Change background color on hover */,
+              boxShadow: isHovering
+                ? '0 8px 24px rgba(0, 0, 0, 0.15)'
+                : '0 8px 24px rgba(0, 0, 0, 0.04)',
+              transition: 'all 0.3s ease',
+            }"
           >
-            {{ item.title }}
-          </div>
-          <div class="font-weight-bold text-black mb-2" style="font-size: 2rem">
-            {{ item.value }}
-          </div>
+            <div class="d-flex align-center mb-4">
+              <div
+                class="rounded-circle d-flex align-center justify-center"
+                :style="{
+                  width: '60px',
+                  height: '60px',
+                  backgroundColor: `var(--v-theme-${item.color}-lighten5)`,
+                }"
+              >
+                <v-icon :color="item.color" size="60">{{ item.icon }}</v-icon>
+              </div>
+            </div>
 
-          <!-- Breakdown for Equipment -->
-          <div v-if="item.title === 'Equipment'" class="mt-4 text-grey-darken-1">
-            <div>Active: {{ item.details.active }}</div>
-            <div>Inactive: {{ item.details.inactive }}</div>
-            <div>Crane: {{ item.details.crane }}</div>
-            <div>Forklift: {{ item.details.forklift }}</div>
-            <div>Excavator: {{ item.details.excavator }}</div>
-            <div>Truck: {{ item.details.truck }}</div>
-          </div>
+            <div
+              class="text-grey mb-1 font-weight-medium text-uppercase tracking-widest"
+              style="font-size: 24px"
+            >
+              {{ item.title }}
+            </div>
+            <div class="font-weight-bold text-black mb-2" style="font-size: 2rem">
+              {{ item.value }}
+            </div>
 
-          <!-- Breakdown for Driver -->
-          <div v-else-if="item.title === 'Driver'" class="mt-4 text-grey-darken-1">
-            <div>Available: {{ item.details.active }}</div>
-            <div>Unavailable: {{ item.details.inactive }}</div>
-          </div>
+            <!-- Breakdown for Equipment -->
+            <div v-if="item.title === 'Equipment'" class="mt-4 text-grey-darken-1">
+              <div>Active: {{ item.details.active }}</div>
+              <div>Inactive: {{ item.details.inactive }}</div>
+              <div>Crane: {{ item.details.crane }}</div>
+              <div>Forklift: {{ item.details.forklift }}</div>
+              <div>Excavator: {{ item.details.excavator }}</div>
+              <div>Truck: {{ item.details.truck }}</div>
+            </div>
 
-          <!-- Breakdown for Request -->
-          <!-- <div v-else-if="item.title === 'Request'" class="mt-4 text-grey-darken-1">
-            <div>Pending: {{ item.details.pending }}</div>
-            <div>Approved: {{ item.details.approved }}</div>
-            <div>Rejected: {{ item.details.rejected }}</div>
-          </div> -->
+            <!-- Breakdown for Driver -->
+            <div v-else-if="item.title === 'Driver'" class="mt-4 text-grey-darken-1">
+              <div>Available: {{ item.details.active }}</div>
+              <div>Unavailable: {{ item.details.inactive }}</div>
+            </div>
 
-          <v-progress-linear
-            :color="item.color"
-            height="10"
-            rounded
-            background-color="grey-lighten-3"
-            value="100"
-            class="shadow-sm mt-4"
-          />
-        </v-card>
+            <v-progress-linear
+              :color="item.color"
+              height="10"
+              rounded
+              background-color="grey-lighten-3"
+              value="100"
+              class="shadow-sm mt-4"
+            />
+          </v-card>
+        </v-hover>
       </v-col>
     </v-row>
     <!-- <v-row>
