@@ -4,6 +4,7 @@ import { ref, onMounted } from 'vue'
 import DashboardLayout from '@/components/system/admin-management/DashboardLayout.vue'
 import { supabase, getUserInformation } from '@/utils/supabase'
 import EquipmentAvailabilityChart from '@/components/charts/EquipmentAvailabilityChart.vue'
+import DriverAvailabilityChart from '@/components/charts/DriverAvailabilityChart.vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -67,6 +68,15 @@ const fetchDriverCount = async () => {
     console.error('Error fetching drivers count:', error)
     return
   }
+
+  // console.log(
+  //   'Total Drivers:',
+  //   count,
+  //   'Available:',
+  //   availableCount,
+  //   'Unavailable:',
+  //   unavailableCount,
+  // )
 
   const driverCard = cardData.value.find((card) => card.title === 'Driver')
   if (driverCard) {
@@ -318,6 +328,15 @@ onMounted(() => {
         </v-hover>
       </v-col>
     </v-row>
+
+    <!-- <v-row>
+      <v-col cols="12" md="6">
+        <DriverAvailabilityChart
+          :active="Number(cardData.find((c) => c.title === 'Driver')?.details.active)"
+          :inactive="Number(cardData.find((c) => c.title === 'Driver')?.details.inactive)"
+        />
+      </v-col>
+    </v-row> -->
 
     <!-- <v-row>
       <v-col cols="12" md="6">
