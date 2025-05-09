@@ -3,6 +3,7 @@
 import { ref, onMounted } from 'vue'
 import DashboardLayout from '@/components/system/admin-management/DashboardLayout.vue'
 import { supabase, getUserInformation } from '@/utils/supabase'
+import EquipmentAvailabilityChart from '@/components/charts/EquipmentAvailabilityChart.vue'
 
 // Reactive array for dashboard cards
 const cardData = ref([
@@ -302,5 +303,13 @@ onMounted(() => {
         </v-card>
       </v-col>
     </v-row>
+    <!-- <v-row>
+      <v-col cols="12" md="6">
+        <EquipmentAvailabilityChart
+          :active="Number(cardData.find((c) => c.title === 'Equipment')?.details.active)"
+          :inactive="Number(cardData.find((c) => c.title === 'Equipment')?.details.inactive)"
+        />
+      </v-col>
+    </v-row> -->
   </DashboardLayout>
 </template>
